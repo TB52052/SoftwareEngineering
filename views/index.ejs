@@ -1,1 +1,35 @@
-Main Page
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Planner</title>
+    <link rel="stylesheet" href="/styles/index.css">
+    <link rel="icon" href="/public/icons/favicon.ico"/>
+    <script src="https://kit.fontawesome.com/27e53cf03d.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Top bar -->
+    <div class="top-bar">
+        <div class="left-content">
+            <label class="font-label"><i class="fa-solid fa-book"></i></label>
+            <span class="text"></i>Study Planner</span>
+        </div>
+        <div class="right-content">
+            <a href="/team" class="team-button">Team Members</a>
+        </div>
+    </div>
+    <div class="main-body">
+        <div class="login-page">
+            <h2>Login</h2>
+            <form action="/login" method="POST">
+                <input type="text" id="username-input" name="username" placeholder="Username" required>
+                <input type="password" id="password-input" name="password" placeholder="Password" required>
+                <button type="submit" class="login-button">Sign In</button>
+                <a href="/register" class="register-text"> New User? </a>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>
