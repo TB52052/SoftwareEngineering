@@ -3,26 +3,28 @@
     <head>
         <%- include('partials/head') %>
         <title>Study Planner - Register</title>
-        <link rel="stylesheet" href="/styles/index.css">
+        <link rel="stylesheet" href="/styles/top-bar.css">
+        <link rel="stylesheet" href="/styles/form.css">
     </head>
     <body>
         <%- include('partials/top-bar') %>
 
-        <div class="login-page">
-            <div class="login-header">
-                <span class="login-title">Register New Account</span>
-                <form class="login-form">
-                    <input class="input-group" type="text" placeholder="Username" name="username" required>
-                    <input class="input-group" type="password" placeholder="Password" name="password" required>
-                    <input class="input-group" type="password" placeholder="Coonfirm Password" name="confirm" required>
-                    <div class="login-button">
+        <div class="form-page">
+            <div class="form-header">
+                <span class="form-title">Register New Account</span>
+                <form class="form-form" action="/register" method="post">
+                    <input class="input-group" type="email" placeholder="Email" name="email" required autocomplete="email">
+                    <input class="input-group" type="password" placeholder="Password" name="password" required autocomplete="current-password">
+                    <input class="input-group" type="password" placeholder="Confirm Password" name="confirm" required>
+                    <div class="form-button">
                         <button class="input-button" type="submit">Register Account</button>
                     </div>
                 </form>
-                <div class="register-link">
+                <div class="form-link">
                     <a href="/">Existing User?</a>
                 </div>
             </div>
         </div>
     </body>
 </html>
+
