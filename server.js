@@ -20,6 +20,10 @@ app.get('/dashboard', (req, res) => {
     res.render('dashboard.ejs');
 });
 
+app.get('/team', (req, res) => {
+    res.render('team.ejs');
+});
+
 app.post('/register', (req, res) => {
 });
 

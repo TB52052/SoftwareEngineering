@@ -1,14 +1,28 @@
-<form action="/register" method="POST">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('partials/head') %>
+        <title>Study Planner - Register</title>
+        <link rel="stylesheet" href="/styles/index.css">
+    </head>
+    <body>
+        <%- include('partials/top-bar') %>
 
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required>
-
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required>
-
-    <button type="submit">Register</button>
-
-    <button type="button">Existing User?</button>
-</form>
+        <div class="login-page">
+            <div class="login-header">
+                <span class="login-title">Register New Account</span>
+                <form class="login-form">
+                    <input class="input-group" type="text" placeholder="Username" name="username" required>
+                    <input class="input-group" type="password" placeholder="Password" name="password" required>
+                    <input class="input-group" type="password" placeholder="Coonfirm Password" name="confirm" required>
+                    <div class="login-button">
+                        <button class="input-button" type="submit">Register Account</button>
+                    </div>
+                </form>
+                <div class="register-link">
+                    <a href="/">Existing User?</a>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
