@@ -11,16 +11,20 @@ app.use(express.urlencoded({ extended: false}));
 // Routes
 const loginRoute = require('./routes/login_route');
 const registerRoute = require('./routes/register_route');
+const calendarRoute = require('./routes/calendar_route');
+const tasksRoute = require('./routes/tasks_route');
+const dashboardRoute = require('./routes/dashboard_route');
+const profileRoute = require('./routes/profile_route');
 
 app.use('/login', loginRoute);
 app.use('/register', registerRoute);
+app.use('/calendar', calendarRoute);
+app.use('/tasks', tasksRoute);
+app.use('/dashboard', dashboardRoute);
+app.use('/profile', profileRoute);
 
 app.get('/', (req, res) => {
     res.redirect('/login');
-});
-
-app.get('/dashboard', (req, res) => {
-    res.render('dashboard.ejs');
 });
 
 app.get('/team', (req, res) => {

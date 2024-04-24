@@ -39,7 +39,7 @@ router.post('/', async (req, res) => {
         }
 
         console.log('Login successful');
-        return res.redirect('/dashboard');
+        return res.redirect('/profile');
     } catch (error) {
         console.error('Error:', error);
         return res.status(500).send('Internal Server Error');
