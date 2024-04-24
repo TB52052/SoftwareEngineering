@@ -9,8 +9,8 @@ module.exports = router;
 const db = new sqlite3.Database('./db/users.db',  sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {if (err) {console.error(err.message)};});
 const SALT = 13;
 
-function get_account(email) {
-    return db.get(`SELECT * FROM users WHERE email = ?`, [email], (row) => {return row;});
+async function get_account(email) {
+    return await db.get(`SELECT * FROM users WHERE email = ?`, [email], (row) => {return row;});
 }
 
 function insert_new_account(email, password) {
