@@ -3,5 +3,5 @@ const router = express.Router();
 module.exports = router;
 
 router.get('/', (req, res) => {
-    res.render('profile.ejs');
+    res.render('profile.ejs', { title: 'Profile'});
 });

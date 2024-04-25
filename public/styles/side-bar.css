@@ -1,11 +1,42 @@
+/* CSS for hamburger menu */
+.hamburger-menu {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 1000; /* Ensure it's above other elements */
+}
+
+#hamburger-toggle {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 24px;
+    color: #333;
+    cursor: pointer;
+    transition: transform 0.3s ease; /* Smooth transition for transform */
+}
+
+#hamburger-toggle.open {
+    transform: rotate(90deg); /* Rotate the icon when open */
+}
+
+
 .sidebar {
-    background-color: #f4f4f4; 
+    background-color: aliceblue; 
     padding: 0 16px;
     position: fixed; 
     overflow-y: auto;
     margin: 16px;
     border-radius: 16px;
     top: calc(50% - 200px);
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    transform: translateX(-100%);
+    transition: transform 0.5s ease-in;
+}
+
+.sidebar.open {
+    transform: translateX(0); /* Move sidebar back into view */
+    transition: transform 0.5s ease-in;
 }
 
 .sidebar ul {
@@ -32,10 +63,6 @@
     border-radius: 8px; 
 }
 
-.sidebar ul li a:hover {
-    text-decoration: underline;
-}
-
 .sidebar-name {
     font-size: 16px;
     font-weight: bold;
@@ -44,3 +71,8 @@
 .sidebar-list {
     align-items: center;
 }
+
+.sidebar ul li a.selected {
+    border-bottom: #333 2px solid;
+}
+

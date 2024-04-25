@@ -1,22 +1,26 @@
-<div class="sidebar">
+<div class="hamburger-menu">
+    <button id="hamburger-toggle"><i class="fas fa-bars"></i></button>
+</div>
+
+<div class="sidebar open">
     <ul class="sidebar-list">
         <li>
-            <a href="/profile"><i class="fa-solid fa-user"></i>
+            <a href="/profile" class="<%= title === 'Profile' ? 'selected' : '' %>"><i class="fa-solid fa-user"></i>
                 <div class="sidebar-name">Profile</div>
             </a>
         </li>
         <li>
-            <a href="/dashboard"><i class="fa-solid fa-gauge"></i>
+            <a href="/dashboard" class="<%= title === 'Dashboard' ? 'selected' : '' %>"><i class="fa-solid fa-gauge"></i>
                 <div class="sidebar-name">Dashboard</div>
             </a>
         </li>
         <li>
-            <a href="/calendar"><i class="fa-solid fa-calendar"></i>
+            <a href="/calendar" class="<%= title === 'Calendar' ? 'selected' : '' %>"><i class="fa-solid fa-calendar"></i>
                 <div class="sidebar-name">Calendar</div>
             </a>
         </li>
         <li>
-            <a href="/tasks"><i class="fa-solid fa-clipboard"></i>
+            <a href="/tasks" class="<%= title === 'Tasks' ? 'selected' : '' %>"><i class="fa-solid fa-clipboard"></i>
                 <div class="sidebar-name">Tasks</div>
             </a>
         </li>
