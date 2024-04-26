@@ -1,9 +1,22 @@
-/* CSS for hamburger menu */
+.sidebar-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 0px;
+    transition: width 1s ease-in;
+}
+
+.sidebar-wrapper.open {
+    width: 200px;
+}
+
 .hamburger-menu {
     position: fixed;
-    top: 16px;
-    left: 16px;
-    z-index: 1000; /* Ensure it's above other elements */
+    top: 24px;
+    left: 24px;
+    z-index: 1000; 
+    justify-content: center; 
+    align-items: center;
 }
 
 #hamburger-toggle {
@@ -13,11 +26,11 @@
     font-size: 24px;
     color: #333;
     cursor: pointer;
-    transition: transform 0.3s ease; /* Smooth transition for transform */
+    transition: transform 0.3s ease; 
 }
 
 #hamburger-toggle.open {
-    transform: rotate(90deg); /* Rotate the icon when open */
+    transform: rotate(90deg);
 }
 
 
@@ -30,13 +43,14 @@
     border-radius: 16px;
     top: calc(50% - 200px);
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-    transform: translateX(-100%);
-    transition: transform 0.5s ease-in;
+    transform: translateX(-200%);
+    transition: transform 1s ease-in;
 }
+
 
 .sidebar.open {
     transform: translateX(0); /* Move sidebar back into view */
-    transition: transform 0.5s ease-in;
+    transition: transform 1s ease-in;
 }
 
 .sidebar ul {
