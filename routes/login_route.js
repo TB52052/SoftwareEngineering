@@ -2,7 +2,6 @@ const sqlite3 = require('sqlite3').verbose();
 const bcrypt = require('bcrypt');
 const express = require('express');
 const router = express.Router();
-module.exports = router;
 
 const db = new sqlite3.Database('./db/users.db',  sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {if (err) {console.error(err.message)};});
 
@@ -19,12 +18,14 @@ async function get_account(email) {
 }
 
 router.get('/', (req, res) => {
-    res.render('login.ejs');
+    if (!(req.session && req.session.user)) {
+        return res.render('login.ejs');
+    }
+    return res.redirect('/dashboard');
 });
 
 router.post('/', async (req, res) => {
     try {
-        // Check if user exists
         const account = await get_account(req.body.email);
 
         if (!account || account.password === undefined) {
@@ -35,8 +36,12 @@ router.post('/', async (req, res) => {
             return res.redirect('/login');
         }
 
-        return res.redirect('/profile');
+        req.session.user = {id: account.id, email: account.email};
+
+        return res.redirect('/dashboard');
     } catch (error) {
         return res.status(500).send('Internal Server Error');
     }
 });
+
+module.exports = router;
