@@ -26,22 +26,17 @@ router.post('/', async (req, res) => {
     try {
         // Check if user exists
         const account = await get_account(req.body.email);
-        console.log(account);
 
         if (!account || account.password === undefined) {
-            console.log('User not found');
             return res.redirect('/login');
         }
 
         if (!(await bcrypt.compare(req.body.password, account.password))) {
-            console.log('Incorrect password');
             return res.redirect('/login');
         }
 
-        console.log('Login successful');
         return res.redirect('/profile');
     } catch (error) {
-        console.error('Error:', error);
         return res.status(500).send('Internal Server Error');
     }
 });
