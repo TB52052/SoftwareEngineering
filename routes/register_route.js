@@ -7,10 +7,18 @@ module.exports = router;
 
 // Database
 const db = new sqlite3.Database('./db/users.db',  sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {if (err) {console.error(err.message)};});
-const SALT = 13;
+const NUMBER_OF_HASHES = 13;
 
 async function get_account(email) {
-    return await db.get(`SELECT * FROM users WHERE email = ?`, [email], (row) => {return row;});
+    return new Promise((resolve, reject) => {
+        db.get(`SELECT * FROM users WHERE email = ?`, [email], (err, row) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(row);
+            }
+        });
+    });
 }
 
 function insert_new_account(email, password) {
@@ -24,21 +32,27 @@ router.get('/', (req, res) => {
 router.post('/', async (req, res) => {
     // Check if passwords match
     if (req.body.password !== req.body.confirm) {
+        console.log('Passwords do not match');
         return res.redirect('/register');
     }
-
     // Check if user exists
-    if (get_account(req.body.email)) {
+    const account = await get_account(req.body.email);
+
+    if (account) {
+        console.log('User already exists')
         return res.redirect('/register');
     }
 
     // Hash password
     try {
-        const hashedPassword = await bcrypt.hash(req.body.password, SALT);
+        console.log('Creating new account');
+        const hashedPassword = await bcrypt.hash(req.body.password, NUMBER_OF_HASHES);
         insert_new_account(req.body.email, hashedPassword);
         return res.redirect('/login');
+
     }
     catch {
+        console.error('Error:', error);
         return res.redirect('/register');
     }
 });
