@@ -21,7 +21,6 @@ router.get('/', (req, res) => {
     if (!(req.session && req.session.user)) {
         return res.render('login.ejs');
     }
-    return res.redirect('/dashboard');
 });
 
 router.post('/', async (req, res) => {
@@ -29,14 +28,12 @@ router.post('/', async (req, res) => {
         const account = await get_account(req.body.email);
 
         if (!account || account.password === undefined) {
-            req.session.message = 'Invalid email or password.';
-            console.log("Invalid email or password 1.");
+            req.session.message = 'Account not found.';
             return res.redirect('/login');
         }
 
         if (!(await bcrypt.compare(req.body.password, account.password))) {
-            req.session.message = 'Invalid email or password.';
-            console.log("Invalid email or password 2.");
+            req.session.message = 'Invalid credentials.';
             return res.redirect('/login');
         }
 
@@ -45,7 +42,6 @@ router.post('/', async (req, res) => {
         return res.redirect('/dashboard');
     } catch (error) {
         req.session.message = 'Internal Server Error';
-        console.log("Internal Server Error.");
         return res.status(500).send('Internal Server Error');
     }
 });

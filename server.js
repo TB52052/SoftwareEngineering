@@ -66,8 +66,13 @@ app.get('/team', (req, res) => {
     res.render('team.ejs');
 });
 
-app.get('/get-session-data', (req, res) => {
+app.get('/get-session-message', (req, res) => {
     res.json(req.session.message);
+});
+
+app.get('/clear-session-message', (req, res) => {
+    req.session.message = null;
+    res.json(true);
 });
 
 app.listen(PORT);

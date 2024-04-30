@@ -13,3 +13,37 @@ html {
     max-height: 100vh;
     overflow: hidden;
 }
+
+#error-box {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background-color: #c0392b; /* Dark red */
+    color: #fff;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Concert', sans-serif; /* Using Concert font */
+    font-size: 16px;
+    max-width: 300px;
+    width: auto;
+    z-index: 1000;
+    transition: opacity 0.3s ease;
+}
+
+#error-box.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#error-box:after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 10px;
+    width: 0;
+    height: 0;
+    border: solid transparent;
+    border-top-color: #c0392b; /* Dark red */
+    border-width: 10px;
+}
