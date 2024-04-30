@@ -18,12 +18,12 @@ html {
     position: fixed;
     bottom: 20px;
     left: 20px;
-    background-color: #c0392b; /* Dark red */
+    background-color: #c0392b;
     color: #fff;
     padding: 15px 20px;
     border-radius: 8px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    font-family: 'Concert', sans-serif; /* Using Concert font */
+    font-family: 'Concert', sans-serif;
     font-size: 16px;
     max-width: 300px;
     width: auto;
@@ -44,6 +44,6 @@ html {
     width: 0;
     height: 0;
     border: solid transparent;
-    border-top-color: #c0392b; /* Dark red */
+    border-top-color: #c0392b;
     border-width: 10px;
 }
