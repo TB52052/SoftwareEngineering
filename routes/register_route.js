@@ -3,9 +3,6 @@ const router = express.Router();
 const sqlite3 = require('sqlite3').verbose();
 const bcrypt = require('bcrypt');
 
-module.exports = router;
-
-// Database
 const db = new sqlite3.Database('./db/study_planner.db',  sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {if (err) {console.error(err.message)};});
 const NUMBER_OF_HASHES = 13;
 
@@ -55,3 +52,5 @@ router.post('/', async (req, res) => {
         return res.redirect('/register');
     }
 });
+
+module.exports = router;
