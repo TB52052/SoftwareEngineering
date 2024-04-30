@@ -29,10 +29,14 @@ router.post('/', async (req, res) => {
         const account = await get_account(req.body.email);
 
         if (!account || account.password === undefined) {
+            req.session.message = 'Invalid email or password.';
+            console.log("Invalid email or password 1.");
             return res.redirect('/login');
         }
 
         if (!(await bcrypt.compare(req.body.password, account.password))) {
+            req.session.message = 'Invalid email or password.';
+            console.log("Invalid email or password 2.");
             return res.redirect('/login');
         }
 
@@ -40,6 +44,8 @@ router.post('/', async (req, res) => {
 
         return res.redirect('/dashboard');
     } catch (error) {
+        req.session.message = 'Internal Server Error';
+        console.log("Internal Server Error.");
         return res.status(500).send('Internal Server Error');
     }
 });

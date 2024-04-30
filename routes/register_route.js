@@ -32,12 +32,14 @@ router.get('/', (req, res) => {
 router.post('/', async (req, res) => {
     // Check if passwords match
     if (req.body.password !== req.body.confirm) {
+        req.session.message = 'Passwords do not match.';
         return res.redirect('/register');
     }
     // Check if user exists
     const account = await get_account(req.body.email);
 
     if (account) {
+        req.session.message = 'User already exists.';
         return res.redirect('/register');
     }
 
@@ -49,6 +51,7 @@ router.post('/', async (req, res) => {
 
     }
     catch {
+        req.session.message = 'Internal Server Error';
         return res.redirect('/register');
     }
 });

@@ -3,7 +3,6 @@ const express = require('express');
 const session = require('express-session');
 const dotenv = require('dotenv').config();
 
-
 // App
 const app = express();
 const PORT = 3000;
@@ -21,16 +20,26 @@ app.use(session({
 }));
 
 // Middleware to check if user is authenticated
-const checkAuth = (req, res, next) => {
-    if (!(req.session && req.session.user)){
-        return res.render('login.ejs');
+const checkAuth = (req, res, next) => {    
+    // Check if user is authenticated
+    if (!req.session.user) {
+        res.redirect("/login");
     }
+
     if (req.session.cookie.expires < Date.now()) {
         req.session.destroy();
-        return res.render('login.ejs');
+        return res.redirect("/login");
     }
-    next();
+
+    return next();
 };
+
+const forceLogout = (req, res, next) => {
+    if (req.session.user) {
+        req.session.destroy();
+    }
+    return next();
+}
 
 // Routes
 const loginRoute = require('./routes/login_route');
@@ -41,8 +50,8 @@ const dashboardRoute = require('./routes/dashboard_route');
 const profileRoute = require('./routes/profile_route');
 const logoutRoute = require('./routes/logout_route');
 
-app.use('/login', loginRoute);
-app.use('/register', checkAuth, registerRoute);
+app.use('/login',forceLogout, loginRoute);
+app.use('/register', forceLogout, registerRoute);
 app.use('/calendar', checkAuth, calendarRoute);
 app.use('/tasks', checkAuth, tasksRoute);
 app.use('/dashboard', checkAuth, dashboardRoute);
@@ -55,6 +64,10 @@ app.get('/', (req, res) => {
 
 app.get('/team', (req, res) => {
     res.render('team.ejs');
+});
+
+app.get('/get-session-data', (req, res) => {
+    res.json(req.session.message);
 });
 
 app.listen(PORT);
