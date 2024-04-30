@@ -10,6 +10,17 @@
     <div class="wrapper">
         <%- include('partials/side-bar') %>
         <div class="content">
+
+
+            <h2>Select a Semester </h2>
+            <select name="semester" id="seasonForm">
+                  <% semesterInfo.forEach(function(semester) { %>
+                   <option value="<%= semester.Season %>"><%= semester.Season %></option>
+                  <% }); %>
+                  <input type="submit">
+            </select>
+
+
         </div>
     </div>
     <%- include('partials/error-box') %>
