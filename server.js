@@ -42,13 +42,13 @@ const forceLogout = (req, res, next) => {
 }
 
 // Routes
-const loginRoute = require('./routes/login_route');
-const registerRoute = require('./routes/register_route');
-const calendarRoute = require('./routes/calendar_route');
-const tasksRoute = require('./routes/tasks_route');
-const dashboardRoute = require('./routes/dashboard_route');
-const profileRoute = require('./routes/profile_route');
-const logoutRoute = require('./routes/logout_route');
+const loginRoute = require('./routes/login-route');
+const registerRoute = require('./routes/register-route');
+const calendarRoute = require('./routes/calendar-route');
+const tasksRoute = require('./routes/tasks-route');
+const dashboardRoute = require('./routes/dashboard-route');
+const profileRoute = require('./routes/profile-route');
+const logoutRoute = require('./routes/logout-route');
 
 app.use('/login',forceLogout, loginRoute);
 app.use('/register', forceLogout, registerRoute);
