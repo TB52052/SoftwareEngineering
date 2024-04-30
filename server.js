@@ -16,16 +16,20 @@ app.use(express.urlencoded({ extended: false}));
 app.use(session({
     secret: process.env.ACCESS_TOKEN_SECRET,
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    cookie: {maxAge: 600000}
 }));
 
 // Middleware to check if user is authenticated
 const checkAuth = (req, res, next) => {
-    if (req.session && req.session.user) {
-        next();
-    } else {
-        res.render('login.ejs');
+    if (!(req.session && req.session.user)){
+        return res.render('login.ejs');
     }
+    if (req.session.cookie.expires < Date.now()) {
+        req.session.destroy();
+        return res.render('login.ejs');
+    }
+    next();
 };
 
 // Routes
