@@ -4,12 +4,12 @@ const router = express.Router();
 const sqlite3 = require('sqlite3').verbose();
 
 
-const db = new sqlite3.Database('./db/semesterInfo.db');
+const db = new sqlite3.Database('./db/study_planner.db');
 
 
 async function getSemester() {
     return new Promise((resolve, reject) => {
-        db.all(`SELECT Season FROM semesterInfo`, [], (err, rows) => {
+        db.all(`SELECT Season FROM SemesterInfo`, [], (err, rows) => {
             if (err) {
                 reject(err);
             } else {
