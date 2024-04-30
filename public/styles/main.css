@@ -4,13 +4,22 @@
     height: calc(100vh - 56px);
 }
 
-.content {
+.container {
     display: flex;
     flex: 1;
-    height: 100%;
-    width: 100%;
-    background-color: aliceblue;
-    padding: 20px;
-    border-radius: 10px;
+    height: calc(100% - 56px);
+    width:  calc(100% - 48px);
+    padding: 48px;
+    background-color: rgb(223, 238, 246);
+    border-radius: 16px;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+.content {
+    display: flex;
+    flex:content;
+    background-color: aliceblue;
+    border-radius: 16px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    padding: 16px; 
 }
