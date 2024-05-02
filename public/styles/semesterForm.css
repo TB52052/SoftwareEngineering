@@ -16,7 +16,7 @@ h2 {
 }
 
 /* Style for the submit button */
-input[type="submit"] {
+button[type="submit"] {
     background-color: grey;
     color: white;
     padding: 10px 20px;
@@ -30,6 +30,6 @@ input[type="submit"] {
 }
 
 /* Hover effect for the submit button */
-input[type="submit"]:hover {
+button[type="submit"]:hover {
     background-color: #45a049;
 }

@@ -13,15 +13,27 @@
         <div class="container">
             <div class="content">
                 <h2>Select a Semester </h2>
-            <select name="semester" id="seasonForm">
-                <% semesterInfo.forEach(function(semester) { %>
-                <option value="<%= semester.Season %>"><%= semester.Season %></option>
-                <% }); %>
-                <input type="submit">
-            </select>
+                <form id="semesterForm" method="post">
+                    <select name="semester" id="seasonForm">
+                        <% semesterInfo.forEach(function(semester) { %>
+                        <option value="<%= semester.season %>"><%= semester.season %></option>
+                        <% }); %>
+                    </select>
+                    <button type="submit">Submit</button>
+                </form>
             </div>
         </div>
     </div>
     <%- include('partials/error-box') %>
+
+    <script>
+        // Event listener to the form submit event
+        document.getElementById('semesterForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+            var selectedSemester = document.getElementById('seasonForm').value;
+            
+            console.log('Selected Semester:', selectedSemester);
+        });
+    </script>
 </body>
 </html>
