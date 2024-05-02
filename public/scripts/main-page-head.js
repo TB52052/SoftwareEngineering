@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function() {
         this.classList.toggle("open"); // Toggle hamburger icon
         document.querySelector(".sidebar").classList.toggle("open"); // Toggle sidebar
         document.querySelector(".sidebar-wrapper").classList.toggle("open"); // Toggle content
+        document.querySelector(".container").classList.toggle("open"); // Toggle content
     });
 });
 

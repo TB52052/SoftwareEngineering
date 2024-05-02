@@ -1,18 +1,22 @@
 .wrapper {
     display: flex;
     max-width: calc(100vw - 16px);
-    height: calc(100vh - 56px);
+    height: calc(100vh - 16px);
 }
 
 .container {
     display: flex;
     flex: 1;
-    height: calc(100% - 56px);
-    width:  calc(100% - 48px);
-    padding: 48px;
+    padding: 8px;
     background-color: rgb(223, 238, 246);
     border-radius: 16px;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    transition: padding 0.5s ease-in;
+}
+
+.container.open{
+    padding: 48px; 
+    transition: padding 0.5s ease-in;
 }
 
 .content {
