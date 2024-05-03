@@ -15,7 +15,7 @@
 }
 
 .container.open{
-    padding: 48px; 
+    padding-left: 48px; 
     transition: padding 0.5s ease-in;
 }
 
