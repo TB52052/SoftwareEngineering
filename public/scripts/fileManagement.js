@@ -29,6 +29,7 @@ function checkFileName(selectedSemester) {
 
         if (uploadedFileName === expectedFileName) {
             alert("File name matches!");
+            window.location.href = "/profile";
         } else {
             alert("File name doesn't match.");
         }

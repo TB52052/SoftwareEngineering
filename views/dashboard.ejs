@@ -21,16 +21,13 @@
                         <option value="<%= semester.season %>"><%= semester.season %></option>
                         <% }); %>
                     </select>
+
+                    <div id="fileForm">
+                        <input id="fileInputForm" type="file" id="myFile" name="filename" accept=" .csv">
+                    </div>
+
                     <button type="submit">Submit</button>
                 </form>
-                
-                <div id="fileForm">
-                    <input id="fileInputForm" type="file" id="myFile" name="filename" accept=" .csv">
-                    <input type="submit">
-                    <button onclick=checkFileName()> Check File Name </button>
-                </div>
-
-
             </div>
             
         </div>
