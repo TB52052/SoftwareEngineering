@@ -1,4 +1,4 @@
-# SoftwareEngineering
+# Software Engineering
 
 ## Dependencies
 1. `npm i nodemon`
