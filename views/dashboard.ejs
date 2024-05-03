@@ -5,6 +5,8 @@
     <%- include('partials/main-page-head') %>
     <link rel="stylesheet" href="/styles/side-bar.css">
     <link rel="stylesheet" href="/styles/semesterForm.css">
+    <link rel="stylesheet" href="/styles/fileForm.css">
+    <script src="/scripts/fileManagement.js"></script>
     <title>Study Planner - Dashboard</title>
 </head>
 <body>
@@ -13,7 +15,7 @@
         <div class="container">
             <div class="content">
                 <h2>Select a Semester </h2>
-                <form id="semesterForm" method="post">
+                <form id="semesterForm">
                     <select name="semester" id="seasonForm">
                         <% semesterInfo.forEach(function(semester) { %>
                         <option value="<%= semester.season %>"><%= semester.season %></option>
@@ -21,19 +23,19 @@
                     </select>
                     <button type="submit">Submit</button>
                 </form>
+                
+                <div id="fileForm">
+                    <input id="fileInputForm" type="file" id="myFile" name="filename" accept=" .csv">
+                    <input type="submit">
+                    <button onclick="checkFileName()"> Check File Name </button>
+                </div>
+
+
             </div>
+            
         </div>
     </div>
     <%- include('partials/error-box') %>
 
-    <script>
-        // Event listener to the form submit event
-        document.getElementById('semesterForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent form submission
-            var selectedSemester = document.getElementById('seasonForm').value;
-            
-            console.log('Selected Semester:', selectedSemester);
-        });
-    </script>
 </body>
 </html>
