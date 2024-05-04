@@ -1,0 +1,122 @@
+/* Task Section Styles */
+
+/* Add New Task Section */
+.add-task-section {
+    background-color: #f9f9f9;
+    padding: 10px; 
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    max-height: calc(100vh - 100px); 
+    overflow-y: hidden; 
+}
+
+.add-task-section .form-title {
+    color: #333;
+    margin-bottom: 10px; 
+    font-size: 18px;
+}
+
+.add-task-section label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px; 
+}
+
+.add-task-section input[type="text"],
+.add-task-section select,
+.add-task-section textarea {
+    width: calc(100% - 20px); 
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-bottom: 8px; 
+    font-size: 14px; 
+}
+
+.add-task-section button[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%; 
+    font-size: 16px;
+}
+
+.add-task-section button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Existing Tasks Section */
+.tasks-section {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    flex-grow: 1;
+    height: calc(100% - 30px); 
+    overflow-y: auto; 
+}
+
+
+.tasks-section h2 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.task-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0; 
+}
+
+.task-item {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+}
+
+.task-item h3 {
+    color: #007bff;
+    margin-bottom: 10px;
+}
+
+.task-item p {
+    margin: 5px 0;
+}
+
+.task-item button {
+    background-color: #dc3545;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.task-item button:hover {
+    background-color: #c82333;
+}
+
+
+/* Milestones Section */
+.milestones-section {
+    margin-top: 20px;
+}
+
+.milestone-item {
+    margin-bottom: 5px;
+}
+
+.milestone-item input[type="checkbox"] {
+    margin-right: 10px;
+}
+
