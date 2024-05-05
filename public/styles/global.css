@@ -47,3 +47,7 @@ html {
     border-top-color: #c0392b;
     border-width: 10px;
 }
+
+.hidden {
+    display: none;
+}
