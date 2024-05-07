@@ -47,4 +47,55 @@ function comparePassword(password, hash) {
     });
 }
 
-module.exports = { getAccount, insertNewAccount, hashPassword, comparePassword};
+function getUserAssessments(userId) {
+    return new Promise((resolve, reject) => {
+        const sql = `
+            SELECT Assessments.*, Modules.ModuleName
+                FROM Assessments
+                JOIN UserAssessments ON Assessments.AssessmentID = UserAssessments.AssessmentID
+                JOIN Modules ON Assessments.ModuleID = Modules.ModuleID
+                WHERE UserAssessments.UserID = ?
+        `;
+        db.all(sql, [userId], (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+}
+
+function getUserTasks(userId) {
+    return new Promise((resolve, reject) => {
+        const sql = `
+        SELECT 
+        StudyTasks.*,
+        TaskTypes.TypeName,
+        Assessments.AssessmentName,
+        Modules.ModuleName
+            FROM StudyTasks
+            JOIN TaskTypes ON StudyTasks.TaskTypeID = TaskTypes.TaskTypeID
+            JOIN Assessments ON StudyTasks.AssessmentID = Assessments.AssessmentID  -- Assuming a reference exists
+            JOIN Modules ON Assessments.ModuleID = Modules.ModuleID  -- Assuming Assessments table has a ModuleID
+            WHERE StudyTasks.UserID = ?
+        `;
+        db.all(sql, [userId], (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+}
+
+
+module.exports = {
+    getAccount,
+    insertNewAccount,
+    hashPassword,
+    comparePassword,
+    getUserAssessments,
+    getUserTasks
+};
