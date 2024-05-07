@@ -14,20 +14,7 @@
         <%- include('partials/side-bar') %>
         <div class="container">
             <div class="content">
-                <h2>Select a Semester </h2>
-                <form id="semesterForm">
-                    <select name="semester" id="seasonForm">
-                        <% semesterInfo.forEach(function(semester) { %>
-                        <option value="<%= semester.season %>"><%= semester.season %></option>
-                        <% }); %>
-                    </select>
-
-                    <div id="fileForm">
-                        <input id="fileInputForm" type="file" id="myFile" name="filename" accept=" .csv">
-                    </div>
-
-                    <button type="submit">Submit</button>
-                </form>
+                
             </div>
             
         </div>
