@@ -58,24 +58,6 @@
                             </form>
                         </div>
 
-
-
-                        <h2 class="form-title">Select a Semester</h2>
-                        <form id="semesterForm">
-                            <select name="semester" id="seasonForm">
-                                <% semesterInfo.forEach(function(semester) { %>
-                                <option value="<%= semester.season %>"><%= semester.season %></option>
-                                <% }); %>
-                            </select>
-        
-                            <div id="fileForm">
-                                <input id="fileInputForm" type="file" id="myFile" name="filename" accept=" .csv">
-                            </div>
-                            <button type="submit" id="submit-name-edit">Submit</button>
-                        </form>
-
-
-
                         <div id="change-password-form" class="hidden">
                             <h2 class="form-title">Change Password</h2>
                             <form>
@@ -94,6 +76,22 @@
                                 <button type="button" id="cancel-delete-account">Cancel</button>
                             </form>
                         </div>
+
+
+                        <h2 class="form-title">Select a Semester</h2>
+                        <form id="semesterForm">
+                            <select name="semester" id="seasonForm">
+                                <% semesterInfo.forEach(function(semester) { %>
+                                <option value="<%= semester.season %>"><%= semester.season %></option>
+                                <% }); %>
+                            </select>
+        
+                            <div id="fileForm">
+                                <input id="fileInputForm" type="file" id="myFile" name="filename" accept=" .csv">
+                            </div>
+                            <button type="submit" id="submit-name-edit">Submit</button>
+                        </form>
+
                 </div>
             </div>
         </div>
