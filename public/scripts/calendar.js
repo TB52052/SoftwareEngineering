@@ -92,11 +92,6 @@ function addEventToCalendar(day, assessmentName, typeName, timeSpent, moduleName
 
 
 
-
-
-
-
-
 function moveDate(dir) {
     currentMonth += dir;
     if (currentMonth < 0) {
