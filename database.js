@@ -50,11 +50,12 @@ function comparePassword(password, hash) {
 function getUserAssessments(userId) {
     return new Promise((resolve, reject) => {
         const sql = `
-            SELECT Assessments.*, Modules.ModuleName
-                FROM Assessments
-                JOIN UserAssessments ON Assessments.AssessmentID = UserAssessments.AssessmentID
-                JOIN Modules ON Assessments.ModuleID = Modules.ModuleID
-                WHERE UserAssessments.UserID = ?
+            SELECT 
+            UserAssessments.*, 
+            Assessments.AssessmentName, Assessments.ModuleID
+                FROM UserAssessments
+                JOIN Assessments ON UserAssessments.AssessmentID = Assessments.AssessmentID
+            WHERE UserAssessments.UserID = ?
         `;
         db.all(sql, [userId], (err, rows) => {
             if (err) {
@@ -76,8 +77,8 @@ function getUserTasks(userId) {
         Modules.ModuleName
             FROM StudyTasks
             JOIN TaskTypes ON StudyTasks.TaskTypeID = TaskTypes.TaskTypeID
-            JOIN Assessments ON StudyTasks.AssessmentID = Assessments.AssessmentID  -- Assuming a reference exists
-            JOIN Modules ON Assessments.ModuleID = Modules.ModuleID  -- Assuming Assessments table has a ModuleID
+            JOIN Assessments ON StudyTasks.AssessmentID = Assessments.AssessmentID  
+            JOIN Modules ON Assessments.ModuleID = Modules.ModuleID  
             WHERE StudyTasks.UserID = ?
         `;
         db.all(sql, [userId], (err, rows) => {
