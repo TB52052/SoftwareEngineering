@@ -10,108 +10,12 @@
 <body>
     <div class="wrapper">
         <%- include('partials/side-bar') %>
-        
         <div class="container">
             <div class="content">
-                <div class="tabs-container">
-                    <div class="tabs">
-                        <button class="tablinks" onclick="openTab(event, 'missed-deadlines')">Missed Deadlines</button>
-                        <button class="tablinks" onclick="openTab(event, 'upcoming-deadlines')">Upcoming Deadlines</button>
-                        <button class="tablinks" onclick="openTab(event, 'deadlines')">Deadlines</button>
-                    </div>
-                    <div class="content">
-
-       <!-- Missed Deadlines Tab -->
-<div id="missed-deadlines" class="tabcontent">
-    <h2>Missed Deadlines</h2>
-    <div class="deadline-grid">
-        <div class="deadline-card missed">
-            <h3><i class="fas fa-exclamation-triangle"></i> Deadline 1</h3>
-            <div class="progress-bar">
-                <div class="progress" style="width: 50%;"></div>
-            </div>
-            <p>Task 1</p>
-            <p>Task 2</p>
-        </div>
-        <div class="deadline-card missed">
-            <h3><i class="fas fa-exclamation-triangle"></i> Deadline 2</h3>
-            <div class="progress-bar">
-                <div class="progress" style="width: 60%;"></div>
-            </div>
-            <p>Task 3</p>
-            <p>Task 4</p>
-        </div>
-        <!-- More deadlines can be added here -->
-    </div>
-</div>
-
-<!-- Upcoming Deadlines Tab -->
-<div id="upcoming-deadlines" class="tabcontent">
-    <h2>Upcoming Deadlines</h2>
-    <div class="deadline-grid">
-        <div class="deadline-card upcoming">
-            <h3><i class="fas fa-hourglass-half"></i> Deadline 3</h3>
-            <div class="progress-bar">
-                <div class="progress" style="width: 75%;"></div>
-            </div>
-            <p>Task 5</p>
-            <p>Task 6</p>
-        </div>
-        <div class="deadline-card upcoming">
-            <h3><i class="fas fa-hourglass-half"></i> Deadline 4</h3>
-            <div class="progress-bar">
-                <div class="progress" style="width: 80%;"></div>
-            </div>
-            <p>Task 7</p>
-            <p>Task 8</p>
-        </div>
-        <!-- More deadlines can be added here -->
-    </div>
-</div>
-
-<!-- Deadlines Tab -->
-<div id="deadlines" class="tabcontent">
-    <h2>Deadlines</h2>
-    <div class="deadline-grid">
-        <div class="deadline-card current">
-            <h3><i class="fas fa-check-circle"></i> Deadline 5</h3>
-            <div class="progress-bar">
-                <div class="progress" style="width: 100%;"></div>
-            </div>
-            <p>Task 9</p>
-            <p>Task 10</p>
-        </div>
-        <div class="deadline-card current">
-            <h3><i class="fas fa-check-circle"></i> Deadline 6</h3>
-            <div class="progress-bar">
-                <div class="progress" style="width: 90%;"></div>
-            </div>
-            <p>Task 11</p>
-            <p>Task 12</p>
-        </div>
-        <!-- More deadlines can be added here -->
-    </div>
-</div>
-                </div>
-
+                
             </div>
         </div>
     </div>
     <%- include('partials/error-box') %>
-    <script>
-  function openTab(evt, tabName) {
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-    document.getElementById(tabName).style.display = "block";
-    evt.currentTarget.className += " active";
-}
-    </script>
 </body>
 </html>

@@ -2,9 +2,11 @@
 const express = require('express'); 
 const session = require('express-session');
 const dotenv = require('dotenv').config();
+const dbHelpers = require('./database.js'); 
 
 // App
 const app = express();
+app.use(express.json());
 const PORT = 3000;
 
 app.set('view engine', 'ejs');
@@ -73,6 +75,26 @@ app.get('/get-session-message', (req, res) => {
 app.get('/clear-session-message', (req, res) => {
     req.session.message = null;
     res.json(true);
+});
+
+app.get('/api/user/:userId/assessments', async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const assessments = await dbHelpers.getUserAssessments(userId);
+        res.json(assessments);
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+
+app.get('/api/user/:userId/tasks', async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const tasks = await dbHelpers.getUserTasks(userId);
+        res.json(tasks);
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
 });
 
 app.listen(PORT);
