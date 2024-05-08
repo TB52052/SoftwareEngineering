@@ -71,6 +71,7 @@
     text-align: center;
 }
 
+
 .sidebar ul li:hover {
     transform: scale(1.1);
     background-color: #ddd; 

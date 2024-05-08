@@ -24,7 +24,7 @@ router.post('/', async (req, res) => {
 
         req.session.user = {id: account.id, email: account.email};
 
-        return res.redirect('/dashboard');
+        return res.redirect('/profile');
     } catch (error) {
         req.session.message = 'Internal Server Error';
         return res.status(500).send(error.message);
