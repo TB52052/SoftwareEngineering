@@ -15,8 +15,20 @@ function getAccount(email) {
     });
 }
 
-function insertNewAccount(email, password) {
-    db.run(`INSERT INTO Users (email, password) VALUES (?, ?)`, [email, password], (err) => {
+function getAccountByID(userId) {
+    return new Promise((resolve, reject) => {
+        db.get(`SELECT * FROM Users WHERE id = ?`, [userId], (err, row) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(row);
+            }
+        });
+    });
+}
+
+function insertNewAccount(email, password, name, surname) {
+    db.run(`INSERT INTO Users (email, password, name, surname) VALUES (?, ?, ?, ?)`, [email, password, name, surname], (err) => {
         if (err) {
             console.error(err.message);
         }
@@ -91,6 +103,41 @@ function getUserTasks(userId) {
     });
 }
 
+function updateUsername(userId, newName, newSurname) {
+    return new Promise((resolve, reject) => {
+        db.run(`UPDATE Users SET name = ?, surname = ? WHERE id = ?`, [newName, newSurname, userId], (err) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
+    });
+}
+
+function updatePassword(userId, newPassword) {
+    return new Promise((resolve, reject) => {
+        db.run(`UPDATE Users SET password = ? WHERE id = ?`, [newPassword, userId], (err) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
+    });
+}
+
+function deleteAccount(userId) {
+    return new Promise((resolve, reject) => {
+        db.run(`DELETE FROM Users WHERE id = ?`, [userId], (err) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
+    });
+}
 
 module.exports = {
     getAccount,
@@ -98,5 +145,9 @@ module.exports = {
     hashPassword,
     comparePassword,
     getUserAssessments,
-    getUserTasks
+    getUserTasks,
+    updateUsername,
+    updatePassword,
+    deleteAccount,
+    getAccountByID
 };

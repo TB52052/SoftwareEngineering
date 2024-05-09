@@ -7,10 +7,8 @@
     <link rel="stylesheet" href="/styles/profile.css">
     <link rel="stylesheet" href="/styles/profile-actions.css">
     <link rel="stylesheet" href="/styles/edit-profile.css">
-
     <link rel="stylesheet" href="/styles/semesterForm.css">
     <link rel="stylesheet" href="/styles/fileForm.css">
-    
     <script src="/scripts/profile.js" defer></script>
     <script src="/scripts/fileManagement.js"></script>
     <title>Study Planner - Profile</title>
@@ -26,15 +24,15 @@
                         <div class="details">
                             <div class="display-wrapper">
                                 <strong>Email:</strong>
-                                <span>johndoe@gmail.com</span>
+                                <span id="email-span">johndoe@gmail.com</span>
                             </div>
                             <div class="display-wrapper" id="edit-name-wrapper">
                                 <strong>Name:</strong>
-                                <span>John</span>
+                                <span id="forename-span">John</span>
                             </div>
                             <div class="display-wrapper">
                                 <strong>Surname:</strong>
-                                <span>Doe</span>
+                                <span id="surname-span">Doe</span>
                             </div>
                         </div>
                     </div>
@@ -44,54 +42,59 @@
                         <button id="edit-name">Edit Name</button>
                         <button id="change-password">Change Password</button>
                         <button id="delete-account">Delete Account</button>
+                        <button id="select-semester">Select Semester</button>
                     </div>  
                 </div>
                 <div class="end-wrapper">
                     <div class="form-container">
+
+                        <!-- Edit Name Form -->
                         <div id="edit-name-form" class="">
                             <h2 class="form-title">Edit Name</h2>
                             <form>
-                                <input type="text" id="name" placeholder="Enter name">
-                                <input type="text" id="surname" placeholder="Enter surname">
+                                <input type="text" id="name-edit" placeholder="Enter name" required>
+                                <input type="text" id="surname-edit" placeholder="Enter surname" required>
+                                <input type="password" id="name-password" placeholder="Enter password" required>
                                 <button type="button" id="submit-name-edit">Save</button>
-                                <button type="button" id="cancel-name-edit">Cancel</button>
                             </form>
                         </div>
 
+                        <!-- Change Password Form -->
                         <div id="change-password-form" class="hidden">
                             <h2 class="form-title">Change Password</h2>
                             <form>
-                                <input type="password" id="old-password" placeholder="Enter old password">
-                                <input type="password" id="new-password" placeholder="Enter new password">
-                                <input type="password" id="confirm-password" placeholder="Confirm new password">
+                                <input type="password" id="old-password" placeholder="Enter old password" required>
+                                <input type="password" id="new-password" placeholder="Enter new password" required>
+                                <input type="password" id="confirm-password" placeholder="Confirm new password" required>
                                 <button type="button" id="submit-password-edit">Save</button>
-                                <button type="button" id="cancel-password-edit">Cancel</button>
                             </form>
                         </div>
+
+                        <!-- Delete Account Form -->
                         <div id="delete-account-form" class="hidden">
                             <h2 class="form-title">Delete Account</h2>
                             <form>
-                                <input type="password" id="password" placeholder="Enter password">
+                                <input type="password" id="delete-password" placeholder="Enter password" required>
                                 <button type="button" id="submit-delete-account">Delete</button>
-                                <button type="button" id="cancel-delete-account">Cancel</button>
                             </form>
                         </div>
 
-
-                        <h2 class="form-title">Select a Semester</h2>
-                        <form id="semesterForm">
-                            <select name="semester" id="seasonForm">
-                                <% semesterInfo.forEach(function(semester) { %>
-                                <option value="<%= semester.season %>"><%= semester.season %></option>
-                                <% }); %>
-                            </select>
-        
-                            <div id="fileForm">
-                                <input id="fileInputForm" type="file" id="myFile" name="filename" accept=" .csv">
-                            </div>
-                            <button type="submit" id="submit-name-edit">Submit</button>
-                        </form> 
-
+                        <!-- Semester Form -->
+                        <div id="select-semester-form" class="hidden">
+                            <h2 class="form-title">Select a Semester</h2>
+                            <form id="semesterForm">
+                                <select name="semester" id="seasonForm">
+                                    <% semesterInfo.forEach(function(semester) { %>
+                                    <option value="<%= semester.season %>"><%= semester.season %></option>
+                                    <% }); %>
+                                </select>
+            
+                                <div id="fileForm">
+                                    <input id="fileInputForm" type="file" id="myFile" name="filename" accept=" .csv">
+                                </div>
+                                <button type="submit" id="submit-semester">Submit</button>
+                            </form> 
+                        </div>  
                 </div>
             </div>
         </div>

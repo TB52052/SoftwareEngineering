@@ -1,14 +1,10 @@
 document.addEventListener("DOMContentLoaded", function() {
-    // Session Error Check
     fetch('/get-session-message')
     .then(response => response.json())
-    .then(sessionMessage => {
-        showError(sessionMessage);
-
-    }).catch(error => {});
+    .then(sessionMessage => { showMessage(sessionMessage); });
 });
 
-function showError(error) {
+function showMessage(error) {
     if (error) {
         const errorBox = document.getElementById('error-box');
         errorBox.textContent = error;
@@ -18,7 +14,7 @@ function showError(error) {
         .then(response => response.json())
         .then(sessionMessage => {
             errorBox.classList.remove('hidden');
-            setTimeout(() => {errorBox.classList.add('hidden');}, 2500);
-        }).catch(error => {});
+            setTimeout(() => {errorBox.classList.add('hidden');}, 2500); 
+        });
     }   
 }
