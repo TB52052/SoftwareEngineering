@@ -52,7 +52,7 @@ const dashboardRoute = require('./routes/dashboard-route');
 const profileRoute = require('./routes/profile-route');
 const logoutRoute = require('./routes/logout-route');
 
-app.use('/login',forceLogout, loginRoute);
+app.use('/login', forceLogout, loginRoute);
 app.use('/register', forceLogout, registerRoute);
 app.use('/calendar', checkAuth, calendarRoute);
 app.use('/tasks', checkAuth, tasksRoute);
@@ -61,7 +61,7 @@ app.use('/profile', checkAuth, profileRoute);
 app.use('/logout', logoutRoute);
 
 app.get('/', (req, res) => {
-    res.redirect('/login');
+    res.redirect('/profile');
 });
 
 app.get('/team', (req, res) => {
