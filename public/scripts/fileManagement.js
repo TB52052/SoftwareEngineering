@@ -14,7 +14,7 @@ function getExpectedFileName(selectedSemester) {
     const [semester, yearRange] = selectedSemester.split(' ');
 
     // Construct the expected filename
-    const expectedFileName = `${semester} ${yearRange}.csv`;
+    const expectedFileName = `${semester}_${yearRange}_template.json`;
 
     return expectedFileName;
 }

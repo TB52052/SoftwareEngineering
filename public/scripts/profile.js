@@ -16,3 +16,21 @@ function toggleForm(form) {
     });
     form.classList.remove('hidden');
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+    const buttons = document.querySelectorAll(".profile-actions button");
+
+    buttons.forEach(button => {
+        button.addEventListener("click", function() {
+            // Remove "pulse" class from all buttons
+            buttons.forEach(btn => {
+                if (btn !== button) {
+                    btn.classList.remove("pulse");
+                }
+            });
+
+            // Add "pulse" class to the clicked button
+            button.classList.add("pulse");
+        });
+    });
+});
