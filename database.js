@@ -182,5 +182,7 @@ module.exports = {
     updateUsername,
     updatePassword,
     deleteAccount,
-    getAccountByID
+    getAccountByID,
+    getUserModules, 
+    getTaskTypes
 };
