@@ -147,7 +147,6 @@ function updateUsername(userId, newName, newSurname) {
     });
 }
 
-
 function updatePassword(userId, newPassword) {
     return new Promise((resolve, reject) => {
         db.run(`UPDATE Users SET password = ? WHERE id = ?`, [newPassword, userId], (err) => {
@@ -172,6 +171,30 @@ function deleteAccount(userId) {
     });
 }
 
+function getModule(moduleId) {
+    return new Promise((resolve, reject) => {
+        db.get(`SELECT * FROM Modules WHERE ModuleID = ?`, [moduleId], (err, row) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(row);
+            }
+        });
+    });
+}
+
+function getAssessment(assessmentId) {
+    return new Promise((resolve, reject) => {
+        db.get(`SELECT * FROM Assessments WHERE AssessmentID = ?`, [assessmentId], (err, row) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(row);
+            }
+        });
+    });
+}
+
 module.exports = {
     getAccount,
     insertNewAccount,
@@ -184,5 +207,7 @@ module.exports = {
     deleteAccount,
     getAccountByID,
     getUserModules, 
-    getTaskTypes
+    getTaskTypes,
+    getModule,
+    getAssessment
 };
