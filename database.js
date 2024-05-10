@@ -27,8 +27,8 @@ function getAccountByID(userId) {
     });
 }
 
-function insertNewAccount(email, password, name, surname) {
-    db.run(`INSERT INTO Users (email, password, name, surname) VALUES (?, ?, ?, ?)`, [email, password, name, surname], (err) => {
+function insertNewAccount(email, password) {
+    db.run(`INSERT INTO Users (email, password) VALUES (?, ?)`, [email, password], (err) => {
         if (err) {
             console.error(err.message);
         }
@@ -62,14 +62,46 @@ function comparePassword(password, hash) {
 function getUserAssessments(userId) {
     return new Promise((resolve, reject) => {
         const sql = `
-            SELECT 
-            UserAssessments.*, 
-            Assessments.AssessmentName, Assessments.ModuleID
-                FROM UserAssessments
-                JOIN Assessments ON UserAssessments.AssessmentID = Assessments.AssessmentID
-            WHERE UserAssessments.UserID = ?
+            SELECT Assessments.*, Modules.ModuleName
+                FROM Assessments
+                JOIN UserAssessments ON Assessments.AssessmentID = UserAssessments.AssessmentID
+                JOIN Modules ON Assessments.ModuleID = Modules.ModuleID
+                WHERE UserAssessments.UserID = ?
         `;
         db.all(sql, [userId], (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+}
+
+function getUserModules(userId) {
+    return new Promise((resolve, reject) => {
+        const sql = `
+            SELECT Modules.*
+                FROM Modules
+                JOIN UserModules ON Modules.ModuleID = UserModules.ModuleID
+                WHERE UserModules.UserID = ?
+        `;
+        db.all(sql, [userId], (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+}
+
+function getTaskTypes() {
+    return new Promise((resolve, reject) => {
+        const sql = `
+            SELECT * FROM TaskTypes
+        `;
+        db.all(sql, [], (err, rows) => {
             if (err) {
                 reject(err);
             } else {
@@ -115,6 +147,7 @@ function updateUsername(userId, newName, newSurname) {
     });
 }
 
+
 function updatePassword(userId, newPassword) {
     return new Promise((resolve, reject) => {
         db.run(`UPDATE Users SET password = ? WHERE id = ?`, [newPassword, userId], (err) => {
@@ -139,42 +172,6 @@ function deleteAccount(userId) {
     });
 }
 
-function deleteTasks(userID) {
-    return new Promise((resolve, reject) => {
-        db.run(`DELETE FROM StudyTasks WHERE UserID = ?`, [userID], (err) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve();
-            }
-        });
-    });
-}
-
-function deleteAssessments(userID) {
-    return new Promise((resolve, reject) => {
-        db.run(`DELETE FROM UserAssessments WHERE UserID = ?`, [userID], (err) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve();
-            }
-        });
-    });
-}
-
-function deleteModules(userID) {
-    return new Promise((resolve, reject) => {
-        db.run(`DELETE FROM UserModules WHERE UserID = ?`, [userID], (err) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve();
-            }
-        });
-    });
-}
-
 module.exports = {
     getAccount,
     insertNewAccount,
@@ -185,8 +182,5 @@ module.exports = {
     updateUsername,
     updatePassword,
     deleteAccount,
-    getAccountByID,
-    deleteTasks,
-    deleteAssessments,
-    deleteModules
+    getAccountByID
 };

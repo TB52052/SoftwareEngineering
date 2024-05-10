@@ -52,7 +52,7 @@ const dashboardRoute = require('./routes/dashboard-route');
 const profileRoute = require('./routes/profile-route');
 const logoutRoute = require('./routes/logout-route');
 
-app.use('/login', forceLogout, loginRoute);
+app.use('/login',forceLogout, loginRoute);
 app.use('/register', forceLogout, registerRoute);
 app.use('/calendar', checkAuth, calendarRoute);
 app.use('/tasks', checkAuth, tasksRoute);
@@ -61,7 +61,7 @@ app.use('/profile', checkAuth, profileRoute);
 app.use('/logout', logoutRoute);
 
 app.get('/', (req, res) => {
-    res.redirect('/profile');
+    res.redirect('/login');
 });
 
 app.get('/team', (req, res) => {
@@ -81,32 +81,24 @@ app.get('/clear-session-message', (req, res) => {
 });
 
 app.get('/api/user/:userId/assessments', async (req, res) => {
-    console.log("Endpoint Called: Fetching assessments");  // Check if this logs
-    const userId = req.params.userId;
-    if (!userId) {
-        console.log("No userId provided");
-        return res.status(400).send("User ID is required");
-    }
     try {
+        const userId = req.params.userId;
         const assessments = await dbHelpers.getUserAssessments(userId);
-        console.log("Assessments:", assessments);  // Log the data fetched
         res.json(assessments);
     } catch (err) {
-        console.error('Server Error:', err);
         res.status(500).send(err.message);
     }
 });
 
-
 app.get('/api/user/:userId/tasks', async (req, res) => {
-    console.log("Endpoint Called: Fetching ");  // Check if this logs
     try {
         const userId = req.params.userId;
-        const tasks = await dbHelpers.getUserTasks(userId);
+        const tasks = await dbHelpers.getAllTasks(userId);
         res.json(tasks);
     } catch (err) {
         res.status(500).send(err.message);
     }
 });
+
 
 app.listen(PORT);

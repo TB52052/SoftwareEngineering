@@ -23,7 +23,7 @@ router.post('/', async (req, res) => {
     // Hash password
     try {
         const hashedPassword = await database.hashPassword(req.body.password);
-        database.insertNewAccount(req.body.email, hashedPassword, req.body.forename, req.body.surname);
+        database.insertNewAccount(req.body.email, hashedPassword);
         return res.redirect('/login');
 
     }
