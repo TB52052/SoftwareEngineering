@@ -139,6 +139,42 @@ function deleteAccount(userId) {
     });
 }
 
+function deleteTasks(userID) {
+    return new Promise((resolve, reject) => {
+        db.run(`DELETE FROM StudyTasks WHERE UserID = ?`, [userID], (err) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
+    });
+}
+
+function deleteAssessments(userID) {
+    return new Promise((resolve, reject) => {
+        db.run(`DELETE FROM UserAssessments WHERE UserID = ?`, [userID], (err) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
+    });
+}
+
+function deleteModules(userID) {
+    return new Promise((resolve, reject) => {
+        db.run(`DELETE FROM UserModules WHERE UserID = ?`, [userID], (err) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
+    });
+}
+
 module.exports = {
     getAccount,
     insertNewAccount,
@@ -149,5 +185,8 @@ module.exports = {
     updateUsername,
     updatePassword,
     deleteAccount,
-    getAccountByID
+    getAccountByID,
+    deleteTasks,
+    deleteAssessments,
+    deleteModules
 };

@@ -76,7 +76,11 @@ router.post('/delete', async (req, res) => {
     if (!await database.comparePassword(password, account.password)) { return res.status(403).send('Incorrect password'); }
 
     // Delete the account
-    if (database.deleteAccount(userId)) { return res.status(200).send('Account deleted'); }
+    let deleteAccount = await database.deleteAccount(userId);
+    await database.deleteTasks(userId);
+    await database.deleteAssessments(userId);
+
+    if (!deleteAccount) { return res.status(200).send('Account deleted'); }
 
     return res.status(500).send('Error deleting account');
 });
