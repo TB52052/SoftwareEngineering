@@ -66,19 +66,13 @@ function getUserAssessments(userId) {
     });
 }
 
-function getUserTasks(userId) {
+function getUserModules(userId) {
     return new Promise((resolve, reject) => {
         const sql = `
-        SELECT 
-        StudyTasks.*,
-        TaskTypes.TypeName,
-        Assessments.AssessmentName,
-        Modules.ModuleName
-            FROM StudyTasks
-            JOIN TaskTypes ON StudyTasks.TaskTypeID = TaskTypes.TaskTypeID
-            JOIN Assessments ON StudyTasks.AssessmentID = Assessments.AssessmentID  -- Assuming a reference exists
-            JOIN Modules ON Assessments.ModuleID = Modules.ModuleID  -- Assuming Assessments table has a ModuleID
-            WHERE StudyTasks.UserID = ?
+            SELECT Modules.*
+                FROM Modules
+                JOIN UserModules ON Modules.ModuleID = UserModules.ModuleID
+                WHERE UserModules.UserID = ?
         `;
         db.all(sql, [userId], (err, rows) => {
             if (err) {
@@ -90,6 +84,20 @@ function getUserTasks(userId) {
     });
 }
 
+function getTaskTypes() {
+    return new Promise((resolve, reject) => {
+        const sql = `
+            SELECT * FROM TaskTypes
+        `;
+        db.all(sql, [], (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+}
 
 module.exports = {
     getAccount,
@@ -97,5 +105,6 @@ module.exports = {
     hashPassword,
     comparePassword,
     getUserAssessments,
-    getUserTasks
+    getUserModules,
+    getTaskTypes
 };

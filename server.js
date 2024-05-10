@@ -90,11 +90,12 @@ app.get('/api/user/:userId/assessments', async (req, res) => {
 app.get('/api/user/:userId/tasks', async (req, res) => {
     try {
         const userId = req.params.userId;
-        const tasks = await dbHelpers.getUserTasks(userId);
+        const tasks = await dbHelpers.getAllTasks(userId);
         res.json(tasks);
     } catch (err) {
         res.status(500).send(err.message);
     }
 });
+
 
 app.listen(PORT);
