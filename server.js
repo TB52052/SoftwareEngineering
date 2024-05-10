@@ -69,6 +69,9 @@ app.get('/team', (req, res) => {
 });
 
 app.get('/get-session-message', (req, res) => {
+    if (!req.session.message) {
+        return res.json(null);
+    }
     res.json(req.session.message);
 });
 
