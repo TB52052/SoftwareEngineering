@@ -32,3 +32,31 @@
 .profile-actions button:focus {
     outline: none;
 }
+
+.profile-actions button:focus,
+.profile-actions button:active {
+    background-color: palevioletred;
+}
+
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+
+.pulse {
+    animation-name: pulse;
+    animation-duration: 1s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite; 
+}
+
+    
