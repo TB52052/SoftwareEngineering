@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/styles/semesterForm.css">
     <link rel="stylesheet" href="/styles/fileForm.css">
     <script src="/scripts/profile.js" defer></script>
+    <script src="/scripts/fileManagement.js"></script>
     <title>Study Planner - Profile</title>
 </head>
 <body>
@@ -38,10 +39,10 @@
                 </div>
                 <div class="middle-wrapper">
                     <div class="profile-actions">
-                        <button id="edit-name" class = "pulse" id="buttonId" class="edit-profile" >Edit Name</button>
-                        <button id="change-password" class = "pulse" id="buttonId" class="edit-profile" >Change Password</button>
-                        <button id="delete-account" class = "pulse" id="buttonId"  class="edit-profile">Delete Account</button>
-                        <button id="select-semester" class = "pulse" id="buttonId">Select Semester</button>
+                        <button id="edit-name" class = "pulse" >Edit Name</button>
+                        <button id="change-password" class = "pulse" >Change Password</button>
+                        <button id="delete-account" class = "pulse" >Delete Account</button>
+                        <button id="select-semester" class = "pulse" >Select Semester</button>
                     </div>  
                 </div>
                 <div class="end-wrapper">
@@ -89,7 +90,7 @@
                                 </select>
             
                                 <div id="fileForm">
-                                    <input id="fileInputForm" type="file" id="myFile" name="filename" accept=" .csv">
+                                    <input id="fileInputForm" type="file" id="myFile" name="filename" accept=" .json">
                                 </div>
                                 <button type="submit" id="submit-semester">Submit</button>
                             </form> 

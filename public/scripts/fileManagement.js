@@ -10,13 +10,14 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 
 function getExpectedFileName(selectedSemester) {
-    // Extract the semester and year range from the selected semester
+    
     const [semester, yearRange] = selectedSemester.split(' ');
 
-    // Construct the expected filename
-    const expectedFileName = `${semester} ${yearRange}.csv`;
-
+    // expected filename
+    const expectedFileName = `${semester} ${yearRange}.json`;
+    
     return expectedFileName;
+    
 }
 
 function checkFileName(selectedSemester) {
@@ -24,12 +25,12 @@ function checkFileName(selectedSemester) {
     if (fileInput.files.length > 0) {
         var uploadedFileName = fileInput.files[0].name;
 
-        // Generate the expected filename based on the selected semester
         var expectedFileName = getExpectedFileName(selectedSemester);
 
         if (uploadedFileName === expectedFileName) {
             alert("File name matches!");
             window.location.href = "/dashboard";
+            
         } else {
             alert("File name doesn't match.");
         }

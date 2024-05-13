@@ -1,0 +1,22 @@
+[
+    {
+        "ModuleID": "CS101",
+        "AssessmentID": 1
+    },
+    {
+        "ModuleID": "CS101",
+        "AssessmentID": 2
+    },
+    {
+        "ModuleID": "CS102",
+        "AssessmentID": 3
+    },
+    {
+        "ModuleID": "CS102",
+        "AssessmentID": 4
+    },
+    {
+        "ModuleID": "CS103",
+        "AssessmentID": 5
+    }
+]

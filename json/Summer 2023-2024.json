@@ -1,0 +1,26 @@
+[
+    {
+        "ModuleID": "EC101",
+        "AssessmentID": 12
+    },
+    {
+        "ModuleID": "EC101",
+        "AssessmentID": 13
+    },
+    {
+        "ModuleID": "EC102",
+        "AssessmentID": 14
+    },
+    {
+        "ModuleID": "EC102",
+        "AssessmentID": 15
+    },
+    {
+        "ModuleID": "EC103",
+        "AssessmentID": 16
+    },
+    {
+        "ModuleID": "EC103",
+        "AssessmentID": 17
+    }
+]
