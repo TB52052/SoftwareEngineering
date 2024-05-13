@@ -18,7 +18,7 @@ html {
     position: fixed;
     bottom: 20px;
     left: 20px;
-    background-color: #c0392b;
+    background-color: lightgreen;
     color: #fff;
     padding: 15px 20px;
     border-radius: 8px;
@@ -44,10 +44,18 @@ html {
     width: 0;
     height: 0;
     border: solid transparent;
-    border-top-color: #c0392b;
+    border-top-color: lightgreen;
     border-width: 10px;
 }
 
 .hidden {
     display: none;
+}
+
+#error-box.isError {
+    background-color: #c0392b;
+}
+
+#error-box.isError:after{
+    border-top-color: #c0392b;
 }

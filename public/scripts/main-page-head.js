@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function logout() {
-    console.log("Logging out...");
     fetch("/logout", {
         method: "POST",
         headers: {

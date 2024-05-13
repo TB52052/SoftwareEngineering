@@ -14,11 +14,13 @@ router.post('/', async (req, res) => {
 
         if (!account || account.password === undefined) {
             req.session.message = 'Account not found.';
+            req.session.isError = true;
             return res.redirect('/login');
         }
 
         if (!(await database.comparePassword(req.body.password, account.password))) {
             req.session.message = 'Invalid credentials.';
+            req.session.isError = true;
             return res.redirect('/login');
         }
 
@@ -27,6 +29,7 @@ router.post('/', async (req, res) => {
         return res.redirect('/profile');
     } catch (error) {
         req.session.message = 'Internal Server Error';
+        req.session.isError = true;
         return res.status(500).send(error.message);
     }
 });
