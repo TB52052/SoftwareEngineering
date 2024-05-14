@@ -1,6 +1,6 @@
 const sqlite3 = require('sqlite3').verbose();
 const bcrypt = require('bcrypt');
-const db = new sqlite3.Database('../database/study_planner.db',  sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {if (err) {console.error(err.message)};});
+const db = new sqlite3.Database('./database/study_planner.db',  sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {if (err) {console.error(err.message)};});
 const NUMBER_OF_HASHES = 13;
 
 function getAccount(email) {
