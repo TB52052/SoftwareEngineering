@@ -1,8 +1,8 @@
 .form-page {
-    box-sizing: border-box; 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin: 0 auto;
     margin-top: 64px;
     background-color: rgba(255, 255, 255, 0.9);
@@ -42,10 +42,10 @@ input[type="email"],
 input[type="password"],
 input[type="text"] {
     width: 100%;
-    padding: 10px; 
-    border: 1px solid #ccc; 
-    border-radius: 5px; 
-    box-sizing: border-box; 
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
     font-size: 16px;
     transition: border-color 0.3s ease;
 }
@@ -55,10 +55,9 @@ input[type="password"]:hover,
 input[type="text"]:hover,
 input[type="email"]:focus,
 input[type="password"]:focus,
-input[type="text"]:focus  {
+input[type="text"]:focus {
     border-color: #999;
     outline: none;
-    
 }
 
 input[type="email"]::placeholder,
@@ -69,13 +68,13 @@ input[type="text"]::placeholder {
 
 /* Button */
 .input-button {
-    background-color: #4CAF50;
+    background-color: #4caf50;
     color: white;
     margin-top: 32px;
     padding: 16px 20px;
     border: none;
-    cursor: pointer; 
-    border-radius: 16px; 
+    cursor: pointer;
+    border-radius: 16px;
     font-size: 16px;
     transition: background-color 0.3s ease;
     width: 100%;

@@ -3,8 +3,8 @@
     <head>
         <%- include('partials/global-head') %>
         <title>Study Planner - Register</title>
-        <link rel="stylesheet" href="/styles/top-bar.css">
-        <link rel="stylesheet" href="/styles/form.css">
+        <link rel="stylesheet" href="/styles/top-bar.css" />
+        <link rel="stylesheet" href="/styles/sign-form.css" />
     </head>
     <body>
         <%- include('partials/top-bar') %>
@@ -13,11 +13,11 @@
             <div class="form-header">
                 <span class="form-title">Register New Account</span>
                 <form class="form-form" action="/register" method="post">
-                    <input class="input-group" type="email" placeholder="Email" name="email" required autocomplete="email">
-                    <input class="input-group" type="text" placeholder="Forename" name="forename" required>
-                    <input class="input-group" type="text" placeholder="Surname" name="surname" required>
-                    <input class="input-group" type="password" placeholder="Password" name="password" required autocomplete="current-password">
-                    <input class="input-group" type="password" placeholder="Confirm Password" name="confirm" required>
+                    <input class="input-group" type="email" placeholder="Email" name="email" required autocomplete="email" />
+                    <input class="input-group" type="text" placeholder="Forename" name="forename" required />
+                    <input class="input-group" type="text" placeholder="Surname" name="surname" required />
+                    <input class="input-group" type="password" placeholder="Password" name="password" required autocomplete="current-password" />
+                    <input class="input-group" type="password" placeholder="Confirm Password" name="confirm" required />
                     <div class="form-button">
                         <button class="input-button" type="submit">Register Account</button>
                     </div>
@@ -30,4 +30,3 @@
         <%- include('partials/error-box') %>
     </body>
 </html>
-

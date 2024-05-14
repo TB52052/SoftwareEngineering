@@ -1,22 +1,14 @@
 .end-wrapper {
     margin-left: 16px;
     display: flex;
-    justify-content: center; /* Add this line */
-    align-items: center; /* Add this line */
+    justify-content: center;
+    align-items: center; 
     background-color: aliceblue;
     border-radius: 16px;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
     padding: 16px;
     flex-grow: 1;
 }
-
-/* .form-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    flex-grow: 1;
-    padding: 256px;
-} */
 
 .form-title {
     font-size: 24px;
