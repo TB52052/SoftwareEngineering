@@ -70,7 +70,7 @@ app.get('/team', (req, res) => {
 
 app.get('/get-session-message', (req, res) => {
     if (!req.session.message) {
-        return res.json(null);
+        return res.json({});
     }
     res.json({message: req.session.message.message, isError: req.session.message.isError});
 });
