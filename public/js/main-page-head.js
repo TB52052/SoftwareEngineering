@@ -1,11 +1,16 @@
-document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("hamburger-toggle").addEventListener("click", function() {
-        this.classList.toggle("open"); // Toggle hamburger icon
-        document.querySelector(".sidebar").classList.toggle("open"); // Toggle sidebar
-        document.querySelector(".sidebar-wrapper").classList.toggle("open"); // Toggle content
-        document.querySelector(".container").classList.toggle("open"); // Toggle content
+document.addEventListener("DOMContentLoaded", function () {
+    // Get the title of the page
+    let title = document.title;
+    let navbarNames = document.querySelectorAll(".navbar-name");
+    navbarNames.forEach(navbarName => {
+        if (title.includes(navbarName.textContent)) {
+            let parent = navbarName.parentElement;
+            parent.classList.add("selected");
+        }
     });
+
 });
+
 
 function logout() {
     fetch("/logout", {

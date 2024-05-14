@@ -1,5 +1,6 @@
 .wrapper {
     display: flex;
+    flex-direction: column; /* Stack items vertically */
     max-width: calc(100vw - 16px);
     height: calc(100vh - 16px);
 }
@@ -14,16 +15,11 @@
     transition: padding 0.5s ease-in;
 }
 
-.container.open{
-    padding-left: 48px; 
-    transition: padding 0.5s ease-in;
-}
-
 .content {
     display: flex;
-    flex:content;
+    flex: 1;
     background-color: #f0f7fc;
     border-radius: 16px;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-    padding: 16px; 
+    padding: 16px;
 }
