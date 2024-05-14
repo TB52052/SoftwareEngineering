@@ -3,7 +3,6 @@ const express = require('express');
 const session = require('express-session');
 const dotenv = require('dotenv').config();
 const db = require('./database/database.js'); 
-const { checkAuth, forceLogout } = require('./middleware/authentication.js');
 
 // App
 const app = express();
@@ -22,6 +21,27 @@ app.use(session({
     cookie: {maxAge: 600000}
 }));
 
+// Middleware to check if user is authenticated
+const checkAuth = (req, res, next) => {    
+    // Check if user is authenticated
+    if (!req.session.user) {
+        res.redirect("/login");
+    }
+
+    if (req.session.cookie.expires < Date.now()) {
+        req.session.destroy();
+        return res.redirect("/login");
+    }
+
+    return next();
+};
+
+const forceLogout = (req, res, next) => {
+    if (req.session.user) {
+        req.session.destroy();
+    }
+    return next();
+}
 
 // Routes
 const loginRoute = require('./routes/login-route');
