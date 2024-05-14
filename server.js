@@ -2,7 +2,8 @@
 const express = require('express'); 
 const session = require('express-session');
 const dotenv = require('dotenv').config();
-const dbHelpers = require('./database.js'); 
+const db = require('./database/database.js'); 
+const { checkAuth, forceLogout } = require('./middleware/authentication.js');
 
 // App
 const app = express();
@@ -21,27 +22,6 @@ app.use(session({
     cookie: {maxAge: 600000}
 }));
 
-// Middleware to check if user is authenticated
-const checkAuth = (req, res, next) => {    
-    // Check if user is authenticated
-    if (!req.session.user) {
-        res.redirect("/login");
-    }
-
-    if (req.session.cookie.expires < Date.now()) {
-        req.session.destroy();
-        return res.redirect("/login");
-    }
-
-    return next();
-};
-
-const forceLogout = (req, res, next) => {
-    if (req.session.user) {
-        req.session.destroy();
-    }
-    return next();
-}
 
 // Routes
 const loginRoute = require('./routes/login-route');
@@ -89,7 +69,7 @@ app.get('/api/user/:userId/assessments', async (req, res) => {
         return res.status(400).send("User ID is required");
     }
     try {
-        const assessments = await dbHelpers.getUserAssessments(userId);
+        const assessments = await db.getUserAssessments(userId);
         console.log("Assessments:", assessments);  // Log the data fetched
         res.json(assessments);
     } catch (err) {
@@ -103,7 +83,7 @@ app.get('/api/user/:userId/tasks', async (req, res) => {
     console.log("Endpoint Called: Fetching ");  // Check if this logs
     try {
         const userId = req.params.userId;
-        const tasks = await dbHelpers.getUserTasks(userId);
+        const tasks = await db.getUserTasks(userId);
         res.json(tasks);
     } catch (err) {
         res.status(500).send(err.message);

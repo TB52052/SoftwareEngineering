@@ -9,3 +9,7 @@
 
 ## Running the Server
 - `npm run dev_start`
+
+## Admin Account
+`email: admin@test`
+`password: admin`
