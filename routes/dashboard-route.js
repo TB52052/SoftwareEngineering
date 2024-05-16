@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const sqlite3 = require('sqlite3').verbose();
 const fs = require('fs');
+const path = require('path'); // Import the path module
 
 const db = new sqlite3.Database('./db/study_planner.db');
 
@@ -22,16 +23,17 @@ router.get('/', async (req, res) => {
         const allAssessments = await getAssessment();
         console.log("Assessments from Database:", allAssessments);
 
-        // read JSON file (needs to be dynamic)
-        const jsonData = fs.readFileSync(`./json/Summer 2023-2024.json`);
-        const uploadedAssessments = JSON.parse(jsonData);
+        const filePath = `./json/${req.query.semester}.json`; // semsester is in query
 
+        // read JSON file (dynamic)
+        const jsonData = fs.readFileSync(filePath);
+        const uploadedAssessments = JSON.parse(jsonData);
 
         // compare and print matching
         const matchingAssessments = allAssessments.filter(assessmentFromDB => {
             return uploadedAssessments.some(uploadedAssessment => {
-                return uploadedAssessment.ModuleID === assessmentFromDB.ModuleID 
-                    && uploadedAssessment.AssessmentID === assessmentFromDB.AssessmentID;
+                return uploadedAssessment.ModuleID === assessmentFromDB.ModuleID &&
+                    uploadedAssessment.AssessmentID === assessmentFromDB.AssessmentID;
             });
         });
 

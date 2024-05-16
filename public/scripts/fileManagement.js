@@ -10,14 +10,10 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 
 function getExpectedFileName(selectedSemester) {
-    
     const [semester, yearRange] = selectedSemester.split(' ');
-
     // expected filename
     const expectedFileName = `${semester} ${yearRange}.json`;
-    
     return expectedFileName;
-    
 }
 
 function checkFileName(selectedSemester) {
@@ -29,8 +25,8 @@ function checkFileName(selectedSemester) {
 
         if (uploadedFileName === expectedFileName) {
             alert("File name matches!");
-            window.location.href = "/dashboard";
-            
+            // redirecting with information
+            window.location.href = "/dashboard?semester=" + selectedSemester;
         } else {
             alert("File name doesn't match.");
         }
