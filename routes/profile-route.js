@@ -18,7 +18,7 @@ router.get("/data", async (req, res) => {
     if (!account) {
         return res.status(500).send("Error fetching user data");
     }
-    res.json({ name: account.name, surname: account.surname, email: account.email });
+    return res.json({ name: account.name, surname: account.surname, email: account.email });
 });
 
 router.post("/name", async (req, res) => {

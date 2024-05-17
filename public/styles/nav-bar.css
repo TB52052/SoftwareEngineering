@@ -57,8 +57,12 @@
 }
 
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 700px) {
     .navbar ul li a div {
         display: none; 
+    }
+
+    .navbar ul li a i {
+        margin-right: 0px;
     }
 }

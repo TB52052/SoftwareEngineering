@@ -1,30 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <%- include('partials/global-head') %>
-        <title>Study Planner - Account Sign In</title>
-        <link rel="stylesheet" href="/styles/top-bar.css" />
-        <link rel="stylesheet" href="/styles/sign-form.css" />
-    </head>
-    <body>
-        <%- include('partials/top-bar') %>
+<head>
+    <%- include('partials/global-head') %>
+    <title>Study Planner - Account Sign In</title>
+    <link rel="stylesheet" href="/styles/top-bar.css" />
+    <link rel="stylesheet" href="/styles/account-form.css" />
+</head>
+<body>
+    <%- include('partials/top-bar') %>
 
-        <div class="form-page">
-            <div class="form-header">
-                <span class="form-title">Account Sign In</span>
-                <form class="form-form" action="/login" method="post">
-                    <input class="input-group" type="email" placeholder="Email" name="email" required autocomplete="email" />
-                    <input class="input-group" type="password" placeholder="Password" name="password" required autocomplete="current-password" />
-                    <div class="form-button">
-                        <button class="input-button" type="submit">Sign In</button>
-                    </div>
-                </form>
-                <div class="form-link">
-                    <a href="/register">New User?</a>
-                </div>
-            </div>
-        </div>
+    <%- include('partials/account-form', { 
+        title: 'Welcome Back!', 
+        action: '/login', 
+        buttonText: 'Sign In', 
+        link: { href: '/register', text: "Don't Have An Account?" }, 
+        fields: [
+            { type: 'email', placeholder: 'Email', name: 'email', autocomplete: 'email' }, 
+            { type: 'password', placeholder: 'Password', name: 'password', autocomplete: 'current-password' }
+        ] 
+    }) %>
 
-        <%- include('partials/error-box') %>
-    </body>
+    <%- include('partials/error-box') %>
+</body>
 </html>

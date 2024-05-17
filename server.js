@@ -1,13 +1,16 @@
 // Modules
+require ('dotenv').config();
 const express = require('express'); 
 const session = require('express-session');
-const dotenv = require('dotenv').config();
 const db = require('./database/database.js'); 
+const { checkAuth, forceLogout } = require('./middleware/authenticator.js');
+const { getSessionMessage, clearSessionMessage } = require('./middleware/message-handler.js');
 
 // App
+const PORT = 3000;
 const app = express();
 app.use(express.json());
-const PORT = 3000;
+
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
@@ -20,28 +23,6 @@ app.use(session({
     saveUninitialized: false,
     cookie: {maxAge: 600000}
 }));
-
-// Middleware to check if user is authenticated
-const checkAuth = (req, res, next) => {    
-    // Check if user is authenticated
-    if (!req.session.user) {
-        res.redirect("/login");
-    }
-
-    if (req.session.cookie.expires < Date.now()) {
-        req.session.destroy();
-        return res.redirect("/login");
-    }
-
-    return next();
-};
-
-const forceLogout = (req, res, next) => {
-    if (req.session.user) {
-        req.session.destroy();
-    }
-    return next();
-}
 
 // Routes
 const loginRoute = require('./routes/login-route');
@@ -69,16 +50,11 @@ app.get('/team', (req, res) => {
 });
 
 app.get('/get-session-message', (req, res) => {
-    if (!req.session.message) {
-        return res.json({});
-    }
-    res.json({message: req.session.message.message, isError: req.session.message.isError});
+    return getSessionMessage(req, res);
 });
 
 app.get('/clear-session-message', (req, res) => {
-    req.session.message = null;
-    req.session.isError = null;
-    res.json(true);
+    return clearSessionMessage(req, res);
 });
 
 app.get('/api/user/:userId/assessments', async (req, res) => {

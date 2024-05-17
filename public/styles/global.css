@@ -1,10 +1,12 @@
-/* Font Import */
+/*
+    Global styles for the application
+*/
+
 @font-face { 
     font-family: Concert; src: url('../fonts/Concert.ttf'); 
     font-family: Roboto-Medium; src: url('../fonts/Roboto-Medium.ttf'); 
 }
 
-/* Global Styles */
 html {
     font-size: 16px;
     font-family: 'Roboto-Medium', sans-serif;
@@ -48,14 +50,14 @@ html {
     border-width: 10px;
 }
 
-.hidden {
-    display: none;
-}
-
 #error-box.isError {
     background-color: #c0392b;
 }
 
 #error-box.isError:after{
     border-top-color: #c0392b;
+}
+
+.hidden {
+    display: none;
 }

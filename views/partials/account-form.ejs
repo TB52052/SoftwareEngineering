@@ -1,0 +1,20 @@
+<div class="page-wrapper">
+    <div class="form-page">
+        <div class="form-container">
+            <div class="form-header">
+                <span><%= title %></span>
+            </div>
+            <form action="<%= action %>" method="post">
+                <% fields.forEach(function(field) { %>
+                <input class="input-group" type="<%= field.type %>" placeholder="<%= field.placeholder %>" name="<%= field.name %>" required autocomplete="<%= field.autocomplete %>" />
+                <% }); %>
+                <div class="form-button">
+                    <button type="submit"><%= buttonText %></button>
+                </div>
+            </form>
+            <div class="form-link">
+                <a href="<%= link.href %>"><%= link.text %></a>
+            </div>
+        </div>
+    </div>
+</div>

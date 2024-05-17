@@ -46,8 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return response.json();
         })
         .then((data) => {
-            document.getElementById("forename-span").textContent = data.name;
-            document.getElementById("surname-span").textContent = data.surname;
+            document.getElementById("name-span").textContent = data.name + " " + data.surname;
             document.getElementById("email-span").textContent = data.email;
         });
 });
@@ -64,8 +63,7 @@ function submitNameEditRquest() {
     }).then((response) => {
         if (response.status === 200) {
             // Update the name in the profile
-            document.getElementById("forename-span").textContent = newName;
-            document.getElementById("surname-span").textContent = newSurname;
+            document.getElementById("name-span").textContent = newName + " " + newSurname;
             return showMessage("Name updated", false);
         }
         if (response.status === 403) {
