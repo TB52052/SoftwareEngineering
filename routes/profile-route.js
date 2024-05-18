@@ -5,13 +5,8 @@ const database = require("../database/database.js");
 const fs = require('fs');
 
 router.get("/", async (req, res) => {
-    try {
-        const allSem = await database.getSemesters();
-        res.render("profile.ejs", { title: "profile", semesterInfo: allSem });
-    } catch (error) {
-        console.error("Error:", error);
-        res.status(500).send("Internal Server Error");
-    }
+    res.render("profile.ejs");
+
     // try {
     //     const allAssessments = await database.getAssessment();
 
@@ -45,13 +40,22 @@ router.get("/", async (req, res) => {
 
 });
 
-router.get("/data", async (req, res) => {
+router.get("/user-data", async (req, res) => {
     const userId = req.session.user.id;
     const account = await database.getAccountByID(userId);
     if (!account) {
         return res.status(500).send("Error fetching user data");
     }
     return res.json({ name: account.Forename, surname: account.Surname, email: account.Email });
+});
+
+router.get("/semester-data", async (req, res) => {
+    const userId = req.session.user.id;
+    const semesters = await database.getSemesters(userId);
+    if (!semesters) {
+        return res.status(500).send("Error fetching semester data");
+    }
+    return res.json(semesters);
 });
 
 router.post("/name", async (req, res) => {

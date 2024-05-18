@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Fetch user data
-    fetch("/profile/data")
+    fetch("/profile/user-data")
         .then((response) => {
             if (response.status === 500) {
                 return showMessage("Error fetching user data", true);

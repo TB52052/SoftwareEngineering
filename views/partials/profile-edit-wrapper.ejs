@@ -28,23 +28,18 @@
             <form>
                 <input type="password" id="delete-password" placeholder="Enter password" required />
                 <button type="button" id="submit-delete-account">Delete</button>
-            </form> 
+            </form>
         </div>
 
         <!-- Semester Form -->
         <div id="select-semester-form" class="hidden">
             <h2 class="form-title">Select a Semester</h2>
             <form id="semesterForm">
-                <select name="semester" id="seasonForm">
-                    <% semesterInfo.forEach(function(semester) { %>
-                    <option value="<%= semester.season %>"><%= semester.Season %></option>
-                    <% }); %>
-                </select>
+                <select name="semester" id="seasonForm"></select>
 
                 <div id="fileForm">
                     <input id="fileInputForm" type="file" id="myFile" name="filename" accept=".json" />
                 </div>
-                <button type="submit" id="submit-semester">Submit</button>
             </form>
         </div>
     </div>
