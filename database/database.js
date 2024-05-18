@@ -247,6 +247,30 @@ function getSemesters() {
     });
 }
 
+function insertUserModule(userID, moduleID, semesterID) {
+    return new Promise((resolve, reject) => {
+        db.run(`INSERT INTO UserModules (UserID, ModuleID, SemesterID) VALUES (?, ?, ?)`, [userID, moduleID, semesterID], (err) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
+    });
+}
+
+function insertUserAssessment(userID, assessmentID, semesterID) {
+    return new Promise((resolve, reject) => {
+        db.run(`INSERT INTO UserAssessments (UserID, AssessmentID, SemesterID) VALUES (?, ?, ?)`, [userID, assessmentID, semesterID], (err) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
+    });
+}
+
 module.exports = {
     getAccount,
     insertNewAccount,
@@ -266,4 +290,6 @@ module.exports = {
     deleteAssessments,
     deleteModules,
     getSemesters,
+    insertUserModule,
+    insertUserAssessment
 };
