@@ -11,20 +11,19 @@ router.get("/", (req, res) => {
 router.post("/", async (req, res) => {
     try {
         const account = await database.getAccount(req.body.email);
-
-        if (!account || account.password === undefined) {
+        if (!account || account.Password === undefined) {
             req.session.message = "Account not found.";
             req.session.isError = true;
             return res.redirect("/login");
         }
 
-        if (!(await database.comparePassword(req.body.password, account.password))) {
+        if (!(await database.comparePassword(req.body.password, account.Password))) {
             req.session.message = "Invalid credentials.";
             req.session.isError = true;
             return res.redirect("/login");
         }
 
-        req.session.user = { id: account.id, email: account.email };
+        req.session.user = { id: account.UserID, email: account.Email};
 
         return res.redirect('/profile');
     } catch (error) {
