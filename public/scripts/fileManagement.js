@@ -1,11 +1,11 @@
+
 document.addEventListener("DOMContentLoaded", function(){
     document.getElementById('semesterForm').addEventListener('submit', function(event) {
         event.preventDefault(); 
-
         var selectedSemester = document.getElementById('seasonForm').value;
         console.log('Selected Semester:', selectedSemester);
-       
         checkFileName(selectedSemester);
+        otherFileFunction(selectedSemester); 
     });
 });
 
@@ -34,3 +34,21 @@ function checkFileName(selectedSemester) {
         alert("Please select a file.");
     }
 }
+
+const jsonData = fs.readFileSync(fileInput);
+const data1 = JSON.parse(jsonData);
+
+const insertStmt = db.prepare(`INSERT INTO FileInformation (ModuleID, AssessmentID) VALUES (?, ?)`);
+    data.forEach(item => {
+        insertStmt.run(item.ModuleID, item.AssessmentID);
+    });
+    insertStmt.finalize();
+
+    // Retrieve and display the data
+    db.each('SELECT * FROM FileInformation', (err, row) => {
+        if (err) {
+            console.error(err.message);
+        }
+        console.log(row);
+    });
+
