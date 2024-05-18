@@ -3,29 +3,39 @@ document.addEventListener("DOMContentLoaded", function(){
     document.getElementById('semesterForm').addEventListener('submit', function(event) {
         event.preventDefault(); 
         var selectedSemester = document.getElementById('seasonForm').value;
-        console.log('Selected Semester:', selectedSemester);
         checkFileName(selectedSemester);
         otherFileFunction(selectedSemester); 
     });
-
-    document.getElementById('fileInputFrom').addEventListener('change', function() {
+    
+    document.querySelector('#fileInputForm').addEventListener('change', function(event) {
         const fileInput = document.getElementById('fileInputForm');
-        const file = fileInput.files[0];
-
-        var selectedSemester = document.getElementById('seasonForm').value;
-
-        const formData = new FormData();
-        formData.append('filename', file);
-
-        fetch('/upload', {
-            method: 'POST',
-            body: {data: formData, sem: selectedSemester}
-        })
-        .then(response => response.json())
-        .then(data => console.log(data))
-        .catch(error => console.error('Error:', error));
+        const selectedSemester = document.getElementById('seasonForm').value;
+    
+        if (fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+    
+            reader.onload = function(event) {
+                try {
+                    const jsonData = JSON.parse(event.target.result);
+                    const dataToSend = {
+                        semester: selectedSemester,
+                        assessments: jsonData
+                    };
+    
+                    fetch('/profile/upload', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(dataToSend)
+                    })
+                    .then(response => response.json())
+                    .then(data => console.log(data))
+                    .catch(error => console.error('Error:', error));
+                } catch (error) { console.error('Error parsing JSON:', error); }
+            };
+            reader.readAsText(file);
+        }
     });
-
 });
 
 function getExpectedFileName(selectedSemester) {

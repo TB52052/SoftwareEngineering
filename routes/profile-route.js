@@ -12,38 +12,36 @@ router.get("/", async (req, res) => {
         console.error("Error:", error);
         res.status(500).send("Internal Server Error");
     }
+    // try {
+    //     const allAssessments = await database.getAssessment();
 
-    
-    try {
-        const allAssessments = await database.getAssessment();
+    //     // Retrieve selectedSemester from the query parameters
+    //     const selectedSemester = req.query.semester;
 
-        // Retrieve selectedSemester from the query parameters
-        const selectedSemester = req.query.semester;
+    //     const filePath = `./json/${selectedSemester}.json`; // semester is in query
 
-        const filePath = `./json/${selectedSemester}.json`; // semester is in query
+    //     // read JSON file (dynamic)
+    //     const jsonData = fs.readFileSync(filePath);
+    //     const uploadedAssessments = JSON.parse(jsonData);
 
-        // read JSON file (dynamic)
-        const jsonData = fs.readFileSync(filePath);
-        const uploadedAssessments = JSON.parse(jsonData);
+    //     // compare and print matching
+    //     const matchingAssessments = allAssessments.filter(assessmentFromDB => {
+    //         return uploadedAssessments.some(uploadedAssessment => {
+    //             return uploadedAssessment.ModuleID === assessmentFromDB.ModuleID &&
+    //                 uploadedAssessment.AssessmentID === assessmentFromDB.AssessmentID;
+    //         });
+    //     });
 
-        // compare and print matching
-        const matchingAssessments = allAssessments.filter(assessmentFromDB => {
-            return uploadedAssessments.some(uploadedAssessment => {
-                return uploadedAssessment.ModuleID === assessmentFromDB.ModuleID &&
-                    uploadedAssessment.AssessmentID === assessmentFromDB.AssessmentID;
-            });
-        });
+    //     const id = req.session.user.id;
 
-        const id = req.session.user.id;
+    //     // insert matchingAssessments into UserAssessments table
+    //     // insert modules into UserModules table
 
-        // insert matchingAssessments into UserAssessments table
-        // insert modules into UserModules table
-
-        res.render('dashboard.ejs', { title: 'dashboard', AssessmentInfo: allAssessments });
-    } catch (error) {
-        console.error('Error:', error);
-        res.status(500).send('Internal Server Error');
-    }
+    //     res.render('dashboard.ejs', { title: 'dashboard', AssessmentInfo: allAssessments });
+    // } catch (error) {
+    //     console.error('Error:', error);
+    //     res.status(500).send('Internal Server Error');
+    // }
 
 });
 
@@ -121,6 +119,8 @@ router.post("/delete", async (req, res) => {
 });
 
 router.post("/upload", async (req, res) => {
+
+    console.log(req.body);
 
     
 
