@@ -271,6 +271,18 @@ function insertUserAssessment(userID, assessmentID, semesterID) {
     });
 }
 
+function getAssessment() {
+    return new Promise((resolve, reject) => {
+        db.all(`SELECT AssessmentID, ModuleID FROM Assessments;`, [], (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+}
+
 module.exports = {
     getAccount,
     insertNewAccount,
@@ -291,5 +303,6 @@ module.exports = {
     deleteModules,
     getSemesters,
     insertUserModule,
-    insertUserAssessment
+    insertUserAssessment,
+    getAssessment
 };

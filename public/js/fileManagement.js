@@ -7,6 +7,25 @@ document.addEventListener("DOMContentLoaded", function(){
         checkFileName(selectedSemester);
         otherFileFunction(selectedSemester); 
     });
+
+    document.getElementById('fileInputFrom').addEventListener('change', function() {
+        const fileInput = document.getElementById('fileInputForm');
+        const file = fileInput.files[0];
+
+        var selectedSemester = document.getElementById('seasonForm').value;
+
+        const formData = new FormData();
+        formData.append('filename', file);
+
+        fetch('/upload', {
+            method: 'POST',
+            body: {data: formData, sem: selectedSemester}
+        })
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(error => console.error('Error:', error));
+    });
+
 });
 
 function getExpectedFileName(selectedSemester) {
@@ -38,17 +57,4 @@ function checkFileName(selectedSemester) {
 const jsonData = fs.readFileSync(fileInput);
 const data1 = JSON.parse(jsonData);
 
-const insertStmt = db.prepare(`INSERT INTO FileInformation (ModuleID, AssessmentID) VALUES (?, ?)`);
-    data.forEach(item => {
-        insertStmt.run(item.ModuleID, item.AssessmentID);
-    });
-    insertStmt.finalize();
-
-    // Retrieve and display the data
-    db.each('SELECT * FROM FileInformation', (err, row) => {
-        if (err) {
-            console.error(err.message);
-        }
-        console.log(row);
-    });
 
