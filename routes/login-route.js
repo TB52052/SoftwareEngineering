@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const database = require("../database/database");
+const database = require('../database');
 
 router.get("/", (req, res) => {
     if (!(req.session && req.session.user)) {
@@ -26,7 +26,7 @@ router.post("/", async (req, res) => {
 
         req.session.user = { id: account.id, email: account.email };
 
-        return res.redirect("/profile");
+        return res.redirect('/profile');
     } catch (error) {
         req.session.message = "Internal Server Error";
         req.session.isError = true;

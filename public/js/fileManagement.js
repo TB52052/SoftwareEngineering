@@ -1,21 +1,18 @@
+
 document.addEventListener("DOMContentLoaded", function(){
     document.getElementById('semesterForm').addEventListener('submit', function(event) {
         event.preventDefault(); 
-
         var selectedSemester = document.getElementById('seasonForm').value;
         console.log('Selected Semester:', selectedSemester);
-       
         checkFileName(selectedSemester);
+        otherFileFunction(selectedSemester); 
     });
 });
 
 function getExpectedFileName(selectedSemester) {
-    // Extract the semester and year range from the selected semester
     const [semester, yearRange] = selectedSemester.split(' ');
-
-    // Construct the expected filename
-    const expectedFileName = `${semester}_${yearRange}_template.json`;
-
+    // expected filename
+    const expectedFileName = `${semester} ${yearRange}.json`;
     return expectedFileName;
 }
 
@@ -24,12 +21,12 @@ function checkFileName(selectedSemester) {
     if (fileInput.files.length > 0) {
         var uploadedFileName = fileInput.files[0].name;
 
-        // Generate the expected filename based on the selected semester
         var expectedFileName = getExpectedFileName(selectedSemester);
 
         if (uploadedFileName === expectedFileName) {
             alert("File name matches!");
-            window.location.href = "/dashboard";
+            // redirecting with information
+            window.location.href = "/dashboard?semester=" + selectedSemester;
         } else {
             alert("File name doesn't match.");
         }
@@ -37,3 +34,21 @@ function checkFileName(selectedSemester) {
         alert("Please select a file.");
     }
 }
+
+const jsonData = fs.readFileSync(fileInput);
+const data1 = JSON.parse(jsonData);
+
+const insertStmt = db.prepare(`INSERT INTO FileInformation (ModuleID, AssessmentID) VALUES (?, ?)`);
+    data.forEach(item => {
+        insertStmt.run(item.ModuleID, item.AssessmentID);
+    });
+    insertStmt.finalize();
+
+    // Retrieve and display the data
+    db.each('SELECT * FROM FileInformation', (err, row) => {
+        if (err) {
+            console.error(err.message);
+        }
+        console.log(row);
+    });
+
