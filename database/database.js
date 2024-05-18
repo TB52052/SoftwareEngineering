@@ -9,7 +9,7 @@ const NUMBER_OF_HASHES = 13;
 
 function getAccount(email) {
     return new Promise((resolve, reject) => {
-        db.get(`SELECT * FROM Users WHERE email = ?`, [email], (err, row) => {
+        db.get(`SELECT * FROM Users WHERE Email = ?`, [email], (err, row) => {
             if (err) {
                 reject(err);
             } else {
@@ -21,7 +21,7 @@ function getAccount(email) {
 
 function getAccountByID(userId) {
     return new Promise((resolve, reject) => {
-        db.get(`SELECT * FROM Users WHERE id = ?`, [userId], (err, row) => {
+        db.get(`SELECT * FROM Users WHERE UserID = ?`, [userId], (err, row) => {
             if (err) {
                 reject(err);
             } else {
@@ -32,7 +32,7 @@ function getAccountByID(userId) {
 }
 
 function insertNewAccount(email, password, name, surname) {
-    db.run(`INSERT INTO Users (email, password, name, surname) VALUES (?, ?, ?, ?)`, [email, password, name, surname], (err) => {
+    db.run(`INSERT INTO Users (Email, Password, Forename, Surname) VALUES (?, ?, ?, ?)`, [email, password, name, surname], (err) => {
         if (err) {
             console.error(err.message);
         }
@@ -109,7 +109,7 @@ function getUserTasks(userId) {
 
 function updateUsername(userId, newName, newSurname) {
     return new Promise((resolve, reject) => {
-        db.run(`UPDATE Users SET name = ?, surname = ? WHERE id = ?`, [newName, newSurname, userId], (err) => {
+        db.run(`UPDATE Users SET name = ?, surname = ? WHERE UserID = ?`, [newName, newSurname, userId], (err) => {
             if (err) {
                 reject(err);
             } else {
@@ -121,7 +121,7 @@ function updateUsername(userId, newName, newSurname) {
 
 function updatePassword(userId, newPassword) {
     return new Promise((resolve, reject) => {
-        db.run(`UPDATE Users SET password = ? WHERE id = ?`, [newPassword, userId], (err) => {
+        db.run(`UPDATE Users SET password = ? WHERE UserID = ?`, [newPassword, userId], (err) => {
             if (err) {
                 reject(err);
             } else {
@@ -133,7 +133,7 @@ function updatePassword(userId, newPassword) {
 
 function deleteAccount(userId) {
     return new Promise((resolve, reject) => {
-        db.run(`DELETE FROM Users WHERE id = ?`, [userId], (err) => {
+        db.run(`DELETE FROM Users WHERE UserID = ?`, [userId], (err) => {
             if (err) {
                 reject(err);
             } else {
