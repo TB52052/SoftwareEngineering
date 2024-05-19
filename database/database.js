@@ -283,6 +283,19 @@ function getAssessment() {
     });
 }
 
+async function getSemesterID(semester) {
+    return new Promise((resolve, reject) => {
+        const query = `SELECT SemesterID FROM SemesterInfo WHERE Season = ?`;
+        db.get(query, [semester], (err, row) => {
+            if (err) {
+                return reject(err);
+            }
+            resolve(row ? row.SemesterID : null);
+        });
+    });
+}
+
+
 module.exports = {
     getAccount,
     insertNewAccount,
@@ -304,5 +317,6 @@ module.exports = {
     getSemesters,
     insertUserModule,
     insertUserAssessment,
-    getAssessment
+    getAssessment,
+    getSemesterID
 };
