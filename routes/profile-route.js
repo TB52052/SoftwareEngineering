@@ -95,7 +95,10 @@ router.post("/delete", async (req, res) => {
 
 router.post("/upload", async (req, res) => {
     try {
+        console.log("Received upload request");
+
         const allAssessments = await database.getAssessment();
+        console.log("Fetched all assessments");
 
         const { semester, assessments: uploadedAssessments } = req.body;
 
@@ -106,29 +109,24 @@ router.post("/upload", async (req, res) => {
             });
         });
 
+        console.log("Matching assessments found:", matchingAssessments);
+
         const userId = req.session.user.id;
+        if (!userId) {
+            return res.status(400).send("User not logged in");
+        }
 
         const semesterID = await database.getSemesterID(semester);
         if (!semesterID) {
             return res.status(400).send('Invalid semester');
         }
 
-        // Insert matching assessments and modules
-        // for (const matchingAssessment of matchingAssessments) {
-        //     const { AssessmentID, ModuleID } = matchingAssessment;
-        //     await database.insertUserAssessment(userId, matchingAssessment.AssessmentID, semesterID);
-        //     await database.insertUserModule(userId, matchingAssessment.ModuleID, semesterID);
-        // }
-
-        // Insert matching assessments and modules
         for (const matchingAssessment of matchingAssessments) {
             const { AssessmentID, ModuleID } = matchingAssessment;
-            await database.insertUserAssessment(userId, AssessmentID, semesterID);
-            await database.insertUserModule(userId, ModuleID, semesterID);
+            console.log(`Inserting assessment ${AssessmentID} and module ${ModuleID} for user ${userId} in semester ${semesterID}`);
+            await database.insertUserAssessment(userId, matchingAssessment.AssessmentID, semesterID);
+            await database.insertUserModule(userId, matchingAssessment.ModuleID, semesterID);
         }
-
-        // alert("Modules and Assessments have been added");
-        // window.location.href = "/dashboard";
 
         res.render('dashboard.ejs', { title: 'dashboard', AssessmentInfo: allAssessments });
     } catch (error) {
@@ -138,3 +136,5 @@ router.post("/upload", async (req, res) => {
 });
 
 module.exports = router;
+
+
