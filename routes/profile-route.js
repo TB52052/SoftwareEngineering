@@ -33,7 +33,7 @@ router.post("/check-semester", async (req, res) => {
     const semesterName = req.body.semester;
     const semesterID = await database.getSemesterID(semesterName);
 
-    let semData = await database.getSemesterID(semesterName, userId);
+    let semData = await database.getSemesterID(semesterID, userId);
 
     if (!semData) {
         return res.json({ exists: false });
