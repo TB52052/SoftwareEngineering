@@ -57,6 +57,47 @@ app.get('/clear-session-message', (req, res) => {
     return clearSessionMessage(req, res);
 });
 
+
+// Endpoint to fetch tasks along with their types
+app.get('/api/tasks', (req, res) => {
+    db.all(`
+        SELECT StudyTasks.*, TaskTypes.TypeName, Modules.ModuleName 
+        FROM StudyTasks 
+        JOIN TaskTypes ON StudyTasks.TaskTypeID = TaskTypes.TaskTypeID 
+        JOIN Modules ON StudyTasks.ModuleID = Modules.ModuleID`, 
+        (err, rows) => {
+            if (err) {
+                res.status(500).send(err.message);
+            } else {
+                res.json(rows);
+            }
+        });
+});
+
+// Endpoint to fetch modules for select options
+app.get('/api/modules', (req, res) => {
+    db.all("SELECT * FROM Modules", (err, modules) => {
+        if (err) {
+            res.status(500).send(err.message);
+        } else {
+            res.json(modules);
+        }
+    });
+});
+
+// Endpoint to fetch task types for select options
+app.get('/api/tasktypes', (req, res) => {
+    db.all("SELECT * FROM TaskTypes", (err, types) => {
+        if (err) {
+            res.status(500).send(err.message);
+        } else {
+            res.json(types);
+        }
+    });
+});
+
+
+
 app.get('/api/user/:userId/assessments', async (req, res) => {
     console.log("Endpoint Called: Fetching assessments");  // Check if this logs
     const userId = req.params.userId;

@@ -3,18 +3,50 @@
 <head>
     <%- include('partials/global-head') %>
     <%- include('partials/main-page-head') %>
+    <link rel="stylesheet" href="/styles/side-bar.css">
     <link rel="stylesheet" href="/styles/calendar.css">
-    <title>Study Planner - Calendar</title>
+    <title>Study Planner - Profile</title>
 </head>
 <body>
     <div class="wrapper">
         <%- include('partials/nav-bar') %>
         <div class="container">
             <div class="content">
+                <div id="calendar-container">
+                    <div id="calendar-header">
+                        <button onclick="moveDate(-1)">&lt;</button>
+                        <h2 id="monthAndYear"></h2>
+                        <button onclick="moveDate(1)">&gt;</button>
+                    </div>
+                    <table id="calendar">
+                        <thead>
+                            <tr>
+                                <th>Sun</th>
+                                <th>Mon</th>
+                                <th>Tue</th>
+                                <th>Wed</th>
+                                <th>Thu</th>
+                                <th>Fri</th>
+                                <th>Sat</th>
+                            </tr>
+                        </thead>
+                        <tbody id="calendar-body"></tbody>
+                    </table>
+                </div>
+                <div id="modal" class="modal">
+                    <div class="modal-content">
+                        <span class="close" onclick="closeModal()">&times;</span>
+                        <p id="modal-details"></p>  <!-- To hold the details dynamically -->
+                    </div>
+                </div>
+                
+                </div>
                 
             </div>
         </div>
     </div>
     <%- include('partials/error-box') %>
+    <script src="/js/calendar.js"></script>
 </body>
 </html>
+
