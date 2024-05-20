@@ -32,10 +32,14 @@ router.post("/check-semester", async (req, res) => {
     const userId = req.session.user.id;
     const semesterName = req.body.semester;
     const semesterID = await database.getSemesterID(semesterName);
-    if (!semesterID) {
+
+    let semData = await database.getSemesterID(semesterName, userId);
+
+    if (!semData) {
         return res.json({ exists: false });
     }
-    return res.json({exists: true});
+
+    return res.json({exists: true, semesterData: semData});
 });
 
 router.post("/name", async (req, res) => {

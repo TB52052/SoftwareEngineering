@@ -295,6 +295,17 @@ async function getSemesterID(semester) {
     });
 }
 
+function getUserSemester(semesterID, userID) {
+    return new Promise((resolve, reject) => {
+        const query = `SELECT * FROM UserModules WHERE SemesterID = ? AND UserID = ?`;
+        db.get(query, [semesterID, userID], (err, row) => {
+            if (err) {
+                return reject(err);
+            }
+            resolve(row);
+        });
+    });
+}
 
 module.exports = {
     getAccount,
@@ -318,5 +329,6 @@ module.exports = {
     insertUserModule,
     insertUserAssessment,
     getAssessment,
-    getSemesterID
+    getSemesterID,
+    getUserSemester
 };
