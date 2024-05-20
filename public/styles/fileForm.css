@@ -12,22 +12,6 @@ h2 {
     margin-bottom: 10px;
     height: 50px;
     margin-left: 4px;
-}
-
-/* Style for the submit button */
-button[type="submit"] {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: #ccc;
-    color: #333;
-
-}
-
-/* Hover effect for the submit button */
-button[type="submit"]:hover {
-    background-color: #bbb;
+    width: fit-content;
 }
 

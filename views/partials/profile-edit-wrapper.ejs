@@ -35,10 +35,12 @@
         <div id="select-semester-form" class="hidden">
             <h2 class="form-title">Select a Semester</h2>
             <form id="semesterForm">
-                <select name="semester" id="seasonForm"></select>
+                <select name="semester" id="seasonForm">
+                    <option value="Select Semester">Select Semester</option>
+                </select>
 
                 <div id="fileForm">
-                    <input id="fileInputForm" type="file" id="myFile" name="filename" accept=".json" />
+                    <input id="fileInputForm" class="hidden" type="file" id="myFile" name="filename" accept=".json" />
                 </div>
             </form>
         </div>

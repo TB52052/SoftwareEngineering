@@ -2,9 +2,9 @@ var selectedSemester = null;
 
 document.addEventListener("DOMContentLoaded", async function () {
     getSemesters();
-    updateSemesterForm();
     document.getElementById("seasonForm").addEventListener("change", function (event) { updateSemesterForm(); });
     document.querySelector("#fileInputForm").addEventListener("change", function (event) { updateFileInputform(); });
+    document.querySelector("#submit-semester").addEventListener("click", function (event) { selectSubmit(); });
 });
 
 function getSemesters() {
@@ -24,10 +24,29 @@ function getSemesters() {
 }
 
 function updateSemesterForm() {
-    console.log("updateSemesterForm");
     selectedSemester = document.getElementById("seasonForm").value;
-    let foo = document.getElementById("seasonForm");
-    console.log(selectedSemester);
+    let fileInputForm = document.getElementById("fileInputForm");
+
+    if (selectedSemester === "Select Semester") {
+        return fileInputForm.classList.add("hidden");
+    }
+
+    fetch("/profile/check-semester", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ selectedSemester: selectedSemester }),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.exists) {
+                // Semester exists, load dashboard
+                fileInputForm.classList.add("hidden");
+            }
+            else {
+                fileInputForm.classList.remove("hidden");
+            }
+        })
+        .catch((error) => console.error("Error:", error));
 }
 
 function updateFileInputform(event) {

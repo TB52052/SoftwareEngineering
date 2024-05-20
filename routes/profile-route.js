@@ -7,8 +7,6 @@ const { Module } = require("module");
 
 router.get("/", async (req, res) => {
     res.render("profile.ejs");
-
-    
 });
 
 router.get("/user-data", async (req, res) => {
@@ -20,6 +18,7 @@ router.get("/user-data", async (req, res) => {
     return res.json({ name: account.Forename, surname: account.Surname, email: account.Email });
 });
 
+
 router.get("/semester-data", async (req, res) => {
     const userId = req.session.user.id;
     const semesters = await database.getSemesters(userId);
@@ -27,6 +26,16 @@ router.get("/semester-data", async (req, res) => {
         return res.status(500).send("Error fetching semester data");
     }
     return res.json(semesters);
+});
+
+router.post("/check-semester", async (req, res) => {
+    const userId = req.session.user.id;
+    const semesterName = req.body.semester;
+    const semesterID = await database.getSemesterID(semesterName);
+    if (!semesterID) {
+        return res.json({ exists: false });
+    }
+    return res.json({exists: true});
 });
 
 router.post("/name", async (req, res) => {
