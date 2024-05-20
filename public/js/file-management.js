@@ -4,7 +4,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     getSemesters();
     document.getElementById("seasonForm").addEventListener("change", function (event) { updateSemesterForm(); });
     document.querySelector("#fileInputForm").addEventListener("change", function (event) { updateFileInputform(); });
-    document.querySelector("#submit-semester").addEventListener("click", function (event) { selectSubmit(); });
 });
 
 function getSemesters() {
@@ -13,7 +12,6 @@ function getSemesters() {
         .then((data) => {
             const semesterForm = document.getElementById("seasonForm");
             data.forEach((semester) => {
-                console.log(semester);
                 const option = document.createElement("option");
                 option.value = semester.Season;
                 option.text = semester.Season;
@@ -50,8 +48,13 @@ function updateSemesterForm() {
 }
 
 function updateFileInputform(event) {
-    console.log("updateFileInputform");
     const fileInput = document.getElementById("fileInputForm");
+    const fileName = fileInput.files.length > 0 ? fileInput.files[0].name : "No file selected";
+
+    if (!compareSemesterNames(fileName, selectedSemester)) {
+        return alert("The file name does not match the selected semester.");
+    }
+
 
     if (fileInput.files.length > 0) {
         const file = fileInput.files[0];
@@ -81,28 +84,6 @@ function updateFileInputform(event) {
     }
 }
 
-function getExpectedFileName(selectedSemester) {
-    const [semester, yearRange] = selectedSemester.split(" ");
-    // expected filename
-    const expectedFileName = `${semester} ${yearRange}.json`;
-    return expectedFileName;
-}
-
-function checkFileName(selectedSemester) {
-    var fileInput = document.getElementById("fileInputForm");
-    if (fileInput.files.length > 0) {
-        var uploadedFileName = fileInput.files[0].name;
-
-        var expectedFileName = getExpectedFileName(selectedSemester);
-
-        if (uploadedFileName === expectedFileName) {
-            alert("File name matches!");
-            // redirecting with information
-            window.location.href = "/dashboard?semester=" + selectedSemester;
-        } else {
-            alert("File name doesn't match.");
-        }
-    } else {
-        alert("Please select a file.");
-    }
+function compareSemesterNames(fileName, selectedSemester) {
+    return fileName.replace(".json", "") === selectedSemester;
 }
