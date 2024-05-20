@@ -108,40 +108,15 @@ router.post("/delete", async (req, res) => {
 
 router.post("/upload", async (req, res) => {
     try {
-        console.log("Received upload request");
-
-        const allAssessments = await database.getAssessment();
-        console.log("Fetched all assessments");
-
-        const { semester, assessments: uploadedAssessments } = req.body;
-
-        const matchingAssessments = allAssessments.filter(assessmentFromDB => {
-            return uploadedAssessments.some(uploadedAssessment => {
-                return uploadedAssessment.ModuleID === assessmentFromDB.ModuleID &&
-                    uploadedAssessment.AssessmentID === assessmentFromDB.AssessmentID;
-            });
-        });
-
-        console.log("Matching assessments found:", matchingAssessments);
-
-        const userId = req.session.user.id;
-        if (!userId) {
-            return res.status(400).send("User not logged in");
-        }
-
+        const semester = req.body.semester;
+        const modules = req.body.modules;
+        const userID = req.session.user.id;
         const semesterID = await database.getSemesterID(semester);
-        if (!semesterID) {
-            return res.status(400).send('Invalid semester');
-        }
 
-        for (const matchingAssessment of matchingAssessments) {
-            const { AssessmentID, ModuleID } = matchingAssessment;
-            console.log(`Inserting assessment ${AssessmentID} and module ${ModuleID} for user ${userId} in semester ${semesterID}`);
-            await database.insertUserAssessment(userId, matchingAssessment.AssessmentID, semesterID);
-            await database.insertUserModule(userId, matchingAssessment.ModuleID, semesterID);
-        }
+        // Loop through modules, insert into datavase
+        modules.forEach(async module => { await database.insertUserModule(userID, module, semesterID); });
 
-        res.render('dashboard.ejs', { title: 'dashboard', AssessmentInfo: allAssessments });
+        res.render('dashboard.ejs');
     } catch (error) {
         console.error('Error:', error);
         res.status(500).send('Internal Server Error');

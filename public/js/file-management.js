@@ -65,7 +65,7 @@ function updateFileInputform(event) {
                 const jsonData = JSON.parse(event.target.result);
                 const dataToSend = {
                     semester: selectedSemester,
-                    assessments: jsonData,
+                    modules: jsonData,
                 };
 
                 fetch("/profile/upload", {

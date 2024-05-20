@@ -249,23 +249,12 @@ function getSemesters() {
 
 function insertUserModule(userID, moduleID, semesterID) {
     return new Promise((resolve, reject) => {
-        db.run(`INSERT OR IGNORE INTO UserModules (UserID, ModuleID, SemesterID) VALUES (?, ?, ?)`, [userID, moduleID, semesterID], (err) => {
+        db.run(`INSERT INTO UserModules (UserID, ModuleID, SemesterID) VALUES (?, ?, ?)`, [userID, moduleID, semesterID], (err) => {
             if (err) {
                 reject(err);
             } else {
-                resolve();
-            }
-        });
-    });
-}
-
-function insertUserAssessment(userID, assessmentID, semesterID) {
-    return new Promise((resolve, reject) => {
-        db.run(`INSERT OR IGNORE INTO UserAssessments (UserID, AssessmentID, SemesterID) VALUES (?, ?, ?)`, [userID, assessmentID, semesterID], (err) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve();
+                resolve()
+                console.log("Module inserted");
             }
         });
     });
@@ -327,7 +316,6 @@ module.exports = {
     deleteModules,
     getSemesters,
     insertUserModule,
-    insertUserAssessment,
     getAssessment,
     getSemesterID,
     getUserSemester
