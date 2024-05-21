@@ -30,16 +30,14 @@ router.get("/semester-data", async (req, res) => {
 
 router.post("/check-semester", async (req, res) => {
     const userId = req.session.user.id;
-    const semesterName = req.body.semester;
+    const semesterName = req.body.selectedSemester;
     const semesterID = await database.getSemesterID(semesterName);
+    console.log(semesterID);
+    console.log(semesterName);
 
-    let semData = await database.getSemesterID(semesterID, userId);
+    let semData = await database.getUserModules(userId, semesterID);
 
-    if (!semData) {
-        return res.json({ exists: false });
-    }
-
-    return res.json({exists: true, semesterData: semData});
+    return res.json({exists: semData.length > 0, semesterData: semData});
 });
 
 router.post("/name", async (req, res) => {

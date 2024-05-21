@@ -24,6 +24,7 @@ function getSemesters() {
 function updateSemesterForm() {
     selectedSemester = document.getElementById("seasonForm").value;
     let fileInputForm = document.getElementById("fileInputForm");
+    fileInputForm.value = null;
 
     if (selectedSemester === "Select Semester") {
         return fileInputForm.classList.add("hidden");
@@ -37,12 +38,10 @@ function updateSemesterForm() {
         .then((response) => response.json())
         .then((data) => {
             if (data.exists) {
-                // Semester exists, load dashboard
                 fileInputForm.classList.add("hidden");
+                // Redirect to dashboard with data.semesterData
             }
-            else {
-                fileInputForm.classList.remove("hidden");
-            }
+            else { fileInputForm.classList.remove("hidden"); }
         })
         .catch((error) => console.error("Error:", error));
 }

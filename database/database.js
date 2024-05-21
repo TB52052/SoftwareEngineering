@@ -203,17 +203,11 @@ function deleteModules(userID) {
     });
 }
 
-function getUserModules(userId) {
+function getUserModules(userID, semesterID) {
+    console.log(userID, semesterID);
     return new Promise((resolve, reject) => {
-        const sql = `
-            SELECT 
-            UserModules.*, 
-            Modules.ModuleName
-                FROM UserModules
-                JOIN Modules ON UserModules.ModuleID = Modules.ModuleID
-            WHERE UserModules.UserID = ?
-        `;
-        db.all(sql, [userId], (err, rows) => {
+        const query = `SELECT * FROM UserModules WHERE UserID = ? AND SemesterID = ?`;
+        db.all(query, [userID, semesterID], (err, rows) => {
             if (err) {
                 reject(err);
             } else {
@@ -254,7 +248,6 @@ function insertUserModule(userID, moduleID, semesterID) {
                 reject(err);
             } else {
                 resolve()
-                console.log("Module inserted");
             }
         });
     });
