@@ -32,6 +32,7 @@ const tasksRoute = require('./routes/tasks-route');
 const dashboardRoute = require('./routes/dashboard-route');
 const profileRoute = require('./routes/profile-route');
 const logoutRoute = require('./routes/logout-route');
+const ganttRoute = require('./routes/gantt-route');
 
 app.use('/login', forceLogout, loginRoute);
 app.use('/register', forceLogout, registerRoute);
@@ -39,7 +40,9 @@ app.use('/calendar', checkAuth, calendarRoute);
 app.use('/tasks', checkAuth, tasksRoute);
 app.use('/dashboard', checkAuth, dashboardRoute);
 app.use('/profile', checkAuth, profileRoute);
+app.use('/gantt', checkAuth, ganttRoute);
 app.use('/logout', logoutRoute);
+
 
 app.get('/', (req, res) => {
     res.redirect('/profile');

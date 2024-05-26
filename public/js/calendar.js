@@ -44,6 +44,9 @@ async function fetchEventsAndTasks(userId, year, month) {
         const assessments = await assessmentsResponse.json();
         const tasks = await tasksResponse.json();
 
+        console.log('Assessments fetched:', assessments);
+        console.log('Tasks fetched:', tasks);
+
         // Adding assessments to the calendar
         assessments.forEach(assessment => {
             const date = new Date(assessment.AssessmentDate);
@@ -60,6 +63,8 @@ async function fetchEventsAndTasks(userId, year, month) {
                 addEventToCalendar(date.getDate(), task.AssessmentName, task.TypeName, task.TimeSpent, task.ModuleName, task.description || 'No additional details provided.');
             }
         });
+        
+       
     } catch (err) {
         console.error('Error fetching events and tasks:', err);
     }
@@ -68,6 +73,7 @@ async function fetchEventsAndTasks(userId, year, month) {
 
 function addEventToCalendar(day, assessmentName, typeName, timeSpent, moduleName, details) {
     const cells = document.querySelectorAll(`td[data-date="${day}"][data-month="${currentMonth + 1}"][data-year="${currentYear}"]`);
+    console.log(`Adding event: ${assessmentName}, ${typeName}, ${timeSpent}, ${moduleName}, on day ${day}`);
     cells.forEach(cell => {
         const eventDiv = document.createElement('div');
         eventDiv.classList.add('event');
@@ -77,6 +83,7 @@ function addEventToCalendar(day, assessmentName, typeName, timeSpent, moduleName
         eventDiv.setAttribute('data-type-name', typeName);
         eventDiv.setAttribute('data-time-spent', timeSpent);
         eventDiv.addEventListener('click', () => {
+            console.log(`Event clicked: ${moduleName}, ${assessmentName}, ${typeName}, ${timeSpent}`);
             openModal(moduleName, assessmentName, typeName, timeSpent);
         });
         cell.appendChild(eventDiv);
@@ -103,6 +110,7 @@ function openModal(moduleName, assessmentName, typeName, timeSpent) {
         console.error("Invalid data provided to modal:", moduleName, assessmentName, typeName, timeSpent);
         return; // Exit if data is invalid
     }
+    console.log("Modal opening with data:", moduleName, assessmentName, typeName, timeSpent);
     const modal = document.getElementById('modal');
     const detailsElement = document.getElementById('modal-details');
     detailsElement.innerHTML = `
