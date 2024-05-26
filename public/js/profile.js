@@ -16,12 +16,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             });
 
-            // Add "pulse" class to the clicked button
             button.classList.add("pulse");
         });
     });
 
-    // Add submit post event listeners to each form submit button
     const nameSubmit = document.getElementById("submit-name-edit");
     nameSubmit.addEventListener("click", () => {
         submitNameEditRquest();
@@ -56,6 +54,10 @@ function submitNameEditRquest() {
     const newName = document.getElementById("name-edit").value;
     const newSurname = document.getElementById("surname-edit").value;
 
+    if (newName === "" || newSurname === "" || password === "") {
+        return showMessage("Please enter all data", true);
+    }
+
     fetch("/profile/name", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -81,6 +83,10 @@ function submitPasswordEditRequest() {
     const newPassword = document.getElementById("new-password").value;
     const confirmPassword = document.getElementById("confirm-password").value;
 
+    if (oldPassword === "" || newPassword === "" || confirmPassword === "") {
+        return showMessage("Please enter all data", true);
+    }
+
     if (newPassword !== confirmPassword) {
         return showMessage("Passwords do not match", true);
     }
@@ -105,6 +111,10 @@ function submitPasswordEditRequest() {
 
 function deleteAccount() {
     const password = document.getElementById("delete-password").value;
+
+    if (password === "") {
+        return showMessage("Please enter your password", true);
+    }
 
     fetch("/profile/delete", {
         method: "POST",

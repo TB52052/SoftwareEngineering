@@ -13,6 +13,19 @@ router.post("/", async (req, res) => {
         req.session.isError = true;
         return res.redirect("/register");
     }
+
+    if (req.body.email === "" || req.body.password === "" || req.body.forename === "" || req.body.surname === "") {
+        req.session.message = "Please enter all data.";
+        req.session.isError = true;
+        return res.redirect("/register");
+    }
+
+    if (req.body.email.length > 50 || req.body.password.length > 40 || req.body.forename.length > 30 || req.body.surname.length > 30) {
+        req.session.message = "Data too long.";
+        req.session.isError = true;
+        return res.redirect("/register");
+    }
+
     // Check if user exists
     const account = await database.getAccount(req.body.email);
 

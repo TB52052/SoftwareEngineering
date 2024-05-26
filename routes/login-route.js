@@ -17,6 +17,12 @@ router.post("/", async (req, res) => {
             return res.redirect("/login");
         }
 
+        if (req.body.password === "" || req.body.email === "") {
+            req.session.message = "Please enter all data.";
+            req.session.isError = true;
+            return res.redirect("/login");
+        }
+
         if (!(await database.comparePassword(req.body.password, account.Password))) {
             req.session.message = "Invalid credentials.";
             req.session.isError = true;
