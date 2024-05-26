@@ -5,8 +5,7 @@ const db = require('../database/database.js');
 
 
 router.get('/', async (req, res) => {
-    
-    
+    res.render('dashboard.ejs' , {title: 'Dashboard'});
 });
 
 module.exports = router;

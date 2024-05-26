@@ -114,6 +114,10 @@ router.post("/upload", async (req, res) => {
         // Loop through modules, insert into datavase
         modules.forEach(async module => { await database.insertUserModule(userID, module, semesterID); });
 
+            alert("Semester already exists!");
+            // Redirect to dashboard
+            window.location.href = "/dashboard"; 
+
         res.render('dashboard.ejs');
     } catch (error) {
         console.error('Error:', error);

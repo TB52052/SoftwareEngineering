@@ -243,7 +243,7 @@ function getSemesters() {
 
 function insertUserModule(userID, moduleID, semesterID) {
     return new Promise((resolve, reject) => {
-        db.run(`INSERT INTO UserModules (UserID, ModuleID, SemesterID) VALUES (?, ?, ?)`, [userID, moduleID, semesterID], (err) => {
+        db.run(`INSERT INTO UserModules (ModuleID, UserID, SemesterID) VALUES (?, ?, ?)`, [moduleID, userID, semesterID], (err) => {
             if (err) {
                 reject(err);
             } else {

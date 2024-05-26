@@ -21,6 +21,7 @@ function getSemesters() {
         .catch((error) => console.error("Error:", error));
 }
 
+
 function updateSemesterForm() {
     selectedSemester = document.getElementById("seasonForm").value;
     let fileInputForm = document.getElementById("fileInputForm");
@@ -35,15 +36,24 @@ function updateSemesterForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ selectedSemester: selectedSemester }),
     })
-        .then((response) => response.json())
-        .then((data) => {
-            if (data.exists) {
-                fileInputForm.classList.add("hidden");
-                // Redirect to dashboard with data.semesterData
+    .then((response) => response.json())
+    .then((data) => {
+        if (data.exists) {
+            fileInputForm.classList.add("hidden");
+            // Show pop-up to confirm loading semester
+            if (confirm("Semester already exists! Do you want to load this semesters tasks?")) {
+                // If user clicks 'OK', redirect to dashboard
+                window.location.href = "/dashboard"; 
+            } else {
+                // If user clicks 'Cancel', reload profile page
+                window.location.href = "/profile";
             }
-            else { fileInputForm.classList.remove("hidden"); }
-        })
-        .catch((error) => console.error("Error:", error));
+        }
+        else {
+            fileInputForm.classList.remove("hidden");
+        }
+    })
+    .catch((error) => console.error("Error:", error));
 }
 
 function updateFileInputform(event) {
@@ -75,6 +85,12 @@ function updateFileInputform(event) {
                     .then((response) => response.json())
                     .then((data) => console.log(data))
                     .catch((error) => console.error("Error:", error));
+
+                    alert("Semester uploaded to database    ");
+                    // Redirect to dashboard
+                    window.location.href = "/dashboard"; 
+
+
             } catch (error) {
                 console.error("Error parsing JSON:", error);
             }
