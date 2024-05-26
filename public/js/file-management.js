@@ -64,7 +64,6 @@ function updateFileInputform(event) {
         return alert("The file name does not match the selected semester.");
     }
 
-
     if (fileInput.files.length > 0) {
         const file = fileInput.files[0];
         const reader = new FileReader();
@@ -72,6 +71,10 @@ function updateFileInputform(event) {
         reader.onload = function (event) {
             try {
                 const jsonData = JSON.parse(event.target.result);
+                // Check if jsonData is empty or not in correct format
+                if (Object.keys(jsonData).length === 0) {
+                    return alert("The file is empty or not in the correct format. Please upload the correct file.");
+                }
                 const dataToSend = {
                     semester: selectedSemester,
                     modules: jsonData,
@@ -86,16 +89,18 @@ function updateFileInputform(event) {
                     .then((data) => console.log(data))
                     .catch((error) => console.error("Error:", error));
 
-                    alert("Semester uploaded to database    ");
-                    // Redirect to dashboard
-                    window.location.href = "/dashboard"; 
-
+                alert("Semester uploaded to database.");
+                // Redirect to dashboard
+                window.location.href = "/dashboard"; 
 
             } catch (error) {
                 console.error("Error parsing JSON:", error);
             }
         };
         reader.readAsText(file);
+    } else {
+        // If no file is selected
+        alert("Please select a file to upload.");
     }
 }
 
