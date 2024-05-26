@@ -6,12 +6,54 @@
     <link rel="stylesheet" href="/styles/side-bar.css">
     <link rel="stylesheet" href="/styles/calendar.css">
     <title>Study Planner - Gantt</title>
+    <!DOCTYPE html>
+<html>
+<head>
+  <title>Study Planner Gantt Chart</title>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+    google.charts.load('current', {'packages':['gantt']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', 'Task ID');
+      data.addColumn('string', 'Task Name');
+      data.addColumn('string', 'Resource');
+      data.addColumn('date', 'Start Date');
+      data.addColumn('date', 'End Date');
+      data.addColumn('number', 'Duration');
+      data.addColumn('number', 'Percent Complete');
+      data.addColumn('string', 'Dependencies');
+
+      data.addRows([
+        ['task1', 'Review Lecture Notes', 'Module 1', new Date(2024, 4, 1), new Date(2024, 4, 3), null, 100, null],
+        ['task2', 'Complete Assignment 1', 'Module 1', new Date(2024, 4, 4), new Date(2024, 4, 10), null, 75, 'task1'],
+        ['task3', 'Prepare for Quiz', 'Module 2', new Date(2024, 4, 5), new Date(2024, 4, 7), null, 50, null],
+        ['task4', 'Write Lab Report', 'Module 2', new Date(2024, 4, 8), new Date(2024, 4, 12), null, 25, 'task3'],
+        ['task5', 'Read Chapter 3', 'Module 3', new Date(2024, 4, 1), new Date(2024, 4, 5), null, 60, null],
+        ['task6', 'Solve Problem Set', 'Module 3', new Date(2024, 4, 6), new Date(2024, 4, 10), null, 20, 'task5']
+      ]);
+
+      var options = {
+        height: 400,
+        gantt: {
+          trackHeight: 30
+        }
+      };
+
+      var chart = new google.visualization.Gantt(document.getElementById('chart_div'));
+
+      chart.draw(data, options);
+    }
+  </script>
 </head>
 <body>
     <div class="wrapper">
         <%- include('partials/nav-bar') %>
         <div class="container">
             <div class="content">
+                <div id="chart_div"></div>
             </div>
         </div>
     </div>

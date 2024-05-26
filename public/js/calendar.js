@@ -1,9 +1,14 @@
 let currentMonth = new Date().getMonth();
 let currentYear = new Date().getFullYear();
+let cache = {
+    assessments: {},
+    tasks: {}
+};
+let currentUserId = 1; // Use correct user ID
 
 document.addEventListener("DOMContentLoaded", function() {
-    const userId = 1;  // This should ideally be dynamically set based on the logged-in user.
-    showCalendar(currentMonth, currentYear, userId);
+    console.log('User ID:', currentUserId);
+    showCalendar(currentMonth, currentYear, currentUserId);
 });
 
 async function showCalendar(month, year, userId) {
@@ -34,63 +39,150 @@ async function showCalendar(month, year, userId) {
         calendarBody.appendChild(row);
     }
     await fetchEventsAndTasks(userId, year, month);
-}
-
-async function fetchEventsAndTasks(userId, year, month) {
-    const baseUrl = `/api/user/${userId}`;
-    try {
-        const assessmentsResponse = await fetch(`${baseUrl}/assessments`);
-        const tasksResponse = await fetch(`${baseUrl}/tasks`);
-        const assessments = await assessmentsResponse.json();
-        const tasks = await tasksResponse.json();
-
-        console.log('Assessments fetched:', assessments);
-        console.log('Tasks fetched:', tasks);
-
-        // Adding assessments to the calendar
-        assessments.forEach(assessment => {
-            const date = new Date(assessment.AssessmentDate);
-            if (date.getFullYear() === year && date.getMonth() === month) {
-                const eventName = `${assessment.ModuleName}: ${assessment.AssessmentName}`;
-                addEventToCalendar(date.getDate(), eventName, 'red');
-            }
-        });
-
-    
-        tasks.forEach(task => {
-            const date = new Date(task.TaskDate);
-            if (date.getFullYear() === year && date.getMonth() === month) {
-                addEventToCalendar(date.getDate(), task.AssessmentName, task.TypeName, task.TimeSpent, task.ModuleName, task.description || 'No additional details provided.');
-            }
-        });
-        
-       
-    } catch (err) {
-        console.error('Error fetching events and tasks:', err);
-    }
     addEventListenersToEvents();
 }
 
-function addEventToCalendar(day, assessmentName, typeName, timeSpent, moduleName, details) {
+async function fetchEventsAndTasks(userId, year, month) {
+    const cacheKey = `${userId}-${year}-${month + 1}`;
+
+    // Ensure calendar is cleared before adding new events
+    clearCalendarEvents();
+
+    if (!cache.assessments[cacheKey]) {
+        await fetchAssessments(userId, year, month);
+    } else {
+        console.log('Using cached assessments:', cache.assessments[cacheKey]);
+        cache.assessments[cacheKey].forEach(assessment => {
+            const dateParts = assessment.AssessmentDate.split('/');
+            const assessmentDate = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
+            if (assessmentDate.getFullYear() === year && assessmentDate.getMonth() === month) {
+                addAssessmentToCalendar(assessmentDate.getDate(), assessment);
+            }
+        });
+    }
+
+    if (!cache.tasks[cacheKey]) {
+        await fetchTasks(userId, year, month);
+    } else {
+        console.log('Using cached tasks:', cache.tasks[cacheKey]);
+        cache.tasks[cacheKey].forEach(task => {
+            const date = new Date(task.TaskDate);
+            if (date.getFullYear() === year && date.getMonth() === month) {
+                addTaskToCalendar(date.getDate(), task);
+            }
+        });
+    }
+}
+
+async function fetchData(userId, year, month) {
+    await Promise.all([fetchAssessments(userId, year, month), fetchTasks(userId, year, month)]);
+}
+
+async function fetchAssessments(userId, year, month) {
+    const baseUrl = `/api/user/${userId}/assessments`;
+    try {
+        const response = await fetch(baseUrl);
+        const assessments = await response.json();
+
+        console.log('Assessments fetched:', assessments);
+
+        const cacheKey = `${userId}-${year}-${month + 1}`;
+        cache.assessments[cacheKey] = assessments;
+
+        assessments.forEach(assessment => {
+            console.log('Processing assessment:', assessment);
+            const dateParts = assessment.AssessmentDate.split('/');
+            const assessmentDate = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
+            if (assessmentDate.getFullYear() === year && assessmentDate.getMonth() === month) {
+                addAssessmentToCalendar(assessmentDate.getDate(), assessment);
+            }
+        });
+
+    } catch (err) {
+        console.error('Error fetching assessments:', err);
+    }
+}
+
+async function fetchTasks(userId, year, month) {
+    const baseUrl = `/api/user/${userId}/tasks`;
+    try {
+        const response = await fetch(baseUrl);
+        const tasks = await response.json();
+
+        console.log('Tasks fetched:', tasks);
+
+        const cacheKey = `${userId}-${year}-${month + 1}`;
+        cache.tasks[cacheKey] = tasks;
+
+        tasks.forEach(task => {
+            console.log('Processing task:', task);
+            const date = new Date(task.TaskDate);
+            if (date.getFullYear() === year && date.getMonth() === month) {
+                addTaskToCalendar(date.getDate(), task);
+            }
+        });
+
+    } catch (err) {
+        console.error('Error fetching tasks:', err);
+    }
+}
+
+function clearCalendarEvents() {
+    const events = document.querySelectorAll('.event');
+    events.forEach(event => event.remove());
+}
+
+function addAssessmentToCalendar(day, assessment) {
     const cells = document.querySelectorAll(`td[data-date="${day}"][data-month="${currentMonth + 1}"][data-year="${currentYear}"]`);
-    console.log(`Adding event: ${assessmentName}, ${typeName}, ${timeSpent}, ${moduleName}, on day ${day}`);
+    console.log(`Adding assessment: ${assessment.AssessmentName} on day ${day}`, assessment);
     cells.forEach(cell => {
         const eventDiv = document.createElement('div');
-        eventDiv.classList.add('event');
-        eventDiv.textContent = `${assessmentName || 'No Assessment'} - ${typeName || 'No Type'}, Time: ${timeSpent || '0'} mins`;
-        eventDiv.setAttribute('data-module-name', moduleName);
-        eventDiv.setAttribute('data-assessment-name', assessmentName);
-        eventDiv.setAttribute('data-type-name', typeName);
-        eventDiv.setAttribute('data-time-spent', timeSpent);
+        eventDiv.classList.add('event', 'assessment-event');  // Added class for assessments
+        eventDiv.textContent = assessment.AssessmentName;
+        eventDiv.setAttribute('data-module-name', assessment.ModuleName);
+        eventDiv.setAttribute('data-assessment-name', assessment.AssessmentName);
+        eventDiv.setAttribute('data-assessment-type', assessment.AssessmentType);
+        eventDiv.setAttribute('data-assessment-description', assessment.AssessmentDescription);
+        eventDiv.setAttribute('data-assessment-date', assessment.AssessmentDate);
+        eventDiv.setAttribute('data-weighting', assessment.Weighting);
         eventDiv.addEventListener('click', () => {
-            console.log(`Event clicked: ${moduleName}, ${assessmentName}, ${typeName}, ${timeSpent}`);
-            openModal(moduleName, assessmentName, typeName, timeSpent);
+            openAssessmentModal(
+                assessment.ModuleName,
+                assessment.AssessmentName,
+                assessment.AssessmentType,
+                assessment.AssessmentDescription,
+                assessment.AssessmentDate,
+                assessment.Weighting
+            );
         });
         cell.appendChild(eventDiv);
     });
 }
 
-
+function addTaskToCalendar(day, task) {
+    const cells = document.querySelectorAll(`td[data-date="${day}"][data-month="${currentMonth + 1}"][data-year="${currentYear}"]`);
+    console.log(`Adding task: ${task.AssessmentName} on day ${day}`, task);
+    cells.forEach(cell => {
+        const eventDiv = document.createElement('div');
+        eventDiv.classList.add('event', 'task-event');  // Added class for tasks
+        eventDiv.textContent = task.AssessmentName;
+        eventDiv.setAttribute('data-module-name', task.ModuleName);
+        eventDiv.setAttribute('data-assessment-name', task.AssessmentName);
+        eventDiv.setAttribute('data-type-name', task.TypeName);
+        eventDiv.setAttribute('data-time-spent', task.TimeSpent);
+        eventDiv.addEventListener('click', () => {
+            openTaskModal(
+                task.ModuleName,
+                task.AssessmentName,
+                task.TypeName,
+                task.description || 'No additional details provided.',
+                task.TaskDate,
+                task.TimeSpent
+            );
+        });
+        cell.appendChild(eventDiv);
+    });
+}
 
 function moveDate(dir) {
     currentMonth += dir;
@@ -101,27 +193,41 @@ function moveDate(dir) {
         currentMonth = 0;
         currentYear += 1;
     }
-    const userId = 1;  // Assume the user ID remains the same; change as needed.
-    showCalendar(currentMonth, currentYear, userId);
+    showCalendar(currentMonth, currentYear, currentUserId); // Use currentUserId
 }
 
-function openModal(moduleName, assessmentName, typeName, timeSpent) {
-    if (!moduleName || !assessmentName || !typeName || timeSpent === undefined) {
-        console.error("Invalid data provided to modal:", moduleName, assessmentName, typeName, timeSpent);
-        return; // Exit if data is invalid
-    }
-    console.log("Modal opening with data:", moduleName, assessmentName, typeName, timeSpent);
+function openAssessmentModal(moduleName, assessmentName, typeName, description, date, weighting) {
+    console.log("Modal opening with data:", moduleName, assessmentName, typeName, description, date, weighting);
     const modal = document.getElementById('modal');
     const detailsElement = document.getElementById('modal-details');
+    const dateParts = date.split('/');
+    const formattedDate = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]).toLocaleDateString();
     detailsElement.innerHTML = `
-        <h2>${assessmentName} - ${typeName}</h2>
+        <h2>${assessmentName}</h2>
         <p><strong>Module:</strong> ${moduleName}</p>
-        <p><strong>Duration:</strong> ${timeSpent} minutes</p>
+        <p><strong>Type:</strong> ${typeName}</p>
+        <p><strong>Description:</strong> ${description}</p>
+        <p><strong>Date:</strong> ${formattedDate}</p>
+        <p><strong>Weighting:</strong> ${weighting}</p>
     `;
     modal.style.display = 'block'; // Show the modal
 }
 
-
+function openTaskModal(moduleName, assessmentName, typeName, description, date, timeSpent) {
+    console.log("Modal opening with data:", moduleName, assessmentName, typeName, description, date, timeSpent);
+    const modal = document.getElementById('modal');
+    const detailsElement = document.getElementById('modal-details');
+    const formattedDate = new Date(date).toLocaleDateString();
+    detailsElement.innerHTML = `
+        <h2>${assessmentName}</h2>
+        <p><strong>Module:</strong> ${moduleName}</p>
+        <p><strong>Type:</strong> ${typeName}</p>
+        <p><strong>Description:</strong> ${description}</p>
+        <p><strong>Date:</strong> ${formattedDate}</p>
+        <p><strong>Time Spent:</strong> ${timeSpent} minutes</p>
+    `;
+    modal.style.display = 'block'; // Show the modal
+}
 
 // Function to close the modal
 function closeModal() {
@@ -143,4 +249,14 @@ function addEventListenersToEvents() {
     });
 }
 
-
+// CSS for red vertical bar for assessments
+const style = document.createElement('style');
+style.innerHTML = `
+    .assessment-event {
+        border-left: 4px solid red;
+    }
+    .task-event {
+        border-left: 4px solid blue;
+    }
+`;
+document.head.appendChild(style);

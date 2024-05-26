@@ -66,13 +66,24 @@ function comparePassword(password, hash) {
 function getUserAssessments(userId) {
     return new Promise((resolve, reject) => {
         const sql = `
-            SELECT 
-            UserAssessments.*, 
-            Assessments.AssessmentName, Assessments.ModuleID
-                FROM UserAssessments
-                JOIN Assessments ON UserAssessments.AssessmentID = Assessments.AssessmentID
-            WHERE UserAssessments.UserID = ?
-        `;
+        SELECT 
+            a.AssessmentID,
+            a.ModuleID,
+            a.AssessmentType,
+            a.AssessmentName,
+            a.AssessmentDescription,
+            a.AssessmentDate,
+            a.Weighting,
+            m.ModuleName
+        FROM 
+            Assessments a
+        JOIN 
+            Modules m ON a.ModuleID = m.ModuleID
+        JOIN 
+            UserModules um ON m.ModuleID = um.ModuleID
+        WHERE 
+            um.UserID = ?
+`;
         db.all(sql, [userId], (err, rows) => {
             if (err) {
                 reject(err);
