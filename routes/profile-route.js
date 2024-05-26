@@ -47,7 +47,7 @@ router.post("/name", async (req, res) => {
     const account = await database.getAccountByID(userId);
 
     // Check if password is correct
-    if (!(await database.comparePassword(password, account.password))) {
+    if (!(await database.comparePassword(password, account.Password))) {
         return res.status(403).send("Incorrect password");
     }
 
@@ -66,7 +66,7 @@ router.post("/password", async (req, res) => {
     const account = await database.getAccountByID(userId);
 
     // Check if old password is correct
-    if (!(await database.comparePassword(oldPassword, account.password))) {
+    if (!(await database.comparePassword(oldPassword, account.Password))) {
         return res.status(403).send("Incorrect password");
     }
 
@@ -88,14 +88,13 @@ router.post("/delete", async (req, res) => {
     const account = await database.getAccountByID(userId);
 
     // Check if password is correct
-    if (!(await database.comparePassword(password, account.password))) {
+    if (!(await database.comparePassword(password, account.Password))) {
         return res.status(403).send("Incorrect password");
     }
 
     // Delete the account
     let deleteAccount = await database.deleteAccount(userId);
     await database.deleteTasks(userId);
-    await database.deleteAssessments(userId);
 
     if (!deleteAccount) {
         return res.status(200).send("Account deleted");
