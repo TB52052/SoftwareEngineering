@@ -109,7 +109,7 @@ function getUserTasks(userId) {
 
 function updateUsername(userId, newName, newSurname) {
     return new Promise((resolve, reject) => {
-        db.run(`UPDATE Users SET name = ?, surname = ? WHERE UserID = ?`, [newName, newSurname, userId], (err) => {
+        db.run(`UPDATE Users SET Forename = ?, Surname = ? WHERE UserID = ?`, [newName, newSurname, userId], (err) => {
             if (err) {
                 reject(err);
             } else {
@@ -121,7 +121,7 @@ function updateUsername(userId, newName, newSurname) {
 
 function updatePassword(userId, newPassword) {
     return new Promise((resolve, reject) => {
-        db.run(`UPDATE Users SET password = ? WHERE UserID = ?`, [newPassword, userId], (err) => {
+        db.run(`UPDATE Users SET Password = ? WHERE UserID = ?`, [newPassword, userId], (err) => {
             if (err) {
                 reject(err);
             } else {
@@ -174,18 +174,6 @@ function getAssessment(assessmentId) {
                 reject(err);
             } else {
                 resolve(row);
-            }
-        });
-    });
-}
-
-function deleteAssessments(userID) {
-    return new Promise((resolve, reject) => {
-        db.run(`DELETE FROM UserAssessments WHERE UserID = ?`, [userID], (err) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve();
             }
         });
     });
@@ -305,7 +293,6 @@ module.exports = {
     getModule,
     getAssessment,
     deleteTasks,
-    deleteAssessments,
     deleteModules,
     getSemesters,
     insertUserModule,

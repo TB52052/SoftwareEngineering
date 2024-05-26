@@ -82,7 +82,7 @@ function submitPasswordEditRequest() {
     const confirmPassword = document.getElementById("confirm-password").value;
 
     if (newPassword !== confirmPassword) {
-        return showMessage("Passwords do not match", trie);
+        return showMessage("Passwords do not match", true);
     }
 
     fetch("/profile/password", {
