@@ -13,181 +13,454 @@
             <div class="content">
                 <div class="add-task-section form-page"> 
                     <h2 class="form-title">Add New Task</h2>
-                    <form class="form-form" action="/tasks/add" method="POST">
+                    <form class="form-form" id="addTaskForm" action="/tasks" method="POST">
                         <div class="input-group">
                             <label for="taskName">Task Name:</label>
                             <input type="text" id="taskName" name="taskName" required>
                         </div>
                         <div class="input-group">
                             <label for="module">Module:</label>
-                            <select id="module" name="module" required>
-                                <option value="module1">Module 1</option>
-                                <option value="module2">Module 2</option>
+                            <select id="module" name="moduleID" required>
+                                <% modules.forEach(function(module) { %>
+                                    <option value="<%= module.ModuleID %>"><%= module.ModuleName %></option>
+                                <% }); %>
                             </select>
                         </div>
                         <div class="input-group">
-                            <label for="assignmentType">Assignment Type:</label>
-                            <select id="assignmentType" name="assignmentType" required>
-                                <option value="exam">Exam</option>
-                                <option value="programming coursework">Programming Coursework</option>
-                                <option value="essay coursework">Essay Coursework</option>
+                            <label for="assessment">Assessment:</label>
+                            <select id="assessment" name="assessmentID" required>
+                                <% assessments.forEach(function(assessment) { %>
+                                    <option value="<%= assessment.AssessmentID %>"><%= assessment.AssessmentName %></option>
+                                <% }); %>
                             </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="timeSpent">Time Spent (hours):</label>
+                            <input type="number" id="timeSpent" name="timeSpent" required>
                         </div>
                         <div class="input-group">
                             <label for="taskRequirement">Task Requirement:</label>
-                            <select id="taskRequirement" name="taskRequirement" required>
-                                <option value="lecturesread">Lectures Covered</option>
-                                <option value="hoursprogramming">Hours Programming</option>
-                                <option value="wordswritten">Words Written</option>
-                                <option value="practicequestions">Practice Questions Completed</option>
+                            <select id="taskRequirement" name="taskTypeID" required>
+                                <% taskTypes.forEach(function(taskType) { %>
+                                    <option value="<%= taskType.TaskTypeID %>"><%= taskType.TypeName %></option>
+                                <% }); %>
                             </select>
                         </div>
                         <div class="input-group">
-                            <label for="milestoneInput">Add Milestone:</label>
-                            <input type="text" id="milestoneInput" class="milestoneInput" placeholder="Enter milestone...">
-                            <button class="input-button add-milestone-btn">Add</button>
+                            <label for="quantity">Quantity:</label>
+                            <input type="number" id="quantity" name="quantity" required>
                         </div>
                         <div class="input-group">
                             <label for="taskDeadline">Task Deadline:</label>
-                            <input type="date" id="taskDeadline" name="taskDeadline" required>
+                            <input type="date" id="taskDeadline" name="taskDate" required>
                         </div>
+                        <input type="hidden" id="userId" name="userId" value="<%= userId %>">
+
+                        <div class="input-group">
+                            <label for="taskDependencies">Task Dependencies:</label>
+                            <select multiple id="taskDependencies" name="taskDependencies[]">
+                                <% tasks.forEach(function(task) { %>
+                                    <option value="<%= task.TaskID %>"><%= task.TaskName %></option>
+                                <% }); %>
+                            </select>
+                        </div>
+
+                     
+                        <div class="input-group">
+                            <label for="milestoneName">Milestone Name:</label>
+                            <input type="text" id="milestoneName" name="milestoneName[]" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="milestoneDeadline">Milestone Deadline:</label>
+                            <input type="date" id="milestoneDeadline" name="milestoneDeadline[]" required>
+                        </div>
+                        
+                        <!-- Button to add another milestone box -->
+                        <button type="button" class="add-milestone-btn">Add Another Milestone</button>
+
+                        
                         <div class="form-button">
                             <button class="input-button" type="submit">Add Task</button>
                         </div>
+                       
+                        
                     </form>
                 </div>
-                <div class="tasks-section">
-                    <h2>Existing Tasks</h2>
-                    <div class="task-list">
-                        <div class="task-item">
-                            <h3>Task 1</h3>
-                            <p>Assignment: Exam</p>
-                            <p>Type: Studying</p>
-                            <p class="task-deadline">Deadline: 2024-04-20</p>
-                            <p class="task-requirement">Requirement: Lectures Covered</p>
-                            <p class="progress-criteria">Progress: 50%</p>
-                            <div class="update-progress">
-                                <label for="progressInput">Update Progress:</label>
-                                <input type="text" id="progressInput1" class="progressInput" name="progressInput" data-task="1" placeholder="Enter progress...">
-                                <button class="input-button update-progress-btn" data-task="1">Update</button>
-                            </div>
-                            <div class="milestones-section">
-                                <h4>Milestones</h4>
-                                <div class="milestone-item">
-                                    <input type="checkbox" id="milestone1-1" name="milestone1-1">
-                                    <label for="milestone1-1">Milestone 1</label>
-                                    <span class="deadline">Deadline: 2024-04-15</span>
+                
+                       <!-- Existing Tasks Section -->
+                       <div class="tasks-section">
+                        <h2>Existing Tasks</h2>
+                        <div class="task-list">
+                            <% tasks.forEach(function(task) { %>
+                                <div class="task-item" data-task-id="<%= task.TaskID %>" data-task-type-id="<%= task.TaskTypeID %>">
+                                    <div class="task-info">
+                                        <h3><%= task.TaskName %></h3>
+                                        <p>Module: <%= task.ModuleName %></p>
+                                        <p>Assessment: <%= task.AssessmentName %></p>
+                                        <p>Estimated Time (hours): <%= task.TimeSpent %></p>
+                                        <p>Type: <%= task.TypeName %></p>
+                                        <p>Task Quantity: <%= task.TaskQuantity %></p>
+                                        <p class="task-deadline">Deadline: <%= task.TaskDate %></p>
+                                        <p>Status: <%= task.Status %></p>
+                                        <p>Hours Spent: <%= task.HoursSpent %></p>
+                                        <p>Activity Quantity: <%= task.ActivityQuantity %></p>
+                                        
+                                        <div class="milestones-section">
+                                            <h4>Milestones:</h4>
+                                            <ul class="milestone-list">
+                                                <% task.milestones.forEach(function(milestone) { %>
+                                                    <li>
+                                                        <%= milestone.MilestoneName %> - Deadline: <%= milestone.MilestoneDeadline %>
+                                                        <button class="update-milestone-deadline-btn">Update Deadline</button>
+                                                        <div class="update-milestone-deadline-section bubble-box">
+                                                            <h4>Update Milestone Deadline</h4>
+                                                            <form class="update-milestone-deadline-form">
+                                                                <div class="input-group">
+                                                                    <label for="newMilestoneDeadline">New Deadline:</label>
+                                                                    <input type="date" id="newMilestoneDeadline" name="newMilestoneDeadline" required>
+                                                                </div>
+                                                                <button type="submit" class="update-milestone-deadline-btn">Update Deadline</button>
+                                                            </form>
+                                                        </div>
+                                                    </li>
+                                                <% }); %>
+                                            </ul>
+                                        </div>
+                                    <div class="task-actions">
+                                        <button class="capture-progress-btn">Capture Study Progress</button>
+                                        <button class="update-progress-btn">Update Progress</button>
+                                        <button class="current-activities-btn">Current Activities</button>
+                                        <button class="update-deadline-btn">Update Deadline</button>
+                                    </div>
+                                    <div class="task-progress-section bubble-box">
+                                        <h4>Update Progress</h4>
+                                        <form class="update-progress-form">
+                                            <div class="input-group">
+                                                <label for="hoursSpent">Hours Spent:</label>
+                                                <input type="number" id="hoursSpent" name="hoursSpent" required>
+                                            </div>
+                                            <div class="input-group">
+                                                <label for="amountDone">Amount Done:</label>
+                                                <input type="number" id="amountDone" name="amountDone" required step="1">
+                                            </div>
+                                            <button type="submit" class="update-progress-btn">Update Progress</button>
+                                        </form>
+                                    </div>
+                                    <div class="study-progress-section bubble-box">
+                                        <form class="study-progress-form" action="/activities" method="POST">
+                                            <input type="hidden" name="userId" value="<%= user.UserID %>">
+                                            <input type="hidden" name="taskId" value="<%= task.TaskID %>">
+                                            <input type="hidden" name="taskTypeId" value="<%= task.TaskTypeID %>">
+                                            <p>Task Type: <%= task.TypeName %></p>
+                                            <div class="input-group">
+                                                <label for="quantity">Quantity:</label>
+                                                <input type="number" id="quantity" name="quantity" required>
+                                            </div>
+                                            <div class="input-group">
+                                                <label for="notes">Notes:</label>
+                                                <textarea id="notes" name="notes" required></textarea>
+                                            </div>
+                                            <div class="input-group">
+                                                <label for="progressMeasurement">Progress Measurement:</label>
+                                                <select id="progressMeasurement" name="progressMeasurement" required></select>
+                                            </div>
+                                            <button type="submit">Add Activity</button>
+                                        </form>
+                                    </div>
+                                    <div class="task-activities bubble-box">
+                                        <h4>Current Activities:</h4>
+                                        <% if (task.activities && task.activities.length > 0) { %>
+                                            <% task.activities.forEach(function(activity) { %>
+                                                <div class="activity">
+                                                    <p><strong>Quantity:</strong> <%= activity.quantity %></p>
+                                                    <p><strong>Notes:</strong> <%= activity.notes %></p>
+                                                    <p><strong>Progress Measurement:</strong> <%= activity.progressMeasurement %></p>
+                                                </div>
+                                            <% }); %>
+                                        <% } else { %>
+                                            <p>No activities found for this task.</p>
+                                        <% } %>
+                                    </div>
+                                    <div class="update-deadline-section bubble-box">
+                                        <h4>Update Deadline</h4>
+                                        <form class="update-deadline-form">
+                                            <div class="input-group">
+                                                <label for="newDeadline">New Deadline:</label>
+                                                <input type="date" id="newDeadline" name="newDeadline" required>
+                                            </div>
+                                            <button type="submit" class="update-deadline-btn">Update Deadline</button>
+                                        </form>
+                                    </div>
+                                    <button class="mark-as-done" data-task-id="<%= task.TaskID %>">Mark as Done</button>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="task-item">
-                            <h3>Task 2</h3>
-                            <p>Assignment: Programming Coursework</p>
-                            <p>Type: Programming</p>
-                            <p class="task-deadline">Deadline: 2024-04-22</p>
-                            <p class="task-requirement">Requirement: Hours Programming</p>
-                            <p class="progress-criteria">Progress: 30%</p>
-                            <div class="update-progress">
-                                <label for="progressInput">Update Progress:</label>
-                                <input type="text" id="progressInput2" class="progressInput" name="progressInput" data-task="2" placeholder="Enter progress...">
-                                <button class="input-button update-progress-btn" data-task="2">Update</button>
-                            </div>
-                            <div class="milestones-section">
-                                <h4>Milestones</h4>
-                                <div class="milestone-item">
-                                    <input type="checkbox" id="milestone1-2" name="milestone1-2">
-                                    <label for="milestone1-2">Milestone 1</label>
-                                    <span class="deadline">Deadline: 2024-04-18</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="task-item">
-                            <h3>Task 3</h3>
-                            <p>Assignment: Essay Coursework</p>
-                            <p>Type: Writing</p>
-                            <p class="task-deadline">Deadline: 2024-04-25</p>
-                            <p class="task-requirement">Requirement: Words Written</p>
-                            <p class="progress-criteria">Progress: 20%</p>
-                            <div class="update-progress">
-                                <label for="progressInput">Update Progress:</label>
-                                <input type="text" id="progressInput3" class="progressInput" name="progressInput" data-task="3" placeholder="Enter progress...">
-                                <button class="input-button update-progress-btn" data-task="3">Update</button>
-                            </div>
-                            <div class="milestones-section">
-                                <h4>Milestones</h4>
-                                <div class="milestone-item">
-                                    <input type="checkbox" id="milestone1-3" name="milestone1-3">
-                                    <label for="milestone1-3">Milestone 1</label>
-                                    <span class="deadline">Deadline: 2024-04-22</span>
-                                </div>
-                            </div>
+                           
+                            <% }); %>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <%- include('partials/error-box') %>
-    <script>
-        document.getElementById('module').addEventListener('change', function() {
-            const module = this.value;
-            const assignmentDropdown = document.getElementById('assignmentType');
-            assignmentDropdown.innerHTML = '';
-            if (module === 'module1' || module === 'module2') {
-                assignmentDropdown.innerHTML += '<option value="exam">Exam</option>';
-                assignmentDropdown.innerHTML += '<option value="programming coursework">Programming Coursework</option>';
-                assignmentDropdown.innerHTML += '<option value="essay coursework">Essay Coursework</option>';
-            }
-        });
+    
+        <%- include('partials/error-box') %>
+        <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const taskItems = document.querySelectorAll('.task-item');
 
-        document.getElementById('assignmentType').addEventListener('change', function() {
-            const assignmentType = this.value;
-            const taskRequirementDropdown = document.getElementById('taskRequirement');
-            taskRequirementDropdown.innerHTML = '';
-            if (assignmentType === 'exam') {
-                taskRequirementDropdown.innerHTML += '<option value="practicequestions">Practice Questions Completed</option>';
-                taskRequirementDropdown.innerHTML += '<option value="lecturesread">Lectures Covered</option>';
-            } else if (assignmentType === 'programming coursework') {
-                taskRequirementDropdown.innerHTML += '<option value="hoursprogramming">Hours Spent Programming</option>';
-            } else if (assignmentType === 'essay coursework') {
-                taskRequirementDropdown.innerHTML += '<option value="wordswritten">Words Written</option>';
-            }
-        });
-
-        const updateProgressButtons = document.querySelectorAll('.update-progress-btn');
-        updateProgressButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const taskId = this.getAttribute('data-task');
-                const progressInput = document.getElementById(`progressInput${taskId}`);
-                const progressValue = progressInput.value;
-            });
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            let milestoneCount = 1;
-            const addMilestoneButton = document.querySelector('.add-milestone-btn');
-            addMilestoneButton.addEventListener('click', function() {
-                const milestoneInput = document.getElementById('milestoneInput');
-                const milestoneValue = milestoneInput.value.trim();
-                if (milestoneValue !== '') {
-                    addMilestoneToList(`${milestoneCount}. ${milestoneValue}`);
-                    milestoneInput.value = '';
-                    milestoneCount++;
-                    milestoneInput.placeholder = `${milestoneCount}. Enter milestone...`;
-                }
-            });
-        });
-
-        function addMilestoneToList(milestone) {
-            const milestonesList = document.querySelector('.milestones-list');
-            const milestoneItem = document.createElement('div');
-            milestoneItem.classList.add('milestone-item');
-            milestoneItem.innerHTML = `
-                <input type="checkbox" class="milestone-checkbox">
-                <label>${milestone}</label>
-            `;
-            milestonesList.appendChild(milestoneItem);
+    function toggleBubbleBoxes(taskItem, bubbleBoxToShow) {
+    const allBubbleBoxes = taskItem.querySelectorAll('.bubble-box');
+    allBubbleBoxes.forEach(bubbleBox => {
+        if (bubbleBox) { // Check if bubbleBox is not null
+            bubbleBox.classList.remove('active');
         }
-    </script>
+    });
+    if (bubbleBoxToShow) { // Check if bubbleBoxToShow is not null
+        bubbleBoxToShow.classList.add('active');
+    }
+}
+
+    taskItems.forEach(taskItem => {
+        const captureProgressBtn = taskItem.querySelector('.capture-progress-btn');
+        const markAsDoneBtn = taskItem.querySelector('.mark-as-done');
+        const updateProgressBtn = taskItem.querySelector('.update-progress-btn');
+        const currentActivitiesBtn = taskItem.querySelector('.current-activities-btn');
+        const updateDeadlineBtn = taskItem.querySelector('.update-deadline-btn');
+        const updateMilestoneDeadlineBtns = taskItem.querySelectorAll('.update-milestone-deadline-btn');
+        const updateMilestoneDeadlineForms = taskItem.querySelectorAll('.update-milestone-deadline-form');
+
+        captureProgressBtn.addEventListener('click', function() {
+            const studyProgressSection = taskItem.querySelector('.study-progress-section');
+            toggleBubbleBoxes(taskItem, studyProgressSection);
+        });
+
+        updateProgressBtn.addEventListener('click', function() {
+            const taskProgressSection = taskItem.querySelector('.task-progress-section');
+            toggleBubbleBoxes(taskItem, taskProgressSection);
+        });
+
+        currentActivitiesBtn.addEventListener('click', function() {
+            const taskActivitiesSection = taskItem.querySelector('.task-activities');
+            toggleBubbleBoxes(taskItem, taskActivitiesSection);
+        });
+
+        updateDeadlineBtn.addEventListener('click', function() {
+            const updateDeadlineSection = taskItem.querySelector('.update-deadline-section');
+            toggleBubbleBoxes(taskItem, updateDeadlineSection);
+        });
+        updateMilestoneDeadlineBtns.forEach((btn, index) => {
+            btn.addEventListener('click', function() {
+                const updateMilestoneDeadlineSection = btn.nextElementSibling;
+                toggleBubbleBoxes(taskItem, updateMilestoneDeadlineSection);
+            });
+        });
+
+        updateMilestoneDeadlineForms.forEach((form, index) => {
+            form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const newMilestoneDeadline = this.querySelector('#newMilestoneDeadline').value;
+    const milestoneIds = taskItem.dataset.milestoneId ? taskItem.dataset.milestoneId.split(',') : []; // Split the data attribute into an array
+    const milestoneId = milestoneIds[index]; // Get the milestone ID
+
+    if (milestoneId) { // Check if the milestone ID exists before trying to use it
+    const response = await fetch(`/milestoneupdate/${milestoneId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ newMilestoneDeadline })
+    });
+
+    if (response.ok) {
+        console.log('Milestone deadline updated successfully.');
+    } else {
+        console.error('Failed to update milestone deadline.');
+    }
+}
+});
+        });
+    
+
+        markAsDoneBtn.addEventListener('click', async function() {
+            const taskId = this.dataset.taskId;
+            const response = await fetch(`/tasks/${taskId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ status: 'done' })
+            });
+            if (response.ok) {
+                taskItem.remove();
+            } else {
+                console.error('Failed to mark task as done.');
+            }
+        });
+            
+                    document.querySelectorAll('.capture-progress-btn').forEach(button => {
+                        button.addEventListener('click', async function() {
+                            const taskItem = this.closest('.task-item');
+                            if (!taskItem) {
+                                console.error('Task item not found.');
+                                return;
+                            }
+            
+                            const progressForm = taskItem.querySelector('.study-progress-form');
+                            if (!progressForm) {
+                                console.error('Study progress form not found.');
+                                return;
+                            }
+            
+                            const progressMeasurementDropdown = progressForm.querySelector('#progressMeasurement');
+                            if (!progressMeasurementDropdown) {
+                                console.error('Progress measurement dropdown not found.');
+                                return;
+                            }
+            
+                            const taskTypeId = taskItem.dataset.taskTypeId;
+            
+                            try {
+                                const response = await fetch(`/tasks/progress-measurements/${taskTypeId}`);
+                                if (!response.ok) {
+                                    throw new Error('Failed to fetch progress measurements');
+                                }
+            
+                                const progressMeasurements = await response.json();
+                                progressMeasurementDropdown.innerHTML = '';
+                                progressMeasurements.forEach(measurement => {
+                                    const option = document.createElement('option');
+                                    option.value = measurement;
+                                    option.textContent = measurement;
+                                    progressMeasurementDropdown.appendChild(option);
+                                });
+            
+                                progressForm.style.display = 'block';
+                            } catch (error) {
+                                console.error('Error:', error);
+                            }
+                        });
+                    });
+            
+                    const updateDeadlineForm = taskItem.querySelector('.update-deadline-form');
+                    updateDeadlineForm.addEventListener('submit', async function(e) {
+                        e.preventDefault();
+            
+                        const newDeadline = this.querySelector('#newDeadline').value;
+                        const taskId = taskItem.dataset.taskId;
+            
+                        const response = await fetch(`/tasks/${taskId}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ newDeadline })
+                        });
+            
+                        if (response.ok) {
+                            console.log('Task deadline updated successfully.');
+                        } else {
+                            console.error('Failed to update task deadline.');
+                        }
+                    });
+                });
+            
+                function addMilestoneBox() {
+                    const milestoneSection = document.querySelector('.add-task-section');
+                    const milestoneBoxes = milestoneSection.querySelectorAll('.milestone-input-box');
+                    const milestoneBox = document.createElement('div');
+                    milestoneBox.classList.add('input-group', 'milestone-input-box');
+                    milestoneBox.innerHTML = `
+                        <label for="milestoneName">Milestone Name:</label>
+                        <input type="text" name="milestoneName[]" required>
+                        <label for="milestoneDeadline">Milestone Deadline:</label>
+                        <input type="date" name="milestoneDeadline[]" required>
+                    `;
+            
+                    const addMilestoneBtnParent = document.querySelector('.add-milestone-btn').parentNode;
+                    addMilestoneBtnParent.insertBefore(milestoneBox, document.querySelector('.add-milestone-btn'));
+            
+                    milestoneBoxes.forEach((box, index) => {
+                        box.querySelector('label').textContent = `Milestone ${index + 1} Name:`;
+                    });
+                }
+            
+                document.querySelector('.add-milestone-btn').addEventListener('click', addMilestoneBox);
+            });
+            
+            document.querySelectorAll('.update-progress-form').forEach(form => {
+                form.addEventListener('submit', async function(event) {
+                    event.preventDefault();
+                    const taskItem = this.closest('.task-item');
+                    if (!taskItem) {
+                        console.error('Task item not found.');
+                        return;
+                    }
+                    const taskId = taskItem.dataset.taskId;
+                    const formData = new FormData(this);
+                    const data = Object.fromEntries(formData);
+                    data.taskId = taskId; // Add taskId to the data
+                    try {
+                        const response = await fetch(`/progress`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(data)
+                        });
+                        if (response.ok) {
+                            window.location.reload();
+                        } else {
+                            console.error('Failed to update progress.');
+                        }
+                    } catch (err) {
+                        console.error('Error updating progress:', err);
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.study-progress-form').forEach(form => {
+    form.addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const taskItem = this.closest('.task-item');
+        if (!taskItem) {
+            console.error('Task item not found.');
+            return;
+        }
+
+        const taskId = taskItem.dataset.taskId;
+        const userId = document.getElementById('userId').value; // Retrieve userId from the hidden input field
+
+        const formData = new FormData(this);
+        formData.append('userId', userId); // Append userId to the form data
+
+        // Add quantity and notes to the form data
+        formData.append('quantity', this.querySelector('#quantity').value);
+        formData.append('notes', this.querySelector('#notes').value);
+
+        let jsonObject = {};
+        for (const [key, value] of formData.entries()) {
+            jsonObject[key] = value;
+        }
+
+        try {
+            const response = await fetch(`/activities`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(jsonObject)
+            });
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                console.error('Failed to add activity.');
+            }
+        } catch (err) {
+            console.error('Error adding activity:', err);
+        }
+    });
+});
+            </script>
+            
 </body>
 </html>

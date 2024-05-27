@@ -3,6 +3,7 @@
 <head>
     <%- include('partials/global-head') %>
     <%- include('partials/main-page-head') %>
+    <link rel="stylesheet" href="/styles/side-bar.css">
     <link rel="stylesheet" href="/styles/calendar.css">
     <link rel="stylesheet" href="/styles/dashboard.css">
     <title>Study Planner - Dashboard</title>
@@ -13,104 +14,160 @@
         <div class="container">
             <div class="content">
                 <div class="tabs-container">
-                    <div class="tabs">
-                        <button class="tablinks" onclick="openTab(event, 'missed-deadlines')">Missed Deadlines</button>
-                        <button class="tablinks" onclick="openTab(event, 'upcoming-deadlines')">Upcoming Deadlines</button>
-                        <button class="tablinks" onclick="openTab(event, 'deadlines')">Deadlines</button>
+                    <div class="left-side">
+                        <div class="input-group">
+                            <label for="moduleFilter">Module:</label>
+                            <select id="moduleFilter" name="moduleID" onchange="filterByModule()" required>
+                                <option value="">All Modules</option>
+                                <% modules.forEach(function(module) { %>
+                                    <option value="<%= module.ModuleID %>" <%= module.ModuleID == selectedModule ? 'selected' : '' %>><%= module.ModuleName %></option>
+                                <% }); %>
+                            </select>
+                        </div>
+                        <div class="tabs">
+                            <button class="tablinks" onclick="openTab(event, 'Upcoming')">Upcoming</button>
+                            <button class="tablinks" onclick="openTab(event, 'Missed')">Missed</button>
+                            <button class="tablinks" onclick="openTab(event, 'Deadlines')">Deadlines</button>
+                        </div>
                     </div>
                     <div class="content">
-
-        <!-- Missed Deadlines Tab -->
-<div id="missed-deadlines" class="tabcontent">
-    <h2>Missed Deadlines</h2>
-    <div class="deadline-grid">
-        <div class="deadline-card missed">
-            <h3><i class="fas fa-exclamation-triangle"></i> Deadline 1</h3>
-            <div class="progress-bar">
-                <div class="progress" style="width: 50%;"></div>
-            </div>
-            <p>Task 1</p>
-            <p>Task 2</p>
-        </div>
-        <div class="deadline-card missed">
-            <h3><i class="fas fa-exclamation-triangle"></i> Deadline 2</h3>
-            <div class="progress-bar">
-                <div class="progress" style="width: 60%;"></div>
-            </div>
-            <p>Task 3</p>
-            <p>Task 4</p>
-        </div>
-        <!-- More deadlines can be added here -->
-    </div>
-</div>
-
-<!-- Upcoming Deadlines Tab -->
-<div id="upcoming-deadlines" class="tabcontent">
-    <h2>Upcoming Deadlines</h2>
-    <div class="deadline-grid">
-        <div class="deadline-card upcoming">
-            <h3><i class="fas fa-hourglass-half"></i> Deadline 3</h3>
-            <div class="progress-bar">
-                <div class="progress" style="width: 75%;"></div>
-            </div>
-            <p>Task 5</p>
-            <p>Task 6</p>
-        </div>
-        <div class="deadline-card upcoming">
-            <h3><i class="fas fa-hourglass-half"></i> Deadline 4</h3>
-            <div class="progress-bar">
-                <div class="progress" style="width: 80%;"></div>
-            </div>
-            <p>Task 7</p>
-            <p>Task 8</p>
-        </div>
-        <!-- More deadlines can be added here -->
-    </div>
-</div>
-
-<!-- Deadlines Tab -->
-<div id="deadlines" class="tabcontent">
-    <h2>Deadlines</h2>
-    <div class="deadline-grid">
-        <div class="deadline-card current">
-            <h3><i class="fas fa-check-circle"></i> Deadline 5</h3>
-            <div class="progress-bar">
-                <div class="progress" style="width: 100%;"></div>
-            </div>
-            <p>Task 9</p>
-            <p>Task 10</p>
-        </div>
-        <div class="deadline-card current">
-            <h3><i class="fas fa-check-circle"></i> Deadline 6</h3>
-            <div class="progress-bar">
-                <div class="progress" style="width: 90%;"></div>
-            </div>
-            <p>Task 11</p>
-            <p>Task 12</p>
-        </div>
-        <!-- More deadlines can be added here -->
-    </div>
-</div>
+                        <div id="Upcoming" class="tabcontent">
+                            <% assessments.forEach(assessment => { %>
+                                <% if (assessment.status === 'Upcoming') { %>
+                                    <div class="deadline-card upcoming">
+                                        
+                                        <h3><%= assessment.AssessmentName %></h3>
+                                        <p><%= assessment.AssessmentDescription %></p>
+                                        <p>Date: <%= assessment.AssessmentDate %></p>
+                                        <p>Weighting: <%= assessment.Weighting %></p>
+                                        <% assessment.tasks.forEach(task => { %>
+                                            <div>
+                                                <p>Task: <%= task.TaskName %></p>
+                                                <p>Status: <%= task.Status %></p>
+                                            </div>
+                                        <% }); %>
+                                        <div class="progress-bar-container">
+                                            <h3>Progress</h3>
+                                            <!-- Add a data-status attribute to the progress bar -->
+                                            <div class="progress-bar" data-status="<%= assessment.status %>" style="width: <%= assessment.progress %>%;" title="You have completed <%= assessment.completedTasks %> out of <%= assessment.totalTasks %> tasks.">
+                                                <span><%= assessment.progress %>%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } %>
+                            <% }); %>
+                        </div>
+                        <div id="Missed" class="tabcontent">
+                            <% assessments.forEach(assessment => { %>
+                                <% if (assessment.status === 'Missed') { %>
+                                    <div class="deadline-card missed">
+                                        <h3><%= assessment.AssessmentName %></h3>
+                                        <p><%= assessment.AssessmentDescription %></p>
+                                        <p>Date: <%= assessment.AssessmentDate %></p>
+                                        <p>Weighting: <%= assessment.Weighting %></p>
+                                        <% assessment.tasks.forEach(task => { %>
+                                            <div>
+                                                <p>Task: <%= task.TaskName %></p>
+                                                <p>Status: <%= task.Status %></p>
+                                            </div>
+                                        <% }); %>
+                                        <div class="progress-bar-container">
+                                            <h3>Progress</h3>
+                                            <!-- Add a data-status attribute to the progress bar -->
+                                            <div class="progress-bar" data-status="<%= assessment.status %>" style="width: <%= assessment.progress %>%;" title="You have completed <%= assessment.completedTasks %> out of <%= assessment.totalTasks %> tasks.">
+                                                <span><%= assessment.progress %>%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } %>
+                            <% }); %>
+                        </div>
+                        <div id="Deadlines" class="tabcontent">
+                            <% assessments.forEach(assessment => { %>
+                                <% if (assessment.status === 'Completed') { %>
+                                    <div class="deadline-card completed">
+                                        <h3><%= assessment.AssessmentName %></h3>
+                                        <p><%= assessment.AssessmentDescription %></p>
+                                        <p>Date: <%= assessment.AssessmentDate %></p>
+                                        <p>Weighting: <%= assessment.Weighting %></p>
+                                        <% assessment.tasks.forEach(task => { %>
+                                            <div>
+                                                <p>Task: <%= task.TaskName %></p>
+                                                <p>Status: <%= task.Status %></p>
+                                            </div>
+                                        <% }); %>
+                                        <div class="progress-bar-container">
+                                            <h3>Progress</h3>
+                                            <!-- Add a data-status attribute to the progress bar -->
+                                            <div class="progress-bar" data-status="<%= assessment.status %>" style="width: <%= assessment.progress %>%;" title="You have completed <%= assessment.completedTasks %> out of <%= assessment.totalTasks %> tasks.">
+                                                <span><%= assessment.progress %>%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } %>
+                            <% }); %>
+                        </div>
+                        <% assessments.forEach(assessment => { %>
+                            <div id="<%= assessment.AssessmentID %>" class="tabcontent">
+                                <div class="deadline-card">
+                                    <h3><%= assessment.AssessmentName %></h3>
+                                    <p><%= assessment.AssessmentDescription %></p>
+                                    <p>Date: <%= assessment.AssessmentDate %></p>
+                                    <p>Weighting: <%= assessment.Weighting %></p>
+                                    <% assessment.tasks.forEach(task => { %>
+                                        <div>
+                                            <p>Task: <%= task.TaskName %></p>
+                                            <p>Status: <%= task.Status %></p>
+                                        </div>
+                                    <% }); %>
+                                    <div class="progress-bar-container">
+                                        <h3>Progress</h3>
+                                        <!-- Add a data-status attribute to the progress bar -->
+                                        <div class="progress-bar" data-status="<%= assessment.status %>" style="width: <%= assessment.progress %>%;" title="You have completed <%= assessment.completedTasks %> out of <%= assessment.totalTasks %> tasks.">
+                                            <span><%= assessment.progress %>%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
                 </div>
-
             </div>
         </div>
     </div>
     <%- include('partials/error-box') %>
     <script>
-  function openTab(evt, tabName) {
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-    document.getElementById(tabName).style.display = "block";
-    evt.currentTarget.className += " active";
-}
+        function filterByModule() {
+            const selectedModule = document.getElementById('moduleFilter').value;
+            window.location.href = `/dashboard?module=${selectedModule}`;
+        }
+
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        // Automatically open the first tab by default
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('.tablinks').click();
+        });
+
+        // Add an event listener to the progress bar
+document.querySelectorAll('.progress-bar').forEach(function(bar) {
+    bar.addEventListener('click', function() {
+        window.location.href = '/tasks?assessment=' + this.dataset.assessment;
+    });
+});
     </script>
 </body>
-</html> 
+</html>

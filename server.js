@@ -96,7 +96,15 @@ app.get('/api/tasktypes', (req, res) => {
     });
 });
 
-
+app.get('/tasks', checkAuth, async (req, res) => {
+    try {
+        const tasks = await db.getAllTasks();
+        res.render('tasks', { tasks });
+    } catch (err) {
+        console.error('Error fetching tasks:', err.message);
+        res.status(500).send("Internal Server Error");
+    }
+});
 
 app.get('/api/user/:userId/assessments', async (req, res) => {
     const userId = req.params.userId;
@@ -120,6 +128,28 @@ app.get('/api/user/:userId/tasks', async (req, res) => {
         res.json(tasks);
     } catch (err) {
         res.status(500).send(err.message);
+    }
+});
+
+app.post('/progress', async (req, res) => {
+    const { taskId, hoursSpent, amountDone } = req.body;
+
+    try {
+        await db.updateTaskProgress(taskId, hoursSpent, amountDone);
+        res.status(200).send('Progress updated successfully.');
+    } catch (err) {
+        console.error('Error updating task progress:', err.message);
+        res.status(500).send("Internal Server Error");
+    }
+});
+app.post('/activities', async (req, res) => {
+    const { userId, taskId, taskTypeId, quantity, notes, progressMeasurement } = req.body;
+    try {
+        await db.insertNewActivity(userId, taskId, taskTypeId, quantity, notes, progressMeasurement);
+        res.status(200).json({ message: 'Activity added successfully' });
+    } catch (err) {
+        console.error('Error inserting new activity:', err.message);
+        res.status(500).send("Internal Server Error");
     }
 });
 
