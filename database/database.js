@@ -288,6 +288,19 @@ function getUserSemester(semesterID, userID) {
     });
 }
 
+function checkModule(moduleID) {
+    return new Promise((resolve, reject) => {
+        const query = `SELECT * FROM Modules WHERE ModuleID = ?`;
+        db.all(query, [moduleID], (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+}
+
 module.exports = {
     getAccount,
     insertNewAccount,
@@ -309,5 +322,6 @@ module.exports = {
     insertUserModule,
     getAssessment,
     getSemesterID,
-    getUserSemester
+    getUserSemester,
+    checkModule
 };

@@ -110,19 +110,24 @@ router.post("/upload", async (req, res) => {
         const userID = req.session.user.id;
         const semesterID = await database.getSemesterID(semester);
 
-        // Loop through modules, insert into datavase
-        modules.forEach(async module => { await database.insertUserModule(userID, module, semesterID); });
+        for (const module of modules) {
+            const rows = await database.checkModule(module);
+            if (rows.length === 0) {
+                return res.status(400).send({ message: 'Invalid module found' });
+            }
+        }
 
-            alert("Semester already exists!");
-            // Redirect to dashboard
-            window.location.href = "/dashboard"; 
+        // Insert valid modules
+        await Promise.all(modules.map(module => database.insertUserModule(userID, module, semesterID)));
 
-        res.render('dashboard.ejs');
+        return res.status(200).send({ message: 'Semester uploaded successfully' });
+
     } catch (error) {
         console.error('Error:', error);
-        res.status(500).send('Internal Server Error');
+        return res.status(500).send('Internal Server Error');
     }
 });
+
 
 module.exports = router;
 
