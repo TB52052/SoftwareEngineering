@@ -335,6 +335,181 @@ function checkModule(moduleName) {
     });
 }
 
+function updateTaskStatus(taskId, status) { 
+    return new Promise((resolve, reject) => { 
+        const query = `UPDATE StudyTasks SET Status = ? WHERE TaskID = ?`; 
+        db.run(query, [status, taskId], (err) => { 
+            if (err) { 
+                reject(err); 
+            } else { 
+                resolve(); 
+            } 
+        }); 
+    }); 
+} 
+
+function getProgressMeasurementsByTaskType(taskTypeId) { 
+    return new Promise((resolve, reject) => { 
+        const sql = 'SELECT ProgressMeasurement FROM TaskTypeProgressMeasurements WHERE TaskTypeID = ?'; 
+        db.all(sql, [taskTypeId], (err, rows) => { 
+            if (err) { 
+                reject(err); 
+            } else { 
+                const progressMeasurements = rows.map(row => row.ProgressMeasurement); 
+                resolve(progressMeasurements); 
+            } 
+        }); 
+    }); 
+} 
+
+function updateTaskProgress(taskId, hoursSpent, amountDone) { 
+    return new Promise((resolve, reject) => { 
+        const query = ` 
+            UPDATE UserTasks 
+            SET HoursSpent = ?, AmountDone = ? 
+            WHERE TaskID = ? 
+        `; 
+        db.run(query, [hoursSpent, amountDone, taskId], (err) => { 
+            if (err) { 
+                console.error('Error updating task progress:', err); 
+                reject(err); 
+            } else { 
+                resolve(); 
+            } 
+        }); 
+    }); 
+} 
+
+// Function to insert a new milestone into the Milestones table 
+
+function insertNewMilestone(taskId, milestoneNames, milestoneDeadlines) { 
+    return new Promise((resolve, reject) => { 
+        if (!Array.isArray(milestoneNames) || !Array.isArray(milestoneDeadlines)) { 
+            reject(new Error('Milestone names and deadlines must be arrays')); 
+            return; 
+        } 
+        const query = ` 
+            INSERT INTO Milestones (TaskID, MilestoneName, MilestoneDeadline) 
+            VALUES (?, ?, ?) 
+        `;
+
+        // Use Promise.all to wait for all milestones to be inserted 
+        Promise.all(milestoneNames.map((name, index) => { 
+            return new Promise((resolve, reject) => { 
+                db.run(query, [taskId, name, milestoneDeadlines[index]], (err) => { 
+                    if (err) { 
+                        console.error('Error inserting milestone:', err); 
+                        reject(err); 
+                    } else { 
+                        resolve(); 
+                    } 
+                }); 
+            }); 
+        })) 
+        .then(() => { 
+            console.log('All milestones inserted successfully'); 
+            resolve(); 
+        }) 
+        .catch((error) => { 
+            console.error('Error inserting milestones:', error); 
+            reject(error); 
+        }); 
+    }); 
+} 
+
+// Function to retrieve milestones for a given task from the database 
+function getMilestonesForTask(taskID) { 
+    return new Promise((resolve, reject) => { 
+        const query = ` 
+            SELECT * FROM Milestones 
+            WHERE TaskID = ? 
+        `; 
+        db.all(query, [taskID], (err, rows) => { 
+            if (err) { 
+                console.error('Error retrieving milestones:', err); 
+                reject(err); 
+            } else { 
+                resolve(rows); // Return the milestones for the task 
+            } 
+        }); 
+    }); 
+} 
+
+// Function to insert a new dependency into the Dependencies table 
+
+function insertNewDependency(taskID, dependencyID) { 
+    return new Promise((resolve, reject) => { 
+        const query = ` 
+            INSERT INTO Dependencies (TaskID, DependencyID) 
+            VALUES (?, ?) 
+        `; 
+        db.run(query, [taskID, dependencyID], function(err) { 
+            if (err) { 
+                console.error('Error inserting new dependency:', err); 
+                reject(err); 
+            } else { 
+                resolve(this.lastID); // Return the ID of the newly inserted dependency 
+            } 
+        }); 
+    }); 
+} 
+
+ 
+
+// Function to get dependencies of a task from the Dependencies table 
+function getDependencies(taskID) { 
+    return new Promise((resolve, reject) => { 
+        const query = ` 
+            SELECT DependencyID FROM Dependencies WHERE TaskID = ? 
+        `; 
+        db.all(query, [taskID], function(err, rows) { 
+            if (err) { 
+                console.error('Error getting dependencies:', err); 
+                reject(err); 
+            } else { 
+                resolve(rows); // Return the rows of dependencies 
+            } 
+        }); 
+    }); 
+} 
+
+// Function to update a task's deadline 
+function updateTaskDeadline(taskID, newDeadline) { 
+    return new Promise((resolve, reject) => { 
+        const query = ` 
+            UPDATE StudyTasks 
+            SET Deadline = ? 
+            WHERE TaskID = ? 
+        `; 
+        db.run(query, [newDeadline, taskID], function(err) { 
+            if (err) { 
+                console.error('Error updating task deadline:', err); 
+                reject(err); 
+            } else { 
+                resolve(this.changes); // Return the number of rows changed 
+            } 
+        }); 
+    }); 
+} 
+
+function getUserModuleAssessments(userID, moduleID) {
+    return new Promise((resolve, reject) => {
+        const query = `
+            SELECT Assessments.*
+            FROM UserModules
+            JOIN Assessments ON UserModules.ModuleID = Assessments.ModuleID
+            WHERE UserModules.UserID = ? AND UserModules.ModuleID = ?
+        `;
+        db.all(query, [userID, moduleID], (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+}
+
 module.exports = {
     getAccount,
     getAccountByID,
@@ -359,5 +534,15 @@ module.exports = {
     getUserSemester,
     insertNewTask,
     insertNewActivity,
-    checkModule
+    checkModule,
+    updateTaskStatus,
+    getProgressMeasurementsByTaskType,
+    updateTaskProgress,
+    insertNewMilestone,
+    getMilestonesForTask,
+    insertNewDependency,
+    getDependencies,
+    updateTaskDeadline,
+    getUserModuleAssessments
 };
+

@@ -13,7 +13,14 @@ router.get('/', async (req, res) => {
     try {
         const userTasksData = await db.getUserTasks(userId);
         const modules = await db.getUserModules(userId);
-        const assessments = await db.getUserAssessments(userId);
+        const assessments = []; // Initialize assessments array
+
+        // Fetch assessments for each module
+        for (const module of modules) {
+            const moduleAssessments = await db.getUserModuleAssessments(userId, module.ModuleID);
+            assessments.push(...moduleAssessments);
+        }
+
         const taskTypes = await db.getTaskTypes();
 
         const userTasks = [];
@@ -42,23 +49,6 @@ router.get('/', async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });
-
-
-
-// Endpoint to fetch ProgressMeasurement options based on TaskTypeID
-router.get('/progress-measurements/:taskTypeId', async (req, res) => {
-    const { taskTypeId } = req.params;
-
-    try {
-        // Retrieve progress measurements based on TaskTypeID from the database
-        const progressMeasurements = await db.getProgressMeasurementsByTaskType(taskTypeId);
-        res.json(progressMeasurements);
-    } catch (err) {
-        console.error('Error retrieving progress measurements:', err.message);
-        res.status(500).send("Internal Server Error");
-    }
-});
-
 
 router.post('/', async (req, res) => {
     if (!req.session.user) {
@@ -101,6 +91,23 @@ router.post('/', async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });
+
+
+// Endpoint to fetch ProgressMeasurement options based on TaskTypeID
+router.get('/progress-measurements/:taskTypeId', async (req, res) => {
+    const { taskTypeId } = req.params;
+
+    try {
+        // Retrieve progress measurements based on TaskTypeID from the database
+        const progressMeasurements = await db.getProgressMeasurementsByTaskType(taskTypeId);
+        res.json(progressMeasurements);
+    } catch (err) {
+        console.error('Error retrieving progress measurements:', err.message);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+
 
 router.post('/progress', async (req, res) => {
     const { taskId, hoursSpent, amountDone, progressMeasurement, quantity, notes } = req.body;

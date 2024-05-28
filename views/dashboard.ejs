@@ -167,6 +167,11 @@ document.querySelectorAll('.progress-bar').forEach(function(bar) {
     bar.addEventListener('click', function() {
         window.location.href = '/tasks?assessment=' + this.dataset.assessment;
     });
+     // Add an event listener to the module filter dropdown
+     document.getElementById('moduleFilter').addEventListener('change', function() {
+        const selectedModule = this.value;
+        window.location.href = `/dashboard?module=${selectedModule}`;
+    });
 });
     </script>
 </body>

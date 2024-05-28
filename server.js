@@ -109,16 +109,14 @@ app.get('/tasks', checkAuth, async (req, res) => {
     }
 });
 
-app.get('/api/user/:userId/assessments', async (req, res) => {
-    const userId = req.params.userId;
-    if (!userId) {
-        return res.status(400).send("User ID is required");
-    }
+
+
+app.get('/getModuleAssessments/:moduleID', async (req, res) => {
     try {
-        const assessments = await db.getUserAssessments(userId);
+        const moduleID = req.params.moduleID;
+        const assessments = await getUserModuleAssessments(moduleID);
         res.json(assessments);
     } catch (err) {
-        console.error('Server Error:', err);
         res.status(500).send(err.message);
     }
 });

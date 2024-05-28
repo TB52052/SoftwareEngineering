@@ -2,75 +2,76 @@
 
 /* Add New Task Section */ 
 
-.add-task-section { 
-    background-color: #f8f9fa; 
-    padding: 20px; 
-    border-radius: 10px; 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-    margin-bottom: 30px; 
-    max-height: calc(100vh - 150px); 
-    overflow-y: auto; 
-    transition: all 0.4s ease; 
-} 
+.add-task-section {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    max-height: calc(100vh - 150px);
+    overflow-y: auto;
+    transition: all 0.4s ease;
+    width: 50%; /* Make the form more compact */
+    margin: 0 auto; /* Center the form */
+}
 
-.add-task-section:hover { 
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); 
-} 
+.add-task-section .form-title {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-size: 24px; /* Reduce the font size */
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+}
 
-.add-task-section .form-title { 
-    color: #2c3e50; 
-    margin-bottom: 20px; 
-    font-size: 28px; 
-    font-weight: bold; 
-    text-transform: uppercase; 
-    text-align: center; 
-} 
+.add-task-section label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 10px;
+    font-size: 16px; /* Reduce the font size */
+    color: #34495e;
+}
 
-.add-task-section label { 
-    font-weight: bold; 
-    display: block; 
-    margin-bottom: 10px; 
-    font-size: 18px; 
-    color: #34495e; 
-} 
+.add-task-section input[type="text"],
+.add-task-section select,
+.add-task-section textarea {
+    width: calc(100% - 24px);
+    padding: 12px;
+    border: 1px solid #bdc3c7;
+    border-radius: 6px;
+    box-sizing: border-box;
+    margin-bottom: 12px;
+    font-size: 16px; /* Reduce the font size */
+    transition: border 0.4s ease, box-shadow 0.4s ease;
+}
 
-.add-task-section input[type="text"], 
-.add-task-section select, 
-.add-task-section textarea { 
-    width: calc(100% - 24px); 
-    padding: 12px; 
-    border: 1px solid #bdc3c7; 
-    border-radius: 6px; 
-    box-sizing: border-box; 
-    margin-bottom: 12px; 
-    font-size: 18px; 
-    transition: border 0.4s ease, box-shadow 0.4s ease; 
-} 
+.add-task-section button[type="submit"] {
+    background-color: #3498db;
+    color: #fff;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px; /* Reduce the font size */
+    margin-top: 12px;
+    transition: background-color 0.4s ease, transform 0.4s ease;
+}
 
-.add-task-section input[type="text"]:focus, 
-.add-task-section select:focus, 
-.add-task-section textarea:focus { 
-    border-color: #3498db; 
-    box-shadow: 0 0 6px rgba(52, 152, 219, 0.7); 
-} 
+.add-task-section .input-group {
+    display: flex; /* Make the label and input field sit side by side */
+    justify-content: space-between; /* Add some space between the label and input field */
+    align-items: center; /* Align the label and input field vertically */
+}
 
-.add-task-section button[type="submit"] { 
-    background-color: #3498db; 
-    color: #fff; 
-    padding: 12px 24px; 
-    border: none; 
-    border-radius: 6px; 
-    cursor: pointer; 
-    width: 100%; 
-    font-size: 18px; 
-    margin-top: 12px; 
-    transition: background-color 0.4s ease, transform 0.4s ease; 
-} 
+.add-task-section .input-group label {
+    width: 30%; /* Assign a width to the label */
+}
 
-.add-task-section button[type="submit"]:hover { 
-    background-color: #2980b9; 
-    transform: scale(1.05); 
-} 
+.add-task-section .input-group input,
+.add-task-section .input-group select {
+    width: 65%; /* Assign a width to the input field and select dropdown */
+}
 
 /* Existing Tasks Section */ 
 .tasks-section { 
@@ -104,18 +105,19 @@
 } 
 
 .task-list { 
-    height: 600px; 
+    height: 350px; 
     overflow-y: auto; 
     display: flex; 
     flex-direction: column; 
     width: 100%; /* Make the task list go the width of the page */ 
+    box-sizing: border-box; /* Include padding and border in element's total width */
 } 
 
 .task-item { 
     border: 1px solid #ccc; 
     border-radius: 5px; 
-    padding: 10px; 
-    margin-bottom: 10px; 
+    padding: 5px; /* Reduce padding */
+    margin-bottom: 20px; /* Reduce space between items */
     display: flex; 
     flex-direction: column; 
     justify-content: flex-start; 
@@ -127,12 +129,12 @@
 .task-info { 
     flex-grow: 1; 
     background-color: #f9f9f9; 
-    padding: 20px; 
+    padding: 5px; /* Further reduce padding */
     border-radius: 5px; 
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
     transition: all 0.3s ease; 
     border-left: 5px solid #3498db; /* Add a left border */ 
-} 
+}
 
 .task-info h3 { 
     color: #3498db; 
@@ -421,3 +423,18 @@
     color: #fff; /* Change the text color of selected options */ 
 
 } 
+
+.add-milestone-btn {
+    background-color: #3498db; /* Primary color */
+    color: #fff; /* Text color */
+    border: none; /* Remove default border */
+    padding: 10px 20px; /* Padding around the text */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 16px; /* Text size */
+    cursor: pointer; /* Change cursor to pointer when hovering over the button */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.add-milestone-btn:hover {
+    background-color: #2980b9; /* Darken the background color a bit when hovering */
+}

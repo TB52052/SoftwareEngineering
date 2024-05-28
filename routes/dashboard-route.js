@@ -19,17 +19,14 @@ router.get('/', async (req, res) => {
         }
         modules = rows;
 
-        sql = `SELECT * FROM UserAssessments 
-               JOIN Assessments ON UserAssessments.AssessmentID = Assessments.AssessmentID 
-               WHERE UserAssessments.UserID = ? AND (? IS NULL OR Assessments.ModuleID = ?)`;
-
-        db.all(sql, [userId, selectedModule, selectedModule], (err, rows) => {
-            if (err) {
-                console.error('Error fetching assessments:', err);
-                res.status(500).send('Error fetching assessments');
-                return;
-            }
-            assessments = rows;
+        sql = `SELECT * FROM Assessments 
+        WHERE (? IS NULL OR Assessments.ModuleID = ?)`;
+ 
+ db.all(sql, [selectedModule, selectedModule], (err, rows) => {
+     if (err) {
+         console.error('Error fetching assessments:', err);
+     }
+     assessments = rows;
 
             const promises = assessments.map(assessment => {
                 return new Promise((resolve, reject) => {
