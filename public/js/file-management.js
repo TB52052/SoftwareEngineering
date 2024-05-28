@@ -21,6 +21,7 @@ function getSemesters() {
         .catch((error) => console.error("Error:", error));
 }
 
+
 function updateSemesterForm() {
     selectedSemester = document.getElementById("seasonForm").value;
     let fileInputForm = document.getElementById("fileInputForm");
@@ -35,15 +36,24 @@ function updateSemesterForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ selectedSemester: selectedSemester }),
     })
-        .then((response) => response.json())
-        .then((data) => {
-            if (data.exists) {
-                fileInputForm.classList.add("hidden");
-                // Redirect to dashboard with data.semesterData
+    .then((response) => response.json())
+    .then((data) => {
+        if (data.exists) {
+            fileInputForm.classList.add("hidden");
+            // Show pop-up to confirm loading semester
+            if (confirm("Semester already exists! Do you want to load this semesters tasks?")) {
+                // If user clicks 'OK', redirect to dashboard
+                window.location.href = "/dashboard"; 
+            } else {
+                // If user clicks 'Cancel', reload profile page
+                window.location.href = "/profile";
             }
-            else { fileInputForm.classList.remove("hidden"); }
-        })
-        .catch((error) => console.error("Error:", error));
+        }
+        else {
+            fileInputForm.classList.remove("hidden");
+        }
+    })
+    .catch((error) => console.error("Error:", error));
 }
 
 function updateFileInputform(event) {
@@ -54,32 +64,44 @@ function updateFileInputform(event) {
         return alert("The file name does not match the selected semester.");
     }
 
-
     if (fileInput.files.length > 0) {
         const file = fileInput.files[0];
         const reader = new FileReader();
 
-        reader.onload = function (event) {
+        reader.onload = async function (event) {
             try {
                 const jsonData = JSON.parse(event.target.result);
+                // check if jsonData is empty or not in correct format
+                if (Object.keys(jsonData).length === 0) {
+                    return alert("The file is empty or not in the correct format. Please upload the correct file.");
+                }
                 const dataToSend = {
                     semester: selectedSemester,
                     modules: jsonData,
                 };
 
-                fetch("/profile/upload", {
+                const response = await fetch("/profile/upload", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(dataToSend),
                 })
-                    .then((response) => response.json())
-                    .then((data) => console.log(data))
-                    .catch((error) => console.error("Error:", error));
+                
+                if (response.ok) {
+                    alert("Semester uploaded to database.");
+                    window.location.href = "/dashboard"; 
+                } else {
+                    const errorData = await response.json();
+                    alert(`${errorData.message}`);
+                }
+
             } catch (error) {
                 console.error("Error parsing JSON:", error);
             }
         };
         reader.readAsText(file);
+    } else {
+        // If no file is selected
+        alert("Please select a file to upload.");
     }
 }
 

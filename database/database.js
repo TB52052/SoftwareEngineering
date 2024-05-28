@@ -69,8 +69,8 @@ function getUserAssessments(userId) {
             SELECT 
             UserAssessments.*, 
             Assessments.AssessmentName, Assessments.ModuleID
-                FROM UserAssessments
-                JOIN Assessments ON UserAssessments.AssessmentID = Assessments.AssessmentID
+            FROM UserAssessments
+            JOIN Assessments ON UserAssessments.AssessmentID = Assessments.AssessmentID
             WHERE UserAssessments.UserID = ?
         `;
         db.all(sql, [userId], (err, rows) => {
@@ -82,8 +82,6 @@ function getUserAssessments(userId) {
         });
     });
 }
-
-// database.js
 
 function getUserTasks(userId) {
     return new Promise((resolve, reject) => {
@@ -117,12 +115,9 @@ function getUserTasks(userId) {
     });
 }
 
-    
-
-
 function updateUsername(userId, newName, newSurname) {
     return new Promise((resolve, reject) => {
-        db.run(`UPDATE Users SET name = ?, surname = ? WHERE UserID = ?`, [newName, newSurname, userId], (err) => {
+        db.run(`UPDATE Users SET Forename = ?, Surname = ? WHERE UserID = ?`, [newName, newSurname, userId], (err) => {
             if (err) {
                 reject(err);
             } else {
@@ -134,7 +129,7 @@ function updateUsername(userId, newName, newSurname) {
 
 function updatePassword(userId, newPassword) {
     return new Promise((resolve, reject) => {
-        db.run(`UPDATE Users SET password = ? WHERE UserID = ?`, [newPassword, userId], (err) => {
+        db.run(`UPDATE Users SET Password = ? WHERE UserID = ?`, [newPassword, userId], (err) => {
             if (err) {
                 reject(err);
             } else {
@@ -143,20 +138,6 @@ function updatePassword(userId, newPassword) {
         });
     });
 }
-
-function updateTaskStatus(taskId, status) {
-    return new Promise((resolve, reject) => {
-        const query = `UPDATE StudyTasks SET Status = ? WHERE TaskID = ?`;
-        db.run(query, [status, taskId], (err) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve();
-            }
-        });
-    });
-}
-
 
 function deleteAccount(userId) {
     return new Promise((resolve, reject) => {
@@ -248,9 +229,6 @@ function getUserModules(userID) {
     });
 }
 
-
-// Ensure similar handling for other methods
-
 function getTaskTypes() {
     return new Promise((resolve, reject) => {
         db.all(`SELECT * FROM TaskTypes`, (err, rows) => {
@@ -281,40 +259,7 @@ function insertUserModule(userID, moduleID, semesterID) {
             if (err) {
                 reject(err);
             } else {
-                resolve()
-            }
-        });
-    });
-}
-
-function getUserAssessments(userId) {
-    return new Promise((resolve, reject) => {
-        const sql = `
-            SELECT 
-            UserAssessments.*, 
-            Assessments.AssessmentName, Assessments.ModuleID
-            FROM UserAssessments
-            JOIN Assessments ON UserAssessments.AssessmentID = Assessments.AssessmentID
-            WHERE UserAssessments.UserID = ?
-        `;
-        db.all(sql, [userId], (err, rows) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(rows);
-            }
-        });
-    });
-}
-
-
-function getAssessment() {
-    return new Promise((resolve, reject) => {
-        db.all(`SELECT AssessmentID, ModuleID FROM Assessments;`, [], (err, rows) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(rows);
+                resolve();
             }
         });
     });
@@ -344,27 +289,22 @@ function getUserSemester(semesterID, userID) {
     });
 }
 
-// Function to insert a new task into the StudyTasks table and return the TaskID
 function insertNewTask(assessmentID, userId, taskTypeID, timeSpent, taskDate, taskName, moduleID, quantity) {
     return new Promise((resolve, reject) => {
         const query = `
             INSERT INTO StudyTasks (AssessmentID, UserID, TaskTypeID, TimeSpent, TaskDate, TaskName, ModuleID, Quantity)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         `;
-        db.run(query, [assessmentID, userId, taskTypeID, timeSpent, taskDate, taskName, moduleID, quantity], function(err) {
+        db.run(query, [assessmentID, userId, taskTypeID, timeSpent, taskDate, taskName, moduleID, quantity], function (err) {
             if (err) {
                 console.error('Error inserting new task:', err);
                 reject(err);
             } else {
-                resolve(this.lastID); // Return the ID of the newly inserted task
+                resolve(this.lastID);
             }
         });
     });
 }
-
-
-
-
 
 function insertNewActivity(userId, taskId, taskTypeId, quantity, notes, progressMeasurement) {
     return new Promise((resolve, reject) => {
@@ -372,153 +312,24 @@ function insertNewActivity(userId, taskId, taskTypeId, quantity, notes, progress
             INSERT INTO UserActivities (UserID, TaskID, TaskTypeID, Quantity, Notes, ProgressMeasurement)
             VALUES (?, ?, ?, ?, ?, ?)
         `;
-        db.run(query, [userId, taskId, taskTypeId, quantity, notes, progressMeasurement], (err) => {
+        db.run(query, [userId, taskId, taskTypeId, quantity, notes, progressMeasurement], function (err) {
             if (err) {
                 console.error('Error inserting new activity:', err);
                 reject(err);
             } else {
-                resolve();
-            }
-        });
-    });
-}
-function getProgressMeasurementsByTaskType(taskTypeId) {
-    return new Promise((resolve, reject) => {
-        const sql = 'SELECT ProgressMeasurement FROM TaskTypeProgressMeasurements WHERE TaskTypeID = ?';
-        db.all(sql, [taskTypeId], (err, rows) => {
-            if (err) {
-                reject(err);
-            } else {
-                const progressMeasurements = rows.map(row => row.ProgressMeasurement);
-                resolve(progressMeasurements);
+                resolve(this.lastID);
             }
         });
     });
 }
 
-
-function updateTaskProgress(taskId, hoursSpent, amountDone) {
+function checkModule(moduleName) {
     return new Promise((resolve, reject) => {
-        const query = `
-            UPDATE UserTasks
-            SET HoursSpent = ?, AmountDone = ?
-            WHERE TaskID = ?
-        `;
-        db.run(query, [hoursSpent, amountDone, taskId], (err) => {
+        db.get(`SELECT * FROM Modules WHERE ModuleName = ?`, [moduleName], (err, row) => {
             if (err) {
-                console.error('Error updating task progress:', err);
                 reject(err);
             } else {
-                resolve();
-            }
-        });
-    });
-}
-
-// Function to insert a new milestone into the Milestones table
-function insertNewMilestone(taskId, milestoneNames, milestoneDeadlines) {
-    return new Promise((resolve, reject) => {
-        if (!Array.isArray(milestoneNames) || !Array.isArray(milestoneDeadlines)) {
-            reject(new Error('Milestone names and deadlines must be arrays'));
-            return;
-        }
-
-        const query = `
-            INSERT INTO Milestones (TaskID, MilestoneName, MilestoneDeadline)
-            VALUES (?, ?, ?)
-        `;
-
-        // Use Promise.all to wait for all milestones to be inserted
-        Promise.all(milestoneNames.map((name, index) => {
-            return new Promise((resolve, reject) => {
-                db.run(query, [taskId, name, milestoneDeadlines[index]], (err) => {
-                    if (err) {
-                        console.error('Error inserting milestone:', err);
-                        reject(err);
-                    } else {
-                        resolve();
-                    }
-                });
-            });
-        }))
-        .then(() => {
-            console.log('All milestones inserted successfully');
-            resolve();
-        })
-        .catch((error) => {
-            console.error('Error inserting milestones:', error);
-            reject(error);
-        });
-    });
-}
-
-// Function to retrieve milestones for a given task from the database
-function getMilestonesForTask(taskID) {
-    return new Promise((resolve, reject) => {
-        const query = `
-            SELECT * FROM Milestones
-            WHERE TaskID = ?
-        `;
-        db.all(query, [taskID], (err, rows) => {
-            if (err) {
-                console.error('Error retrieving milestones:', err);
-                reject(err);
-            } else {
-                resolve(rows); // Return the milestones for the task
-            }
-        });
-    });
-}
-
-// Function to insert a new dependency into the Dependencies table
-function insertNewDependency(taskID, dependencyID) {
-    return new Promise((resolve, reject) => {
-        const query = `
-            INSERT INTO Dependencies (TaskID, DependencyID)
-            VALUES (?, ?)
-        `;
-        db.run(query, [taskID, dependencyID], function(err) {
-            if (err) {
-                console.error('Error inserting new dependency:', err);
-                reject(err);
-            } else {
-                resolve(this.lastID); // Return the ID of the newly inserted dependency
-            }
-        });
-    });
-}
-
-// Function to get dependencies of a task from the Dependencies table
-function getDependencies(taskID) {
-    return new Promise((resolve, reject) => {
-        const query = `
-            SELECT DependencyID FROM Dependencies WHERE TaskID = ?
-        `;
-        db.all(query, [taskID], function(err, rows) {
-            if (err) {
-                console.error('Error getting dependencies:', err);
-                reject(err);
-            } else {
-                resolve(rows); // Return the rows of dependencies
-            }
-        });
-    });
-}
-
-// Function to update a task's deadline
-function updateTaskDeadline(taskID, newDeadline) {
-    return new Promise((resolve, reject) => {
-        const query = `
-            UPDATE StudyTasks
-            SET Deadline = ?
-            WHERE TaskID = ?
-        `;
-        db.run(query, [newDeadline, taskID], function(err) {
-            if (err) {
-                console.error('Error updating task deadline:', err);
-                reject(err);
-            } else {
-                resolve(this.changes); // Return the number of rows changed
+                resolve(row);
             }
         });
     });
@@ -526,6 +337,7 @@ function updateTaskDeadline(taskID, newDeadline) {
 
 module.exports = {
     getAccount,
+    getAccountByID,
     insertNewAccount,
     hashPassword,
     comparePassword,
@@ -534,27 +346,18 @@ module.exports = {
     updateUsername,
     updatePassword,
     deleteAccount,
-    getAccountByID,
-    getUserModules,
-    getTaskTypes,
     getModule,
-    getAssessment,
     deleteTasks,
+    getAssessment,
     deleteAssessments,
     deleteModules,
+    getUserModules,
+    getTaskTypes,
     getSemesters,
     insertUserModule,
-    getAssessment,
     getSemesterID,
     getUserSemester,
     insertNewTask,
-    updateTaskStatus,
     insertNewActivity,
-    getProgressMeasurementsByTaskType,
-    updateTaskProgress,
-    insertNewMilestone,
-    getMilestonesForTask,
-    getDependencies,
-    insertNewDependency,
-    updateTaskDeadline
+    checkModule
 };

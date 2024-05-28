@@ -1,285 +1,423 @@
-/* Task Section Styles */
+/* Task Section Styles */ 
 
-/* Add New Task Section */
-.add-task-section {
-    background-color: #f8f9fa;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 30px;
-    max-height: calc(100vh - 150px);
-    overflow-y: auto;
-    transition: all 0.4s ease;
-}
+/* Add New Task Section */ 
 
-.add-task-section:hover {
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-}
+.add-task-section { 
+    background-color: #f8f9fa; 
+    padding: 20px; 
+    border-radius: 10px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    margin-bottom: 30px; 
+    max-height: calc(100vh - 150px); 
+    overflow-y: auto; 
+    transition: all 0.4s ease; 
+} 
 
-.add-task-section .form-title {
-    color: #2c3e50;
-    margin-bottom: 20px;
-    font-size: 28px;
-    font-weight: bold;
-    text-transform: uppercase;
-    text-align: center;
-}
+.add-task-section:hover { 
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); 
+} 
 
-.add-task-section label {
-    font-weight: bold;
-    display: block;
-    margin-bottom: 10px;
-    font-size: 18px;
-    color: #34495e;
-}
+.add-task-section .form-title { 
+    color: #2c3e50; 
+    margin-bottom: 20px; 
+    font-size: 28px; 
+    font-weight: bold; 
+    text-transform: uppercase; 
+    text-align: center; 
+} 
 
-.add-task-section input[type="text"],
-.add-task-section select,
-.add-task-section textarea {
-    width: calc(100% - 24px);
-    padding: 12px;
-    border: 1px solid #bdc3c7;
-    border-radius: 6px;
-    box-sizing: border-box;
-    margin-bottom: 12px;
-    font-size: 18px;
-    transition: border 0.4s ease, box-shadow 0.4s ease;
-}
+.add-task-section label { 
+    font-weight: bold; 
+    display: block; 
+    margin-bottom: 10px; 
+    font-size: 18px; 
+    color: #34495e; 
+} 
 
-.add-task-section input[type="text"]:focus,
-.add-task-section select:focus,
-.add-task-section textarea:focus {
-    border-color: #3498db;
-    box-shadow: 0 0 6px rgba(52, 152, 219, 0.7);
-}
+.add-task-section input[type="text"], 
+.add-task-section select, 
+.add-task-section textarea { 
+    width: calc(100% - 24px); 
+    padding: 12px; 
+    border: 1px solid #bdc3c7; 
+    border-radius: 6px; 
+    box-sizing: border-box; 
+    margin-bottom: 12px; 
+    font-size: 18px; 
+    transition: border 0.4s ease, box-shadow 0.4s ease; 
+} 
 
-.add-task-section button[type="submit"] {
-    background-color: #3498db;
-    color: #fff;
-    padding: 12px 24px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    width: 100%;
-    font-size: 18px;
-    margin-top: 12px;
-    transition: background-color 0.4s ease, transform 0.4s ease;
-}
+.add-task-section input[type="text"]:focus, 
+.add-task-section select:focus, 
+.add-task-section textarea:focus { 
+    border-color: #3498db; 
+    box-shadow: 0 0 6px rgba(52, 152, 219, 0.7); 
+} 
 
-.add-task-section button[type="submit"]:hover {
-    background-color: #2980b9;
-    transform: scale(1.05);
-}
+.add-task-section button[type="submit"] { 
+    background-color: #3498db; 
+    color: #fff; 
+    padding: 12px 24px; 
+    border: none; 
+    border-radius: 6px; 
+    cursor: pointer; 
+    width: 100%; 
+    font-size: 18px; 
+    margin-top: 12px; 
+    transition: background-color 0.4s ease, transform 0.4s ease; 
+} 
 
-/* Existing Tasks Section */
-.tasks-section {
-    background-color: #f9f9f9;
-    padding: 20px;
-    border: 2px solid #3498db; /* Add a border around the section */
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    flex-grow: 1;
-    height: calc(100% - 30px);
-    overflow-y: auto;
-    transition: all 0.3s ease;
-    font-family: 'Arial', sans-serif; /* Change the font */
-}
+.add-task-section button[type="submit"]:hover { 
+    background-color: #2980b9; 
+    transform: scale(1.05); 
+} 
 
-.tasks-section:hover {
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
+/* Existing Tasks Section */ 
+.tasks-section { 
+    background-color: #f9f9f9; 
+    padding: 20px; 
+    border: 2px solid #3498db; /* Add a border around the section */ 
+    border-radius: 8px; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    width: 100%; 
+    flex-grow: 1; 
+    height: calc(100% - 30px); 
+    overflow-y: auto; 
+    transition: all 0.3s ease; 
+    font-family: 'Arial', sans-serif; /* Change the font */ 
+} 
 
-.tasks-section h2 {
-    color: #333;
-    margin-bottom: 20px;
-    text-transform: uppercase;
-    text-align: center;
-    font-size: 24px;
-    font-weight: bold;
-    letter-spacing: 1px;
-}
+.tasks-section:hover { 
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); 
+} 
 
-.task-list {
-    height: 600px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    width: 100%; /* Make the task list go the width of the page */
-}
+ 
 
-.task-item {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    margin-bottom: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    flex-wrap: nowrap;
-    position: relative;
-}
+.tasks-section h2 { 
+    color: #333; 
+    margin-bottom: 20px; 
+    text-transform: uppercase; 
+    text-align: center; 
+    font-size: 24px; 
+    font-weight: bold; 
+    letter-spacing: 1px; 
+} 
 
-.task-info {
-    flex-grow: 1;
-    background-color: #f9f9f9;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-    border-left: 5px solid #3498db; /* Add a left border */
-}
+.task-list { 
+    height: 600px; 
+    overflow-y: auto; 
+    display: flex; 
+    flex-direction: column; 
+    width: 100%; /* Make the task list go the width of the page */ 
+} 
 
-.task-info h3 {
-    color: #3498db;
-    font-size: 24px;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Add a text shadow */
-}
+.task-item { 
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
+    padding: 10px; 
+    margin-bottom: 10px; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: flex-start; 
+    align-items: flex-start; 
+    flex-wrap: nowrap; 
+    position: relative; 
+} 
 
-.task-info p {
-    color: #2c3e50;
-    font-size: 16px;
-    line-height: 1.6;
-    border-bottom: 1px solid #bdc3c7; /* Add a bottom border */
-    padding-bottom: 5px; /* Add some padding to the bottom */
-    margin-bottom: 5px; /* Add some margin to the bottom */
-}
+.task-info { 
+    flex-grow: 1; 
+    background-color: #f9f9f9; 
+    padding: 20px; 
+    border-radius: 5px; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    transition: all 0.3s ease; 
+    border-left: 5px solid #3498db; /* Add a left border */ 
+} 
 
-.task-info .task-deadline {
-    color: #e74c3c;
-    font-weight: bold;
-    font-size: 18px; /* Increase the font size */
-    text-decoration: underline; /* Underline the text */
-}
-
-.task-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-    width: 100%;
-    position: relative; /* Ensure relative positioning for absolute positioning of bubble boxes */
-}
+.task-info h3 { 
+    color: #3498db; 
+    font-size: 24px; 
+    text-transform: uppercase; 
+    margin-bottom: 10px; 
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Add a text shadow */ 
+} 
 
 
-.task-actions button {
-    background-color: #3498db;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    margin-left: 10px;
-    transition: background-color 0.4s ease;
-}
+.task-info p { 
+    color: #2c3e50; 
+    font-size: 16px; 
+    line-height: 1.6; 
+    border-bottom: 1px solid #bdc3c7; /* Add a bottom border */ 
+    padding-bottom: 5px; /* Add some padding to the bottom */ 
+    margin-bottom: 5px; /* Add some margin to the bottom */ 
+} 
 
-.task-actions button:hover {
-    background-color: #2980b9;
-}
+ 
 
-.task-progress-section, .study-progress-section, .task-activities, .update-deadline-section {
-    display: none;
-    margin-top: 10px;
-    width: 100%;
-}
+.task-info .task-deadline { 
 
+    color: #e74c3c; 
 
-.task-progress-section h4,
-.study-progress-section h4,
-.task-activities h4, .update-deadline-section h4{
-    margin-bottom: 10px;
-    font-size: 18px;
-    font-weight: bold;
-}
+    font-weight: bold; 
 
-.task-progress-section.active,
-.study-progress-section.active,
-.task-activities.active, .update-deadline-section.active {
-    display: block;
-}
+    font-size: 18px; /* Increase the font size */ 
 
-.bubble-box.active {
-    display: block;
-}
+    text-decoration: underline; /* Underline the text */ 
 
-.input-group {
-    margin-bottom: 15px;
-}
+} 
 
-.input-group label {
-    font-weight: bold;
-    display: block;
-    margin-bottom: 5px;
-    font-size: 16px;
-    color: #34495e;
-}
+ 
 
-.input-group input,
-.input-group textarea,
-.input-group select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #bdc3c7;
-    border-radius: 6px;
-    font-size: 16px;
-    box-sizing: border-box;
-    transition: border 0.4s ease, box-shadow 0.4s ease;
-}
+.task-actions { 
 
-.input-group input:focus,
-.input-group textarea:focus,
-.input-group select:focus {
-    border-color: #3498db;
-    box-shadow: 0 0 6px rgba(52, 152, 219, 0.7);
-}
+    display: flex; 
 
-.button-group {
-    display: flex;
-    justify-content: flex-end;
-}
+    gap: 10px; 
 
-.button-group button {
-    background-color: #3498db;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.4s ease;
-}
+    margin-top: 10px; 
 
-.button-group button:hover {
-    background-color: #2980b9;
-}
+    width: 100%; 
 
+    position: relative; /* Ensure relative positioning for absolute positioning of bubble boxes */ 
 
-.mark-as-done {
-    background-color: #e74c3c;
-    color: #fff;
-    padding: 12px 24px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    width: 100%;
-    font-size: 18px;
-    margin-top: 20px;
-    transition: background-color 0.4s ease, transform 0.4s ease;
-}
+} 
 
-.mark-as-done:hover {
-    background-color: #c0392b;
-    transform: scale(1.05);
-}
+ 
 
-#taskDependencies {
-    height: 150px; /* Increase the height to show more options at once */
-    width: 100%; /* Use the full width of the parent element */
-}
+ 
 
-#taskDependencies option:checked {
-    background-color: #3498db; /* Change the background color of selected options */
-    color: #fff; /* Change the text color of selected options */
-}
+.task-actions button { 
 
+    background-color: #3498db; 
+
+    color: #fff; 
+
+    padding: 10px 20px; 
+
+    border: none; 
+
+    border-radius: 6px; 
+
+    cursor: pointer; 
+
+    margin-left: 10px; 
+
+    transition: background-color 0.4s ease; 
+
+} 
+
+ 
+
+.task-actions button:hover { 
+
+    background-color: #2980b9; 
+
+} 
+
+ 
+
+.task-progress-section, .study-progress-section, .task-activities, .update-deadline-section { 
+
+    display: none; 
+
+    margin-top: 10px; 
+
+    width: 100%; 
+
+} 
+
+ 
+
+ 
+
+.task-progress-section h4, 
+
+.study-progress-section h4, 
+
+.task-activities h4, .update-deadline-section h4{ 
+
+    margin-bottom: 10px; 
+
+    font-size: 18px; 
+
+    font-weight: bold; 
+
+} 
+
+ 
+
+.task-progress-section.active, 
+
+.study-progress-section.active, 
+
+.task-activities.active, .update-deadline-section.active { 
+
+    display: block; 
+
+} 
+
+ 
+
+.bubble-box.active { 
+
+    display: block; 
+
+} 
+
+ 
+
+.input-group { 
+
+    margin-bottom: 15px; 
+
+} 
+
+ 
+
+.input-group label { 
+
+    font-weight: bold; 
+
+    display: block; 
+
+    margin-bottom: 5px; 
+
+    font-size: 16px; 
+
+    color: #34495e; 
+
+} 
+
+ 
+
+.input-group input, 
+
+.input-group textarea, 
+
+.input-group select { 
+
+    width: 100%; 
+
+    padding: 10px; 
+
+    border: 1px solid #bdc3c7; 
+
+    border-radius: 6px; 
+
+    font-size: 16px; 
+
+    box-sizing: border-box; 
+
+    transition: border 0.4s ease, box-shadow 0.4s ease; 
+
+} 
+
+ 
+
+.input-group input:focus, 
+
+.input-group textarea:focus, 
+
+.input-group select:focus { 
+
+    border-color: #3498db; 
+
+    box-shadow: 0 0 6px rgba(52, 152, 219, 0.7); 
+
+} 
+
+ 
+
+.button-group { 
+
+    display: flex; 
+
+    justify-content: flex-end; 
+
+} 
+
+ 
+
+.button-group button { 
+
+    background-color: #3498db; 
+
+    color: #fff; 
+
+    padding: 10px 20px; 
+
+    border: none; 
+
+    border-radius: 6px; 
+
+    cursor: pointer; 
+
+    transition: background-color 0.4s ease; 
+
+} 
+
+ 
+
+.button-group button:hover { 
+
+    background-color: #2980b9; 
+
+} 
+
+ 
+
+ 
+
+.mark-as-done { 
+
+    background-color: #e74c3c; 
+
+    color: #fff; 
+
+    padding: 12px 24px; 
+
+    border: none; 
+
+    border-radius: 6px; 
+
+    cursor: pointer; 
+
+    width: 100%; 
+
+    font-size: 18px; 
+
+    margin-top: 20px; 
+
+    transition: background-color 0.4s ease, transform 0.4s ease; 
+
+} 
+
+ 
+
+.mark-as-done:hover { 
+
+    background-color: #c0392b; 
+
+    transform: scale(1.05); 
+
+} 
+
+ 
+
+#taskDependencies { 
+
+    height: 150px; /* Increase the height to show more options at once */ 
+
+    width: 100%; /* Use the full width of the parent element */ 
+
+} 
+
+ 
+
+#taskDependencies option:checked { 
+
+    background-color: #3498db; /* Change the background color of selected options */ 
+
+    color: #fff; /* Change the text color of selected options */ 
+
+} 

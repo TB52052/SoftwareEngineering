@@ -15,11 +15,11 @@
         buttonText: 'Register Account', 
         link: { href: '/', text: 'Existing User?' }, 
         fields: [
-            { type: 'email', placeholder: 'Email', name: 'email', autocomplete: 'email' }, 
-            { type: 'text', placeholder: 'Forename', name: 'forename', autocomplete: 'given-name' }, 
-            { type: 'text', placeholder: 'Surname', name: 'surname', autocomplete: 'family-name' }, 
-            { type: 'password', placeholder: 'Password', name: 'password', autocomplete: 'new-password' }, 
-            { type: 'password', placeholder: 'Confirm Password', name: 'confirm', autocomplete: 'new-password' }
+            { type: 'email', placeholder: 'Email', name: 'email', autocomplete: 'email', required: true, min: 4, max: 50},
+            { type: 'text', placeholder: 'Forename', name: 'forename', autocomplete: 'given-name', required: true, min: 1, max: 24},
+            { type: 'text', placeholder: 'Surname', name: 'surname', autocomplete: 'family-name', required: true, min: 1, max: 24},
+            { type: 'password', placeholder: 'Password', name: 'password', autocomplete: 'new-password', required: true, min: 4, max: 24},
+            { type: 'password', placeholder: 'Confirm Password', name: 'confirm', autocomplete: 'new-password', required: true, min: 4, max: 24}
         ] 
     }) %>
 

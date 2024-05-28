@@ -3,7 +3,6 @@ h2 {
     color: red;
 }
 
-/* Style for the select dropdown */
 #seasonForm {
     
     padding: 8px;
@@ -15,14 +14,16 @@ h2 {
     margin-left: 4px;
 }
 
-/* Style for the submit button */
+button[type="submit"] {
+    background-color: #ccc;
+    color: #333;
+}
 button[type="submit"] {
     background-color: #ccc;
     color: #333;
 
 }
 
-/* Hover effect for the submit button */
 button[type="submit"]:hover {
     background-color: #bbb;
 }

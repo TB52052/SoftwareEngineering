@@ -11,25 +11,11 @@
 .left-content {
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
 .font-label {
     padding: 0 8px;
-}
-
-.right-button {
-    background-color: #005c99;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    border-radius: 16px;
-    min-width: 256px;
-    transition: background-color 0.3s ease;
-}
-
-.team-button:hover {
-    background-color: #2383c4;
 }
 
 a {

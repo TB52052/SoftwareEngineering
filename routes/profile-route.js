@@ -47,7 +47,7 @@ router.post("/name", async (req, res) => {
     const account = await database.getAccountByID(userId);
 
     // Check if password is correct
-    if (!(await database.comparePassword(password, account.password))) {
+    if (!(await database.comparePassword(password, account.Password))) {
         return res.status(403).send("Incorrect password");
     }
 
@@ -66,7 +66,7 @@ router.post("/password", async (req, res) => {
     const account = await database.getAccountByID(userId);
 
     // Check if old password is correct
-    if (!(await database.comparePassword(oldPassword, account.password))) {
+    if (!(await database.comparePassword(oldPassword, account.Password))) {
         return res.status(403).send("Incorrect password");
     }
 
@@ -88,14 +88,13 @@ router.post("/delete", async (req, res) => {
     const account = await database.getAccountByID(userId);
 
     // Check if password is correct
-    if (!(await database.comparePassword(password, account.password))) {
+    if (!(await database.comparePassword(password, account.Password))) {
         return res.status(403).send("Incorrect password");
     }
 
     // Delete the account
     let deleteAccount = await database.deleteAccount(userId);
     await database.deleteTasks(userId);
-    await database.deleteAssessments(userId);
 
     if (!deleteAccount) {
         return res.status(200).send("Account deleted");
@@ -111,15 +110,24 @@ router.post("/upload", async (req, res) => {
         const userID = req.session.user.id;
         const semesterID = await database.getSemesterID(semester);
 
-        // Loop through modules, insert into datavase
-        modules.forEach(async module => { await database.insertUserModule(userID, module, semesterID); });
+        for (const module of modules) {
+            const rows = await database.checkModule(module);
+            if (rows.length === 0) {
+                return res.status(400).send({ message: 'Invalid module found' });
+            }
+        }
 
-        res.render('dashboard.ejs');
+        // Insert valid modules
+        await Promise.all(modules.map(module => database.insertUserModule(userID, module, semesterID)));
+
+        return res.status(200).send({ message: 'Semester uploaded successfully' });
+
     } catch (error) {
         console.error('Error:', error);
-        res.status(500).send('Internal Server Error');
+        return res.status(500).send('Internal Server Error');
     }
 });
+
 
 module.exports = router;
 
