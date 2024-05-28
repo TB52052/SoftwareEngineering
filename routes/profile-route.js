@@ -35,7 +35,7 @@ router.post("/check-semester", async (req, res) => {
     console.log(semesterID);
     console.log(semesterName);
 
-    let semData = await database.getUserModules(userId, semesterID);
+    let semData = await database.getUserModulesTaylor(userId, semesterID);
 
     return res.json({exists: semData.length > 0, semesterData: semData});
 });
