@@ -3,62 +3,109 @@
 <head>
     <%- include('partials/global-head') %>
     <%- include('partials/main-page-head') %>
-    <link rel="stylesheet" href="/styles/side-bar.css">
-    <link rel="stylesheet" href="/styles/calendar.css">
-    <title>Study Planner - Gantt</title>
-    <!DOCTYPE html>
-<html>
-<head>
   <title>Study Planner Gantt Chart</title>
+  <link rel="stylesheet" href="/styles/global.css"> Link to global stylesheet
+  <link rel="stylesheet" href="/styles/gantt.css"> Link to the new Gantt stylesheet
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script type="text/javascript">
     google.charts.load('current', {'packages':['gantt']});
     google.charts.setOnLoadCallback(drawChart);
 
-    function drawChart() {
-      var data = new google.visualization.DataTable();
-      data.addColumn('string', 'Task ID');
-      data.addColumn('string', 'Task Name');
-      data.addColumn('string', 'Resource');
-      data.addColumn('date', 'Start Date');
-      data.addColumn('date', 'End Date');
-      data.addColumn('number', 'Duration');
-      data.addColumn('number', 'Percent Complete');
-      data.addColumn('string', 'Dependencies');
+    async function drawChart() {
+      const userId = 5; // Replace with dynamic user ID if needed
+      const data = await fetchGanttData(userId);
 
-      data.addRows([
-        ['task1', 'Review Lecture Notes', 'Module 1', new Date(2024, 4, 1), new Date(2024, 4, 3), null, 100, null],
-        ['task2', 'Complete Assignment 1', 'Module 1', new Date(2024, 4, 4), new Date(2024, 4, 10), null, 75, 'task1'],
-        ['task3', 'Prepare for Quiz', 'Module 2', new Date(2024, 4, 5), new Date(2024, 4, 7), null, 50, null],
-        ['task4', 'Write Lab Report', 'Module 2', new Date(2024, 4, 8), new Date(2024, 4, 12), null, 25, 'task3'],
-        ['task5', 'Read Chapter 3', 'Module 3', new Date(2024, 4, 1), new Date(2024, 4, 5), null, 60, null],
-        ['task6', 'Solve Problem Set', 'Module 3', new Date(2024, 4, 6), new Date(2024, 4, 10), null, 20, 'task5']
-      ]);
+      var dataTable = new google.visualization.DataTable();
+      dataTable.addColumn('string', 'Task ID');
+      dataTable.addColumn('string', 'Task Name');
+      dataTable.addColumn('string', 'Resource');
+      dataTable.addColumn('date', 'Start Date');
+      dataTable.addColumn('date', 'End Date');
+      dataTable.addColumn('number', 'Duration');
+      dataTable.addColumn('number', 'Percent Complete');
+      dataTable.addColumn('string', 'Dependencies');
+
+      data.forEach(task => {
+        dataTable.addRow([
+          task.id,
+          task.name,
+          task.resource,
+          new Date(task.startDate),
+          new Date(task.endDate),
+          null,
+          task.percentComplete,
+          task.dependencies
+        ]);
+      });
 
       var options = {
         height: 400,
+        backgroundColor: { fill: 'white' },
         gantt: {
-          trackHeight: 30
+          trackHeight: 30,
+          barHeight: 20,
+          barCornerRadius: 5,
+          arrow: {
+            angle: 45,
+            width: 2,
+            color: '#757575',
+            radius: 15,
+            length: 8,
+            spaceAfter: 4
+          },
+          labelStyle: {
+            fontName: 'Roboto-Medium',
+            fontSize: 14,
+            color: '#333'
+          },
+          criticalPathEnabled: true,
+          criticalPathStyle: {
+            stroke: '#e64a19',
+            strokeWidth: 2
+          },
+          innerGridTrack: { fill: '#f3f4f6' },
+          innerGridDarkTrack: { fill: '#e8eaf6' },
+          innerGridHorizLine: {
+            stroke: '#dcdcdc',
+            strokeWidth: 1
+          },
+          percentEnabled: true,
+          percentStyle: { fill: '#4caf50' },
+          shadowEnabled: true,
+          shadowColor: '#757575',
+          shadowOffset: 2,
+          sortTasks: true
         }
       };
 
       var chart = new google.visualization.Gantt(document.getElementById('chart_div'));
 
-      chart.draw(data, options);
+      chart.draw(dataTable, options);
+    }
+
+    async function fetchGanttData(userId) {
+      // Mock data, replace with actual fetch call
+      return [
+        { id: 'task1', name: 'Review Lecture Notes', resource: 'Module 1', startDate: '2024-05-01', endDate: '2024-05-03', percentComplete: 100, dependencies: null },
+        { id: 'task2', name: 'Complete Assignment 1', resource: 'Module 1', startDate: '2024-05-04', endDate: '2024-05-10', percentComplete: 75, dependencies: 'task1' },
+        { id: 'task3', name: 'Prepare for Quiz', resource: 'Module 2', startDate: '2024-05-05', endDate: '2024-05-07', percentComplete: 50, dependencies: null },
+        { id: 'task4', name: 'Write Lab Report', resource: 'Module 2', startDate: '2024-05-08', endDate: '2024-05-12', percentComplete: 25, dependencies: 'task3' },
+        { id: 'task5', name: 'Read Chapter 3', resource: 'Module 3', startDate: '2024-05-01', endDate: '2024-05-05', percentComplete: 60, dependencies: null },
+        { id: 'task6', name: 'Solve Problem Set', resource: 'Module 3', startDate: '2024-05-06', endDate: '2024-05-10', percentComplete: 20, dependencies: 'task5' }
+      ];
     }
   </script>
 </head>
 <body>
-    <div class="wrapper">
-        <%- include('partials/nav-bar') %>
-        <div class="container">
-            <div class="content">
-                <div id="chart_div"></div>
-            </div>
-        </div>
+  <div class="wrapper">
+    <%- include('partials/nav-bar') %>
+    <div class="container">
+      <div class="content">
+        <div id="chart_div"></div>
+      </div>
     </div>
-    <%- include('partials/error-box') %>
-    <script src="/js/gantt.js"></script>
+  </div>
+  <%- include('partials/error-box') %>
+  <script src="/js/gantt.js"></script>
 </body>
 </html>
-

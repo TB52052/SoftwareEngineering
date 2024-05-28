@@ -1,0 +1,48 @@
+/* Gantt Chart Styles */
+.google-visualization-gantt-task {
+    font-family: 'Roboto-Medium', sans-serif;
+    font-size: 14px;
+    color: #333;
+}
+
+.google-visualization-gantt-taskbar {
+    stroke: #ffffff;
+    stroke-width: 1;
+    rx: 5;
+    ry: 5;
+}
+
+.google-visualization-gantt-dependencypath path {
+    stroke: #757575;
+    stroke-width: 2;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+    border-radius: 8px;
+}
+
+.content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#chart_div {
+    width: 100%;
+    height: 500px;
+}

@@ -4,7 +4,7 @@ let cache = {
     assessments: {},
     tasks: {}
 };
-let currentUserId = 1; // Use correct user ID
+let currentUserId = 5; // Use correct user ID
 
 document.addEventListener("DOMContentLoaded", function() {
     console.log('User ID:', currentUserId);
