@@ -14,11 +14,12 @@ const checkAuth = (req, res, next) => {
 };
 
 const forceLogout = (req, res, next) => {
-    // Check if user is authenticated
     if (req.session.user) {
         req.session.destroy();
     }
-    return next();
+    if (next) {
+        return next();
+    }
 };
 
 module.exports = {

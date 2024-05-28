@@ -45,7 +45,11 @@ app.use('/logout', logoutRoute);
 
 
 app.get('/', (req, res) => {
-    res.redirect('/profile');
+    if (req.session && req.session.user) {
+        return res.redirect('/profile');
+    }
+    forceLogout(req, res);
+    return res.redirect('/login');
 });
 
 app.get('/team', (req, res) => {
