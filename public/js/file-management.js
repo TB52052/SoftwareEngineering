@@ -40,12 +40,10 @@ function updateSemesterForm() {
     .then((data) => {
         if (data.exists) {
             fileInputForm.classList.add("hidden");
-            // Show pop-up to confirm loading semester
+            
             if (confirm("Semester already exists! Do you want to load this semesters tasks?")) {
-                // If user clicks 'OK', redirect to dashboard
                 window.location.href = "/dashboard"; 
             } else {
-                // If user clicks 'Cancel', reload profile page
                 window.location.href = "/profile";
             }
         }
@@ -71,7 +69,6 @@ function updateFileInputform(event) {
         reader.onload = async function (event) {
             try {
                 const jsonData = JSON.parse(event.target.result);
-                // check if jsonData is empty or not in correct format
                 if (Object.keys(jsonData).length === 0) {
                     return alert("The file is empty or not in the correct format. Please upload the correct file.");
                 }
@@ -100,7 +97,6 @@ function updateFileInputform(event) {
         };
         reader.readAsText(file);
     } else {
-        // If no file is selected
         alert("Please select a file to upload.");
     }
 }

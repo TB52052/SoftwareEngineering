@@ -113,7 +113,7 @@ router.post("/upload", async (req, res) => {
         for (const module of modules) {
             const rows = await database.checkModule(module);
             if (rows.length === 0) {
-                return res.status(400).send({ message: 'Invalid module found' });
+                return res.status(400).send({ message: 'Invalid module format found' });
             }
         }
 
