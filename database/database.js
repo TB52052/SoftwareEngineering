@@ -211,7 +211,7 @@ function deleteModules(userID) {
     });
 }
 
-function getUserModules(userID,) {
+function getUserModules(userID) {
     return new Promise((resolve, reject) => {
         const query = `
             SELECT Modules.*
@@ -227,20 +227,6 @@ function getUserModules(userID,) {
             }
         });
     });
-}
-
-function getUserModulesTaylor(userID, semesterID) {
-    console.log(userID, semesterID);
-    return new Promise((resolve, reject) => {
-        const query = `SELECT * FROM UserModules WHERE UserID = ? AND SemesterID = ?`;
-        db.all(query, [userID, semesterID], (err, rows) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(rows);
-            }
-        });
-    });
 }
 
 function getTaskTypes() {
@@ -337,17 +323,16 @@ function insertNewActivity(userId, taskId, taskTypeId, quantity, notes, progress
     });
 }
 
-function checkModule(moduleID) {
+function checkModule(moduleName) {
     return new Promise((resolve, reject) => {
-        const query = `SELECT * FROM Modules WHERE ModuleID = ?`;
-        db.all(query, [moduleID], (err, rows) => {
+        db.get(`SELECT * FROM Modules WHERE ModuleName = ?`, [moduleName], (err, row) => {
             if (err) {
                 reject(err);
             } else {
-                resolve(rows);
+                resolve(row);
             }
-        });
-    });
+        });
+    });
 }
 
 function updateTaskStatus(taskId, status) { 
@@ -542,7 +527,6 @@ module.exports = {
     deleteAssessments,
     deleteModules,
     getUserModules,
-    getUserModulesTaylor,
     getTaskTypes,
     getSemesters,
     insertUserModule,
