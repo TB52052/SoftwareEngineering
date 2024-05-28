@@ -68,10 +68,10 @@ function updateFileInputform(event) {
         const file = fileInput.files[0];
         const reader = new FileReader();
 
-        reader.onload = function (event) {
+        reader.onload = async function (event) {
             try {
                 const jsonData = JSON.parse(event.target.result);
-                // Check if jsonData is empty or not in correct format
+                // check if jsonData is empty or not in correct format
                 if (Object.keys(jsonData).length === 0) {
                     return alert("The file is empty or not in the correct format. Please upload the correct file.");
                 }
@@ -80,18 +80,19 @@ function updateFileInputform(event) {
                     modules: jsonData,
                 };
 
-                fetch("/profile/upload", {
+                const response = await fetch("/profile/upload", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(dataToSend),
                 })
-                    .then((response) => response.json())
-                    .then((data) => console.log(data))
-                    .catch((error) => console.error("Error:", error));
-
-                alert("Semester uploaded to database.");
-                // Redirect to dashboard
-                window.location.href = "/dashboard"; 
+                
+                if (response.ok) {
+                    alert("Semester uploaded to database.");
+                    window.location.href = "/dashboard"; 
+                } else {
+                    const errorData = await response.json();
+                    alert(`${errorData.message}`);
+                }
 
             } catch (error) {
                 console.error("Error parsing JSON:", error);
