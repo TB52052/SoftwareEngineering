@@ -61,6 +61,26 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/getModuleAssessments/:moduleID', async (req, res) => {
+    if (!req.session.user) {
+        return res.redirect('/login');
+    }
+
+    const { moduleID } = req.params;
+    const userId = req.session.user.id;
+
+    try {
+        const assessments = await db.getUserModuleAssessments(userId, moduleID);
+        res.json(assessments);
+    } catch (err) {
+        console.error('Error fetching module assessments:', err.message);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+
+
+
 router.post('/', async (req, res) => {
     if (!req.session.user) {
         return res.redirect('/login');
@@ -101,17 +121,18 @@ router.post('/', async (req, res) => {
 });
 
 router.post('/progress', async (req, res) => {
-    const { taskId, hoursSpent, amountDone } = req.body;
+    const { taskId, hoursSpent, amountDone, progressMeasurement } = req.body;
 
     try {
-        console.log(`Updating progress for task ${taskId}: hoursSpent=${hoursSpent}, amountDone=${amountDone}`);
-        await updateTaskProgress(taskId, amountDone);
-        res.redirect('/tasks');
+        await db.updateTaskProgress(taskId, hoursSpent, amountDone);
+        res.status(200).json({ amountDone, progressMeasurement });
     } catch (error) {
         console.error('Error updating progress:', error);
         res.status(500).json({ error: 'Error updating progress.' });
     }
 });
+
+
 
 router.put('/milestone/:milestoneId', async (req, res) => {
     const { newDeadline } = req.body;
@@ -139,12 +160,14 @@ router.post('/activities', async (req, res) => {
 
     try {
         await db.insertNewActivity(userId, taskId, taskTypeId, quantity, notes, progressMeasurement);
+        updateTaskDetails(taskId); // Update task details after adding the activity
         res.redirect('/tasks');
     } catch (err) {
         console.error('Error inserting new activity:', err.message);
         res.status(500).send("Internal Server Error");
     }
 });
+
 
 router.put('/:taskId', async (req, res) => {
     if (!req.session.user) {
@@ -176,16 +199,20 @@ router.post('/:taskID', async (req, res) => {
     }
 });
 
-// New route to get progress measurements for a specific task type
 router.get('/progress-measurements/:taskTypeId', async (req, res) => {
     const { taskTypeId } = req.params;
     try {
         const measurements = await db.getProgressMeasurementsByTaskType(taskTypeId);
+        if (measurements.length === 0) {
+            return res.status(404).json({ error: 'No progress measurements found for the given task type ID' });
+        }
         res.status(200).json(measurements);
     } catch (err) {
         console.error('Error fetching task type progress measurements:', err.message);
-        res.status(500).send("Internal Server Error");
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
+
 
 module.exports = router;

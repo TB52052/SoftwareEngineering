@@ -1,38 +1,48 @@
+/* Common Styles for Sticky Titles */
+.sticky-title {
+    position: sticky;
+    top: 0;
+    background-color: #3498db;
+    color: #ffffff;
+    z-index: 1;
+    padding: 15px 0;
+    font-size: 24px;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+    letter-spacing: 1.5px;
+    margin: 0;
+    border-radius: 12px 12px 0 0; /* Rounded top corners */
+}
+
 /* Add New Task Section */
 .add-task-section {
-    background-color: #fff;
-    padding: 0; /* Ensure no padding at the top */
+    background-color: #ffffff;
+    padding: 0;
     border-radius: 12px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
     margin-bottom: 40px;
-    width: 50%;
-    max-height: 80vh; /* Increase Max height with scrolling */
-    overflow-y: auto; /* Enable vertical scrolling */
+    width: 45%; /* Reduced width to make the section smaller */
+    max-height: 80vh;
+    overflow-y: auto;
     transition: all 0.4s ease;
     border: 2px solid #3498db;
 }
 
 .add-task-section .form-title {
-    position: sticky;
-    top: 0;
-    background-color: #fff; /* Same as section background */
-    z-index: 1;
-    padding: 15px 0;
-    color: #2c3e50;
-    font-size: 26px;
-    font-weight: bold;
-    text-transform: uppercase;
-    text-align: center;
-    letter-spacing: 1.5px;
-    margin: 0; /* Ensure no margin at the top */
+    composes: sticky-title;
+}
+
+.add-task-section form {
+    padding: 20px;
 }
 
 .add-task-section label {
     font-weight: bold;
     display: block;
-    margin-bottom: 10px;
-    font-size: 18px;
-    color: #34495e;
+    margin-bottom: 5px;
+    font-size: 16px;
+    color: #2c3e50;
 }
 
 .add-task-section input[type="text"],
@@ -41,7 +51,7 @@
 .add-task-section select,
 .add-task-section textarea {
     width: 100%;
-    padding: 15px;
+    padding: 12px 15px; /* Adjust padding for better appearance */
     border: 1px solid #bdc3c7;
     border-radius: 8px;
     box-sizing: border-box;
@@ -79,24 +89,31 @@
 
 .milestone-container {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     gap: 10px;
 }
 
 .milestone-container label {
-    width: 40%;
+    font-weight: bold;
+    font-size: 16px;
+    color: #34495e;
 }
 
 .milestone-container input[type="text"],
 .milestone-container input[type="date"] {
-    width: 60%;
+    padding: 12px;
+    border: 1px solid #bdc3c7;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 16px;
+    transition: border 0.4s ease, box-shadow 0.4s ease;
 }
 
 .add-milestone-btn {
     background-color: #3498db;
     color: #fff;
     border: none;
-    padding: 10px 20px;
+    padding: 12px;
     border-radius: 8px;
     font-size: 18px;
     cursor: pointer;
@@ -113,7 +130,7 @@
 
 .additional-milestone {
     background-color: #f9f9f9;
-    padding: 10px;
+    padding: 15px;
     border-radius: 8px;
     margin-top: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -121,30 +138,36 @@
 
 .additional-milestone .input-group {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     gap: 10px;
     margin-bottom: 10px;
 }
 
 .additional-milestone .input-group label {
-    width: 40%;
+    font-weight: bold;
+    font-size: 16px;
+    color: #34495e;
 }
 
 .additional-milestone .input-group input[type="text"],
 .additional-milestone .input-group input[type="date"] {
-    width: 60%;
+    padding: 12px;
+    border: 1px solid #bdc3c7;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border 0.4s ease, box-shadow 0.4s ease;
 }
 
 /* Existing Tasks Section */
 .tasks-section {
     background-color: #ffffff;
-    padding: 0; /* Ensure no padding at the top */
+    padding: 0;
     border: 2px solid #3498db;
     border-radius: 12px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
     width: 100%;
     flex-grow: 1;
-    max-height: 80vh; /* Increase Max height with scrolling */
+    max-height: 80vh;
     overflow-y: auto;
     transition: all 0.3s ease;
 }
@@ -154,32 +177,23 @@
 }
 
 .tasks-section h2 {
-    position: sticky;
-    top: 0;
-    background-color: #fff;
-    z-index: 1;
-    padding: 15px 0;
-    color: #333;
-    margin: 0; /* Ensure no margin at the top */
-    text-transform: uppercase;
-    text-align: center;
-    font-size: 26px;
-    font-weight: bold;
-    letter-spacing: 1.5px;
+    composes: sticky-title;
 }
 
 .task-list {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    padding: 20px; /* Added padding for better separation */
 }
 
 .task-item {
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    border: 2px solid #3498db; /* Increased border thickness for bold effect */
+    border-radius: 12px; /* More rounded corners for individual appearance */
     padding: 20px;
-    background-color: #fafafa;
+    background-color: #ffffff; /* Changed to white for more contrast */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 20px; /* Added margin for separation */
 }
 
 .task-item:hover {
@@ -189,56 +203,85 @@
 
 .task-info h3 {
     color: #3498db;
-    font-size: 24px;
+    font-size: 26px; /* Increased font size */
     text-transform: uppercase;
     margin-bottom: 10px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    border-bottom: 2px solid #3498db; /* Added bottom border */
+    padding-bottom: 10px;
 }
 
 .task-info p {
-    color: #2c3e50;
-    font-size: 16px;
-    line-height: 1.6;
-    padding-bottom: 5px;
-    margin-bottom: 10px;
+    color: #2c3e50; /* Dark text color for better readability */
+    font-size: 18px; /* Larger font size for better readability */
+    line-height: 1.6; /* Increased line-height for better spacing */
+    padding-bottom: 5px; /* Padding at the bottom for spacing */
+    margin-bottom: 10px; /* Margin at the bottom for spacing */
+    font-weight: 500; /* Slightly bolder font for better visibility */
+    font-family: 'Arial', sans-serif; /* Clear and modern font */
+    position: relative;
+}
+
+.task-info p:before {
+    content: attr(data-label);
+    font-weight: bold;
+    margin-right: 5px;
+    color: #2980b9; /* Distinct color for the bold text */
+}
+
+.task-info p[data-label]:before {
+    content: attr(data-label) ": ";
+    font-weight: bold;
+    margin-right: 5px;
+    color: #2980b9; /* Distinct color for the bold text */
+}
+
+.task-info p span {
+    color: #2980b9; /* Distinct color for span elements for emphasis */
+    font-weight: bold; /* Bolder font for emphasis */
 }
 
 .task-info p:not(:last-child) {
-    border-bottom: 1px solid #bdc3c7;
+    border-bottom: 1px solid #bdc3c7; /* Border at the bottom for separation */
 }
 
-.task-info .task-deadline {
-    color: #e74c3c;
-    font-weight: bold;
-    font-size: 18px;
-    text-decoration: underline;
+.task-info .task-deadline .deadline-date {
+    color: inherit; /* Inherit color from parent */
+    font-weight: normal; /* Normal font weight */
+    font-size: inherit; /* Inherit font size from parent */
+    text-decoration: none; /* Remove underline */
 }
 
 .task-info .hours-spent,
 .task-info .activity-quantity {
-    font-size: 18px;
-    font-weight: bold;
-    color: #27ae60;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    font-size: 20px; /* Larger font size for better visibility */
+    font-weight: bold; /* Bolder font for emphasis */
+    color: #27ae60; /* Green color for positive metrics */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Subtle text shadow for depth */
 }
 
+.task-info .status {
+    font-size: 18px; /* Larger font size for better readability */
+    font-weight: bold; /* Bolder font for emphasis */
+    color: #8e44ad; /* Distinct color for status */
+}
 .task-actions {
     display: flex;
-    justify-content: space-between; /* Distribute buttons evenly */
-    gap: 10px;
+    justify-content: space-between;
+    gap: 15px; /* Increased gap for better spacing */
     margin-top: 20px;
-    flex-wrap: wrap; /* Allow wrapping if necessary */
+    flex-wrap: wrap;
 }
 
 .task-actions button {
-    flex: 1; /* Make buttons grow to fill available space */
+    flex: 1;
     background-color: #3498db;
     color: #fff;
-    padding: 12px 15px; /* Adjust padding for a sleeker look */
+    padding: 15px; /* Increased padding */
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    font-size: 14px; /* Reduce font size for better fit */
+    font-size: 16px; /* Increased font size */
     text-align: center;
     transition: background-color 0.4s ease, transform 0.4s ease, box-shadow 0.3s ease;
 }
@@ -246,12 +289,12 @@
 .task-actions button:hover {
     background-color: #2980b9;
     transform: scale(1.05);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .task-actions button:active {
     transform: scale(1);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add shadow on active */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .task-progress-section,
@@ -273,7 +316,7 @@
 .task-activities h4,
 .update-deadline-section h4 {
     margin-bottom: 15px;
-    font-size: 20px;
+    font-size: 22px;
     font-weight: bold;
     color: #2c3e50;
     border-bottom: 2px solid #3498db;
@@ -304,7 +347,7 @@
 
 .task-activities .activity p {
     margin: 5px 0;
-    font-size: 16px;
+    font-size: 18px; /* Increased font size */
     color: #34495e;
 }
 
@@ -345,24 +388,9 @@
 .input-group label {
     display: block;
     margin-bottom: 5px;
-    font-size: 16px;
+    font-size: 18px; /* Increased font size */
     color: #34495e;
     font-weight: bold;
-}
-
-.input-group input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #bdc3c7;
-    border-radius: 8px;
-    font-size: 16px;
-    box-sizing: border-box;
-    transition: border 0.3s ease, box-shadow 0.3s ease;
-}
-
-.input-group input:focus {
-    border-color: #3498db;
-    box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
 }
 
 .input-group input,

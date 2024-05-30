@@ -12,7 +12,7 @@
         <div class="container">
             <div class="content">
                 <div class="add-task-section form-page"> 
-                    <h2 class="form-title">Add New Task</h2>
+                    <h2 class="form-title sticky-title">Add New Task</h2>
                     <form class="form-form" id="addTaskForm" action="/tasks" method="POST">
                         <div class="input-group">
                             <label for="taskName">Task Name:</label>
@@ -29,9 +29,7 @@
                         <div class="input-group">
                             <label for="assessment">Assessment:</label>
                             <select id="assessment" name="assessmentID" required>
-                                <% assessments.forEach(function(assessment) { %>
-                                    <option value="<%= assessment.AssessmentID %>"><%= assessment.AssessmentName %></option>
-                                <% }); %>
+                                <!-- Options will be dynamically populated based on selected module -->
                             </select>
                         </div>
                         <div class="input-group">
@@ -48,14 +46,13 @@
                         </div>
                         <div class="input-group">
                             <label for="quantity">Quantity:</label>
-                            <input type="number" id="quantity" name="quantity" required>
+                            <input type="text" id="quantity" name="quantity" required>
                         </div>
                         <div class="input-group">
                             <label for="taskDeadline">Task Deadline:</label>
                             <input type="date" id="taskDeadline" name="taskDate" required>
                         </div>
                         <input type="hidden" id="userId" name="userId" value="<%= userId %>">
-    
                         <div class="input-group">
                             <label for="taskDependencies">Task Dependencies:</label>
                             <select multiple id="taskDependencies" name="taskDependencies[]">
@@ -64,41 +61,45 @@
                                 <% }); %>
                             </select>
                         </div>
-    
-                        <div class="input-group milestone-container">
+                        <div class="milestone-container">
                             <label for="milestoneName">Milestone Name:</label>
                             <input type="text" id="milestoneName" name="milestoneName[]" required>
                         </div>
-                        <div class="input-group milestone-container">
+                        <div class="milestone-container">
                             <label for="milestoneDeadline">Milestone Deadline:</label>
                             <input type="date" id="milestoneDeadline" name="milestoneDeadline[]" required>
                         </div>
                         <div id="additionalMilestones"></div>
                         <button type="button" class="add-milestone-btn">Add Another Milestone</button>
-                        
                         <div class="form-button">
                             <button class="input-button" type="submit">Add Task</button>
                         </div>
                     </form>
                 </div>
-    
-                <!-- Existing Tasks Section -->
                 <div class="tasks-section">
-                    <h2>Existing Tasks</h2>
+                    <h2 class="sticky-title">Existing Tasks</h2>
                     <div class="task-list">
                         <% tasks.forEach(function(task) { %>
                             <div class="task-item" data-task-id="<%= task.TaskID %>" data-task-type-id="<%= task.TaskTypeID %>">
                                 <div class="task-info">
                                     <h3><%= task.TaskName %></h3>
-                                    <p>Module: <%= task.ModuleName %></p>
-                                    <p>Assessment: <%= task.AssessmentName %></p>
-                                    <p>Estimated Time (hours): <%= task.TimeSpent %></p>
-                                    <p>Type: <%= task.TypeName %></p>
-                                    <p>Task Quantity: <%= task.TaskQuantity %></p>
-                                    <p class="task-deadline">Deadline: <%= task.TaskDate %></p>
-                                    <p>Status: <%= task.Status %></p>
-                                    <p class="hours-spent">Hours Spent: <span><%= task.HoursSpent %> hrs</span></p>
-                                    <p class="activity-quantity">Activity Quantity: <span><%= task.AmountDone %></span></p>
+                                    <p data-label="Module"><%= task.ModuleName %></p>
+                                    <p data-label="Assessment"><%= task.AssessmentName %></p>
+                                    <p data-label="Estimated Time (hours)"><%= task.TimeSpent %></p>
+                                    <p data-label="Type"><%= task.TypeName %></p>
+                                    <p class="task-quantity" data-label="Task Quantity"><%= task.Quantity %></p>
+                                    <p class="task-deadline" data-label="Deadline"><span class="deadline-date"><%= task.TaskDate %></span></p>
+                                    <p data-label="Status"><%= task.Status %></p>
+                                    <p class="hours-spent" data-label="Hours Spent"><span><%= task.HoursSpent %> hrs</span></p>
+                                    <p class="activity-quantity" data-label="Activity Quantity"><span><%= task.AmountDone %> <%= task.ProgressMeasurement %></span></p>
+                                    <!-- Placeholder for new progress entries -->
+                                    <% if (task.newProgressEntries) { %>
+                                        <% task.newProgressEntries.forEach(entry => { %>
+                                            <p><%= entry.amountDone %> <%= entry.progressMeasurement %></p>
+                                        <% }); %>
+                                    <% } %>
+                                
+                                
                                 </div>
                                 <div class="milestones-section">
                                     <h4>Milestones:</h4>
@@ -124,9 +125,8 @@
                                         <% }); %>
                                     </ul>
                                 </div>
-                                
                                 <div class="task-actions">
-                                    <button class="capture-progress-btn">Capture Study Progress</button>
+                                    <button class="capture-progress-btn">Capture Study Activity</button>
                                     <button class="update-progress-btn">Update Progress</button>
                                     <button class="current-activities-btn">Current Activities</button>
                                     <button class="update-deadline-btn">Update Deadline</button>
@@ -141,6 +141,10 @@
                                         <div class="input-group">
                                             <label for="amountDone">Amount Done:</label>
                                             <input type="number" id="amountDone" name="amountDone" required step="1">
+                                        </div>
+                                        <div class="input-group">
+                                            <label for="progressMeasurement">Progress Measurement:</label>
+                                            <select id="progressMeasurement" name="progressMeasurement" required></select>
                                         </div>
                                         <button type="submit" class="update-progress-btn">Update Progress</button>
                                     </form>
@@ -180,7 +184,6 @@
                                         <p>No activities found for this task.</p>
                                     <% } %>
                                 </div>
-                                
                                 <div class="update-deadline-section bubble-box">
                                     <h4>Update Deadline</h4>
                                     <form class="update-deadline-form" action="/tasks/<%= task.TaskID %>" method="POST">
@@ -201,306 +204,269 @@
     </div>
     <%- include('partials/error-box') %>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const taskItems = document.querySelectorAll('.task-item');
-    
-            function toggleBubbleBoxes(taskItem, bubbleBoxToShow) {
-                const allBubbleBoxes = taskItem.querySelectorAll('.bubble-box');
-                allBubbleBoxes.forEach(bubbleBox => {
-                    bubbleBox.classList.remove('active');
+document.addEventListener('DOMContentLoaded', function() {
+    const taskItems = document.querySelectorAll('.task-item');
+
+    function toggleBubbleBoxes(taskItem, bubbleBoxToShow) {
+        const allBubbleBoxes = taskItem.querySelectorAll('.bubble-box');
+        allBubbleBoxes.forEach(bubbleBox => {
+            bubbleBox.classList.remove('active');
+        });
+        if (bubbleBoxToShow) {
+            bubbleBoxToShow.classList.add('active');
+        }
+    }
+
+    taskItems.forEach(taskItem => {
+        const captureProgressBtn = taskItem.querySelector('.capture-progress-btn');
+        const markAsDoneBtn = taskItem.querySelector('.mark-as-done');
+        const updateProgressBtn = taskItem.querySelector('.update-progress-btn');
+        const currentActivitiesBtn = taskItem.querySelector('.current-activities-btn');
+        const updateDeadlineBtn = taskItem.querySelector('.update-deadline-btn');
+
+        captureProgressBtn.addEventListener('click', function() {
+            const studyProgressSection = taskItem.querySelector('.study-progress-section');
+            toggleBubbleBoxes(taskItem, studyProgressSection);
+        });
+
+        updateProgressBtn.addEventListener('click', async function() {
+            const taskProgressSection = taskItem.querySelector('.task-progress-section');
+            toggleBubbleBoxes(taskItem, taskProgressSection);
+
+            const taskTypeId = taskItem.dataset.taskTypeId;
+            const progressMeasurementDropdown = taskProgressSection.querySelector('#progressMeasurement');
+            
+            try {
+                const response = await fetch(`/task-type-progress-measurements/${taskTypeId}`);
+                const progressMeasurements = await response.json();
+                progressMeasurementDropdown.innerHTML = '';
+                progressMeasurements.forEach(measurement => {
+                    const option = document.createElement('option');
+                    option.value = measurement;
+                    option.textContent = measurement;
+                    progressMeasurementDropdown.appendChild(option);
                 });
-                if (bubbleBoxToShow) {
-                    bubbleBoxToShow.classList.add('active');
+            } catch (error) {
+                console.error('Error fetching progress measurements:', error);
+            }
+        });
+
+        currentActivitiesBtn.addEventListener('click', function() {
+            const taskActivitiesSection = taskItem.querySelector('.task-activities');
+            toggleBubbleBoxes(taskItem, taskActivitiesSection);
+        });
+
+        updateDeadlineBtn.addEventListener('click', function() {
+            const updateDeadlineSection = taskItem.querySelector('.update-deadline-section');
+            toggleBubbleBoxes(taskItem, updateDeadlineSection);
+        });
+
+        markAsDoneBtn.addEventListener('click', async function() {
+            const taskId = this.dataset.taskId;
+            try {
+                const response = await fetch(`/tasks/${taskId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ status: 'done' })
+                });
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    const errorText = await response.text();
+                    console.error('Failed to mark task as done:', errorText);
                 }
+            } catch (error) {
+                console.error('Error marking task as done:', error);
             }
-    
-            taskItems.forEach(taskItem => {
-                const captureProgressBtn = taskItem.querySelector('.capture-progress-btn');
-                const markAsDoneBtn = taskItem.querySelector('.mark-as-done');
-                const updateProgressBtn = taskItem.querySelector('.update-progress-btn');
-                const currentActivitiesBtn = taskItem.querySelector('.current-activities-btn');
-                const updateDeadlineBtn = taskItem.querySelector('.update-deadline-btn');
-                const updateMilestoneDeadlineBtns = taskItem.querySelectorAll('.update-milestone-deadline-btn');
-                const updateMilestoneDeadlineForms = taskItem.querySelectorAll('.update-milestone-deadline-form');
-    
-                captureProgressBtn.addEventListener('click', function() {
-                    const studyProgressSection = taskItem.querySelector('.study-progress-section');
-                    toggleBubbleBoxes(taskItem, studyProgressSection);
-                });
-    
-                updateProgressBtn.addEventListener('click', function() {
-                    const taskProgressSection = taskItem.querySelector('.task-progress-section');
-                    toggleBubbleBoxes(taskItem, taskProgressSection);
-                });
-    
-                currentActivitiesBtn.addEventListener('click', function() {
-                    const taskActivitiesSection = taskItem.querySelector('.task-activities');
-                    toggleBubbleBoxes(taskItem, taskActivitiesSection);
-                });
-    
-                updateDeadlineBtn.addEventListener('click', function() {
-                    const updateDeadlineSection = taskItem.querySelector('.update-deadline-section');
-                    toggleBubbleBoxes(taskItem, updateDeadlineSection);
-                });
-    
-                updateMilestoneDeadlineBtns.forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const updateMilestoneDeadlineSection = btn.nextElementSibling;
-                        btn.style.display = 'none';
-                        toggleBubbleBoxes(taskItem, updateMilestoneDeadlineSection);
-                    });
-                });
-    
-                updateMilestoneDeadlineForms.forEach(form => {
-                    form.addEventListener('submit', async function(e) {
-                        e.preventDefault();
-    
-                        const newMilestoneDeadline = this.querySelector('#newMilestoneDeadline').value;
-                        const milestoneId = this.closest('li').dataset.milestoneId;
-    
-                        if (milestoneId) {
-                            try {
-                                const response = await fetch(`/tasks/milestone/${milestoneId}`, {
-                                    method: 'PUT',
-                                    headers: {
-                                        'Content-Type': 'application/json'
-                                    },
-                                    body: JSON.stringify({ newDeadline: newMilestoneDeadline })
-                                });
-    
-                                if (response.ok) {
-                                    window.location.reload();
-                                } else {
-                                    console.error('Failed to update milestone deadline.');
-                                }
-                            } catch (error) {
-                                console.error('Error:', error);
-                            }
-                        }
-                    });
-                });
-    
-                markAsDoneBtn.addEventListener('click', async function() {
-                    const taskId = this.dataset.taskId;
-                    const response = await fetch(`/tasks/${taskId}`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ status: 'done' })
-                    });
-                    if (response.ok) {
-                        window.location.reload();
-                    } else {
-                        console.error('Failed to mark task as done.');
-                    }
-                });
-    
-                document.querySelectorAll('.capture-progress-btn').forEach(button => {
-                    button.addEventListener('click', async function() {
-                        const taskItem = this.closest('.task-item');
-                        const progressForm = taskItem.querySelector('.study-progress-form');
-                        const progressMeasurementDropdown = progressForm.querySelector('#progressMeasurement');
-                        const taskTypeId = taskItem.dataset.taskTypeId;
-    
-                        try {
-                            const response = await fetch(`/tasks/progress-measurements/${taskTypeId}`);
-                            const progressMeasurements = await response.json();
-                            progressMeasurementDropdown.innerHTML = '';
-                            progressMeasurements.forEach(measurement => {
-                                const option = document.createElement('option');
-                                option.value = measurement;
-                                option.textContent = measurement;
-                                progressMeasurementDropdown.appendChild(option);
-                            });
-    
-                            progressForm.style.display = 'block';
-                        } catch (error) {
-                            console.error('Error:', error);
-                        }
-                    });
-                });
-    
-                document.getElementById('module').addEventListener('change', async function() {
-                    const moduleID = this.value;
-                    const response = await fetch(`/getModuleAssessments/${moduleID}`);
-                    const assessments = await response.json();
-    
-                    const assessmentDropdown = document.getElementById('assessment');
-                    assessmentDropdown.innerHTML = '';
-    
-                    assessments.forEach(assessment => {
+        });
+
+        document.querySelectorAll('.capture-progress-btn').forEach(button => {
+            button.addEventListener('click', async function() {
+                const taskItem = this.closest('.task-item');
+                const progressForm = taskItem.querySelector('.study-progress-form');
+                const progressMeasurementDropdown = progressForm.querySelector('#progressMeasurement');
+                const taskTypeId = taskItem.dataset.taskTypeId;
+
+                try {
+                    const response = await fetch(`/tasks/progress-measurements/${taskTypeId}`);
+                    const progressMeasurements = await response.json();
+                    progressMeasurementDropdown.innerHTML = '';
+                    progressMeasurements.forEach(measurement => {
                         const option = document.createElement('option');
-                        option.value = assessment.AssessmentID;
-                        option.textContent = assessment.AssessmentName;
-                        assessmentDropdown.appendChild(option);
+                        option.value = measurement;
+                        option.textContent = measurement;
+                        progressMeasurementDropdown.appendChild(option);
                     });
-                });
-    
-                const updateDeadlineForm = taskItem.querySelector('.update-deadline-form');
-                updateDeadlineForm.addEventListener('submit', async function(e) {
-                    e.preventDefault();
-    
-                    const newDeadline = this.querySelector('#newDeadline').value;
-                    const taskId = taskItem.dataset.taskId;
-    
-                    const response = await fetch(`/tasks/${taskId}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ newDeadline })
-                    });
-    
-                    if (response.ok) {
-                        window.location.reload();
-                    } else {
-                        console.error('Failed to update task deadline.');
-                    }
-                });
-            });
-    
-            function addMilestoneBox() {
-                const milestoneSection = document.querySelector('.add-task-section');
-                const milestoneBoxes = milestoneSection.querySelectorAll('.milestone-input-box');
-                const milestoneBox = document.createElement('div');
-                milestoneBox.classList.add('input-group', 'milestone-input-box');
-                milestoneBox.innerHTML = `
-                    <label for="milestoneName">Milestone Name:</label>
-                    <input type="text" name="milestoneName[]" required>
-                    <label for="milestoneDeadline">Milestone Deadline:</label>
-                    <input type="date" name="milestoneDeadline[]" required>
-                `;
-    
-                const addMilestoneBtnParent = document.querySelector('.add-milestone-btn').parentNode;
-                addMilestoneBtnParent.insertBefore(milestoneBox, document.querySelector('.add-milestone-btn'));
-    
-                milestoneBoxes.forEach((box, index) => {
-                    box.querySelector('label').textContent = `Milestone ${index + 1} Name:`;
-                });
-            }
-    
-            document.querySelector('.add-milestone-btn').addEventListener('click', addMilestoneBox);
-    
-            function displayNewActivity(activity) {
-                const activitiesSection = document.querySelector('.task-activities');
-                const activityDiv = document.createElement('div');
-                activityDiv.className = 'activity';
-                activityDiv.innerHTML = `
-                    <p><strong>Quantity:</strong> ${activity.quantity}</p>
-                    <p><strong>Notes:</strong> ${activity.notes}</p>
-                    <p><strong>Progress Measurement:</strong> ${activity.progressMeasurement}</p>
-                `;
-                activitiesSection.appendChild(activityDiv);
-                window.location.reload();
-            }
-    
-            document.querySelectorAll('.update-progress-form').forEach(form => {
-                form.addEventListener('submit', async function(event) {
-                    event.preventDefault();
-                    const taskItem = this.closest('.task-item');
-                    const taskId = taskItem.dataset.taskId;
-                    const formData = new FormData(this);
-                    const data = Object.fromEntries(formData);
-                    data.taskId = taskId;
-    
-                    try {
-                        const response = await fetch(`/progress`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(data)
-                        });
-    
-                        if (response.ok) {
-                            window.location.reload();
-                        } else {
-                            console.error('Failed to update progress.');
-                        }
-                    } catch (err) {
-                        console.error('Error updating progress:', err);
-                    }
-                });
-            });
-    
-            document.querySelectorAll('.study-progress-form').forEach(form => {
-                form.addEventListener('submit', async function(event) {
-                    event.preventDefault();
-    
-                    const taskItem = this.closest('.task-item');
-                    const taskId = taskItem.dataset.taskId;
-                    const userId = document.getElementById('userId').value;
-    
-                    const formData = new FormData(this);
-                    formData.append('userId', userId);
-                    formData.append('quantity', this.querySelector('#quantity').value);
-                    formData.append('notes', this.querySelector('#notes').value);
-    
-                    let jsonObject = {};
-                    for (const [key, value] of formData.entries()) {
-                        jsonObject[key] = value;
-                    }
-    
-                    try {
-                        const response = await fetch(`/activities`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(jsonObject)
-                        });
-                        if (response.ok) {
-                            const activity = await response.json();
-                            displayNewActivity(activity);
-                            window.location.reload();
-                        } else {
-                            console.error('Failed to add activity.');
-                        }
-                    } catch (err) {
-                        console.error('Error adding activity:', err);
-                    }
-                });
-            });
-    
-            const milestoneItems = document.querySelectorAll('.milestone-item');
-    
-            milestoneItems.forEach(milestoneItem => {
-                const updateMilestoneDeadlineBtn = milestoneItem.querySelector('.update-milestone-deadline-btn');
-                const updateMilestoneDeadlineSection = milestoneItem.querySelector('.update-milestone-deadline-section');
-                const updateMilestoneDeadlineForm = milestoneItem.querySelector('.update-milestone-deadline-form');
-    
-                updateMilestoneDeadlineBtn.addEventListener('click', function() {
-                    updateMilestoneDeadlineBtn.style.display = 'none';
-                    updateMilestoneDeadlineSection.classList.add('active');
-                });
-    
-                updateMilestoneDeadlineForm.addEventListener('submit', async function(e) {
-                    e.preventDefault();
-    
-                    const newMilestoneDeadline = this.querySelector('#newMilestoneDeadline').value;
-                    const milestoneId = milestoneItem.dataset.milestoneId;
-    
-                    try {
-                        const response = await fetch(`/tasks/milestone/${milestoneId}`, {
-                            method: 'PUT',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({ newDeadline: newMilestoneDeadline })
-                        });
-    
-                        if (response.ok) {
-                            window.location.reload();
-                        } else {
-                            console.error('Failed to update milestone deadline.');
-                        }
-                    } catch (error) {
-                        console.error('Error:', error);
-                    }
-                });
+
+                    progressForm.style.display = 'block';
+                } catch (error) {
+                    console.error('Error fetching progress measurements:', error);
+                }
             });
         });
+
+        const updateDeadlineForm = taskItem.querySelector('.update-deadline-form');
+        updateDeadlineForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const newDeadline = this.querySelector('#newDeadline').value;
+            const taskId = taskItem.dataset.taskId;
+
+            try {
+                const response = await fetch(`/tasks/${taskId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ newDeadline })
+                });
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    const errorText = await response.text();
+                    console.error('Failed to update task deadline:', errorText);
+                }
+            } catch (error) {
+                console.error('Error updating task deadline:', error);
+            }
+        });
+    });
+
+    document.querySelectorAll('.update-progress-form').forEach(form => {
+        form.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const taskItem = this.closest('.task-item');
+            const taskId = taskItem.dataset.taskId;
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            data.taskId = taskId;
+
+            try {
+                const response = await fetch(`/progress`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    const taskInfo = taskItem.querySelector('.task-info');
+                    const newProgress = document.createElement('p');
+                    newProgress.textContent = `${result.amountDone} ${result.progressMeasurement}`;
+                    taskInfo.appendChild(newProgress);
+                    window.location.reload();
+                } else {
+                    const errorText = await response.text();
+                    console.error('Failed to update progress:', errorText);
+                }
+            } catch (err) {
+                console.error('Error updating progress:', err);
+            }
+        });
+    });
+
+    document.querySelectorAll('.study-progress-form').forEach(form => {
+        form.addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const taskItem = this.closest('.task-item');
+            const taskId = taskItem.dataset.taskId;
+            const userId = document.getElementById('userId').value;
+
+            const formData = new FormData(this);
+            formData.append('userId', userId);
+            formData.append('quantity', this.querySelector('#quantity').value);
+            formData.append('notes', this.querySelector('#notes').value);
+
+            let jsonObject = {};
+            for (const [key, value] of formData.entries()) {
+                jsonObject[key] = value;
+            }
+
+            try {
+                const response = await fetch(`/activities`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(jsonObject)
+                });
+                if (response.ok) {
+                    const activity = await response.json();
+                    displayNewActivity(activity);
+                    window.location.reload();
+                } else {
+                    console.error('Failed to add activity.');
+                }
+            } catch (err) {
+                console.error('Error adding activity:', err);
+            }
+        });
+    });
+
+    const milestoneItems = document.querySelectorAll('.milestone-item');
+
+    milestoneItems.forEach(milestoneItem => {
+        const updateMilestoneDeadlineBtn = milestoneItem.querySelector('.update-milestone-deadline-btn');
+        const updateMilestoneDeadlineSection = milestoneItem.querySelector('.update-milestone-deadline-section');
+        const updateMilestoneDeadlineForm = milestoneItem.querySelector('.update-milestone-deadline-form');
+
+        updateMilestoneDeadlineBtn.addEventListener('click', function() {
+            updateMilestoneDeadlineBtn.style.display = 'none';
+            updateMilestoneDeadlineSection.classList.add('active');
+        });
+
+        updateMilestoneDeadlineForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const newMilestoneDeadline = this.querySelector('#newMilestoneDeadline').value;
+            const milestoneId = milestoneItem.dataset.milestoneId;
+
+            try {
+                const response = await fetch(`/tasks/milestone/${milestoneId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ newDeadline: newMilestoneDeadline })
+                });
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    const errorText = await response.text();
+                    console.error('Failed to update milestone deadline:', errorText);
+                }
+            } catch (error) {
+                console.error('Error updating milestone deadline:', error);
+            }
+        });
+    });
+
+    document.getElementById('module').addEventListener('change', async function() {
+        const moduleID = this.value;
+        try {
+            const response = await fetch(`/getModuleAssessments/${moduleID}`);
+            const assessments = await response.json();
+
+            const assessmentDropdown = document.getElementById('assessment');
+            assessmentDropdown.innerHTML = '';
+
+            assessments.forEach(assessment => {
+                const option = document.createElement('option');
+                option.value = assessment.AssessmentID;
+                option.textContent = assessment.AssessmentName;
+                assessmentDropdown.appendChild(option);
+            });
+        } catch (error) {
+            console.error('Error fetching module assessments:', error);
+        }
+    });
+});
+
     </script>
 </body>
 </html>

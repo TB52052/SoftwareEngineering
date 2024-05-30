@@ -362,20 +362,19 @@ function updateTaskStatus(taskId, status) {
         }); 
     }); 
 } 
-
-function getProgressMeasurementsByTaskType(taskTypeId) { 
-    return new Promise((resolve, reject) => { 
-        const sql = 'SELECT ProgressMeasurement FROM TaskTypeProgressMeasurements WHERE TaskTypeID = ?'; 
-        db.all(sql, [taskTypeId], (err, rows) => { 
-            if (err) { 
-                reject(err); 
-            } else { 
-                const progressMeasurements = rows.map(row => row.ProgressMeasurement); 
-                resolve(progressMeasurements); 
-            } 
-        }); 
-    }); 
-} 
+function getProgressMeasurementsByTaskType(taskTypeId) {
+    return new Promise((resolve, reject) => {
+        const sql = 'SELECT ProgressMeasurement FROM TaskTypeProgressMeasurements WHERE TaskTypeID = ?';
+        db.all(sql, [taskTypeId], (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                const progressMeasurements = rows.map(row => row.ProgressMeasurement);
+                resolve(progressMeasurements);
+            }
+        });
+    });
+}
 function updateTaskProgress(taskId, hoursSpent, amountDone) {
     return new Promise((resolve, reject) => {
         const query = `
@@ -393,6 +392,7 @@ function updateTaskProgress(taskId, hoursSpent, amountDone) {
         });
     });
 }
+
 
 
 
@@ -546,6 +546,8 @@ function getUserModuleAssessments(userID, moduleID) {
         });
     });
 }
+
+
 
 // Function to retrieve activities for a given task from the database 
 function getUserActivitiesForTask(taskID) { 

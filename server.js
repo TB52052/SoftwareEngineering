@@ -124,13 +124,21 @@ app.get('/task-type-progress-measurements/:taskTypeId', async (req, res) => {
     }
 });
 
+
 app.get('/getModuleAssessments/:moduleID', async (req, res) => {
+    if (!req.session.user) {
+        return res.redirect('/login');
+    }
+
+    const { moduleID } = req.params;
+    const userId = req.session.user.id;
+
     try {
-        const moduleID = req.params.moduleID;
-        const assessments = await getUserModuleAssessments(moduleID);
+        const assessments = await db.getUserModuleAssessments(userId, moduleID);
         res.json(assessments);
     } catch (err) {
-        res.status(500).send(err.message);
+        console.error('Error fetching module assessments:', err.message);
+        res.status(500).send("Internal Server Error");
     }
 });
 
@@ -146,16 +154,18 @@ app.get('/api/user/:userId/tasks', async (req, res) => {
 });
 
 app.post('/progress', async (req, res) => {
-    const { taskId, hoursSpent, amountDone } = req.body;
+    const { taskId, hoursSpent, amountDone, progressMeasurement } = req.body;
 
     try {
         await db.updateTaskProgress(taskId, hoursSpent, amountDone);
-        
-    } catch (err) {
-        console.error('Error updating task progress:', err.message);
-        res.status(500).send("Internal Server Error");
+        res.status(200).json({ amountDone, progressMeasurement });
+    } catch (error) {
+        console.error('Error updating progress:', error);
+        res.status(500).json({ error: 'Error updating progress.' });
     }
 });
+
+
 app.post('/activities', async (req, res) => {
     const { userId, taskId, taskTypeId, quantity, notes, progressMeasurement } = req.body;
     try {
