@@ -26,6 +26,12 @@ router.post("/", async (req, res) => {
         return res.redirect("/register");
     }
 
+    if (req.body.email.length < 2 || req.body.password.length < 4 || req.body.forename.length < 1 || req.body.surname.length < 1) {
+        req.session.message = "Data too short.";
+        req.session.isError = true;
+        return res.redirect("/register");
+    }
+
     // Check if user exists
     const account = await database.getAccount(req.body.email);
 

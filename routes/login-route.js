@@ -3,9 +3,7 @@ const router = express.Router();
 const database = require('../database/database.js');
 
 router.get("/", (req, res) => {
-    if (!(req.session && req.session.user)) {
-        return res.render("login.ejs");
-    }
+    return res.render("login.ejs");
 });
 
 router.post("/", async (req, res) => {

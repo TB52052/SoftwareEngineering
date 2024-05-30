@@ -387,24 +387,25 @@ function getProgressMeasurementsByTaskType(taskTypeId) {
         }); 
     }); 
 } 
+function updateTaskProgress(taskId, hoursSpent, amountDone) {
+    return new Promise((resolve, reject) => {
+        const query = `
+            UPDATE UserTasks
+            SET HoursSpent = ?, AmountDone = ?
+            WHERE TaskID = ?
+        `;
+        db.run(query, [hoursSpent, amountDone, taskId], (err) => {
+            if (err) {
+                console.error('Error updating task progress:', err);
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
+    });
+}
 
-function updateTaskProgress(taskId, hoursSpent, amountDone) { 
-    return new Promise((resolve, reject) => { 
-        const query = ` 
-            UPDATE UserTasks 
-            SET HoursSpent = ?, AmountDone = ? 
-            WHERE TaskID = ? 
-        `; 
-        db.run(query, [hoursSpent, amountDone, taskId], (err) => { 
-            if (err) { 
-                console.error('Error updating task progress:', err); 
-                reject(err); 
-            } else { 
-                resolve(); 
-            } 
-        }); 
-    }); 
-} 
+
 
 // Function to insert a new milestone into the Milestones table 
 
@@ -461,6 +462,27 @@ function getMilestonesForTask(taskID) {
     }); 
 } 
 
+function updateMilestoneDeadline(milestoneId, newDeadline) {
+    return new Promise((resolve, reject) => {
+        const query = `
+            UPDATE Milestones
+            SET MilestoneDeadline = ?
+            WHERE MilestoneID = ?
+        `;
+        db.run(query, [newDeadline, milestoneId], function(err) {
+            if (err) {
+                console.error('Error updating milestone deadline:', err);
+                reject(err);
+            } else {
+                console.log(`Milestone ${milestoneId} deadline updated to ${newDeadline}`); // Add this line for debugging
+                resolve();
+            }
+        });
+    });
+}
+
+
+
 // Function to insert a new dependency into the Dependencies table 
 
 function insertNewDependency(taskID, dependencyID) { 
@@ -504,7 +526,7 @@ function updateTaskDeadline(taskID, newDeadline) {
     return new Promise((resolve, reject) => { 
         const query = ` 
             UPDATE StudyTasks 
-            SET Deadline = ? 
+            SET TaskDate = ? 
             WHERE TaskID = ? 
         `; 
         db.run(query, [newDeadline, taskID], function(err) { 
@@ -581,6 +603,59 @@ function getUserGanttData(userId) {
 }
 
 
+// Function to retrieve activities for a given task from the database 
+function getUserActivitiesForTask(taskID) { 
+    return new Promise((resolve, reject) => { 
+        const query = ` 
+            SELECT * FROM UserActivities 
+            WHERE TaskID = ? 
+        `; 
+        db.all(query, [taskID], (err, rows) => { 
+            if (err) { 
+                console.error('Error retrieving activities:', err); 
+                reject(err); 
+            } else { 
+                resolve(rows); // Return the activities for the task 
+            } 
+        }); 
+    }); 
+} 
+
+function getTaskById(taskId) {
+    return new Promise((resolve, reject) => {
+        const query = `
+            SELECT 
+                StudyTasks.*,
+                StudyTasks.Quantity AS TaskQuantity,
+                TaskTypes.TypeName,
+                Assessments.AssessmentName,
+                Modules.ModuleName,
+                UserTasks.HoursSpent,
+                UserTasks.AmountDone,
+                UserActivities.Quantity AS ActivityQuantity,
+                UserActivities.Notes,
+                UserActivities.ProgressMeasurement
+            FROM StudyTasks
+            JOIN TaskTypes ON StudyTasks.TaskTypeID = TaskTypes.TaskTypeID
+            JOIN Assessments ON StudyTasks.AssessmentID = Assessments.AssessmentID
+            JOIN Modules ON Assessments.ModuleID = Modules.ModuleID
+            LEFT JOIN UserTasks ON StudyTasks.TaskID = UserTasks.TaskID
+            LEFT JOIN UserActivities ON StudyTasks.TaskID = UserActivities.TaskID
+            WHERE StudyTasks.TaskID = ?
+        `;
+        db.get(query, [taskId], (err, row) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(row);
+            }
+        });
+    });
+}
+
+
+
+
 module.exports = {
     getAccount,
     getAccountByID,
@@ -616,6 +691,9 @@ module.exports = {
     getDependencies,
     updateTaskDeadline,
     getUserModuleAssessments,
-    getUserGanttData
+    getUserGanttData,
+    getUserActivitiesForTask,
+    updateMilestoneDeadline,
+    getTaskById
 };
 
