@@ -113,7 +113,16 @@ app.get('/tasks', checkAuth, async (req, res) => {
     }
 });
 
-
+app.get('/task-type-progress-measurements/:taskTypeId', async (req, res) => {
+    const { taskTypeId } = req.params;
+    try {
+        const measurements = await db.getProgressMeasurementsByTaskType(taskTypeId);
+        res.status(200).json(measurements);
+    } catch (err) {
+        console.error('Error fetching task type progress measurements:', err.message);
+        res.status(500).send("Internal Server Error");
+    }
+});
 
 app.get('/getModuleAssessments/:moduleID', async (req, res) => {
     try {
@@ -141,7 +150,7 @@ app.post('/progress', async (req, res) => {
 
     try {
         await db.updateTaskProgress(taskId, hoursSpent, amountDone);
-        res.status(200).send('Progress updated successfully.');
+        
     } catch (err) {
         console.error('Error updating task progress:', err.message);
         res.status(500).send("Internal Server Error");
@@ -150,8 +159,8 @@ app.post('/progress', async (req, res) => {
 app.post('/activities', async (req, res) => {
     const { userId, taskId, taskTypeId, quantity, notes, progressMeasurement } = req.body;
     try {
-        await db.insertNewActivity(userId, taskId, taskTypeId, quantity, notes, progressMeasurement);
-        res.status(200).json({ message: 'Activity added successfully' });
+        const activity = await db.insertNewActivity(userId, taskId, taskTypeId, quantity, notes, progressMeasurement);
+        res.status(200).json(activity);
     } catch (err) {
         console.error('Error inserting new activity:', err.message);
         res.status(500).send("Internal Server Error");

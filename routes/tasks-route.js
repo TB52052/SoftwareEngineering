@@ -2,7 +2,18 @@ const express = require('express');
 const router = express.Router();
 const db = require('../database/database.js');
 
+// Update task progress
+const updateTaskProgress = async (taskId, newActivityQuantity) => {
+    const task = await db.getTaskById(taskId);
+    const totalQuantity = task.HoursSpent + newActivityQuantity;
 
+    if (totalQuantity >= task.TaskQuantity) {
+        await db.updateTaskStatus(taskId, 'completed');
+    }
+    await db.updateTaskProgress(taskId, totalQuantity);
+};
+
+// Routes
 router.get('/', async (req, res) => {
     if (!req.session.user) {
         return res.redirect('/login');
@@ -13,34 +24,34 @@ router.get('/', async (req, res) => {
     try {
         const userTasksData = await db.getUserTasks(userId);
         const modules = await db.getUserModules(userId);
-        const assessments = []; // Initialize assessments array
+        const assessments = [];
 
-        // Fetch assessments for each module
         for (const module of modules) {
             const moduleAssessments = await db.getUserModuleAssessments(userId, module.ModuleID);
             assessments.push(...moduleAssessments);
         }
 
         const taskTypes = await db.getTaskTypes();
-
         const userTasks = [];
         const tasksMap = new Map();
 
-        // Fetch milestones for each task
         for (const taskData of userTasksData) {
             if (!tasksMap.has(taskData.TaskID)) {
                 const task = {
                     ...taskData,
                     activities: [],
-                    milestones: [] // Initialize milestones array
+                    milestones: []
                 };
                 tasksMap.set(taskData.TaskID, task);
                 userTasks.push(task);
             }
-        
+
             const task = tasksMap.get(taskData.TaskID);
             const milestones = await db.getMilestonesForTask(taskData.TaskID);
-            task.milestones = milestones; // Assign milestones to the task object
+            task.milestones = milestones;
+
+            const activities = await db.getUserActivitiesForTask(taskData.TaskID);
+            task.activities = activities;
         }
 
         res.render('tasks', { tasks: userTasks, modules, assessments, taskTypes, userId, user: req.session.user });
@@ -65,10 +76,8 @@ router.post('/', async (req, res) => {
             throw new Error('Missing required fields');
         }
 
-        // Insert the task first
         const taskID = await db.insertNewTask(assessmentID, userId, taskTypeID, timeSpent, taskDate, taskName, moduleID, quantity);
 
-        // Ensure milestoneName and milestoneDeadline are arrays
         const milestones = Array.isArray(milestoneName) ? milestoneName : [milestoneName];
         const deadlines = Array.isArray(milestoneDeadline) ? milestoneDeadline : [milestoneDeadline];
 
@@ -78,12 +87,11 @@ router.post('/', async (req, res) => {
             await db.insertNewMilestone(taskID, [milestones[i]], [deadlines[i]]);
         }
 
-       // Handle task dependencies
-    if (dependencies && dependencies.length > 0) {
-        for (let i = 0; i < dependencies.length; i++) {
-            await db.insertNewDependency(taskID, dependencies[i]);
+        if (dependencies && dependencies.length > 0) {
+            for (let i = 0; i < dependencies.length; i++) {
+                await db.insertNewDependency(taskID, dependencies[i]);
+            }
         }
-    }
 
         res.redirect('/tasks');
     } catch (err) {
@@ -92,64 +100,52 @@ router.post('/', async (req, res) => {
     }
 });
 
-
-// Endpoint to fetch ProgressMeasurement options based on TaskTypeID
-router.get('/progress-measurements/:taskTypeId', async (req, res) => {
-    const { taskTypeId } = req.params;
+router.post('/progress', async (req, res) => {
+    const { taskId, hoursSpent, amountDone } = req.body;
 
     try {
-        // Retrieve progress measurements based on TaskTypeID from the database
-        const progressMeasurements = await db.getProgressMeasurementsByTaskType(taskTypeId);
-        res.json(progressMeasurements);
+        console.log(`Updating progress for task ${taskId}: hoursSpent=${hoursSpent}, amountDone=${amountDone}`);
+        await updateTaskProgress(taskId, amountDone);
+        res.redirect('/tasks');
+    } catch (error) {
+        console.error('Error updating progress:', error);
+        res.status(500).json({ error: 'Error updating progress.' });
+    }
+});
+
+router.put('/milestone/:milestoneId', async (req, res) => {
+    const { newDeadline } = req.body;
+    const { milestoneId } = req.params;
+
+    try {
+        console.log(`Received request to update milestone ${milestoneId} with new deadline ${newDeadline}`);
+        await db.updateMilestoneDeadline(milestoneId, newDeadline);
+        res.redirect('/tasks');
     } catch (err) {
-        console.error('Error retrieving progress measurements:', err.message);
+        console.error('Error updating milestone deadline:', err.message);
         res.status(500).send("Internal Server Error");
     }
 });
 
-
-
-router.post('/progress', async (req, res) => {
-    const { taskId, hoursSpent, amountDone, progressMeasurement, quantity, notes } = req.body;
-
-    try {
-        console.log(`Updating progress for task ${taskId}: hoursSpent=${hoursSpent}, amountDone=${amountDone}, progressMeasurement=${progressMeasurement}, quantity=${quantity}, notes=${notes}`);
-        await db.updateTaskProgress(taskId, hoursSpent, amountDone, progressMeasurement, quantity, notes);
-        res.status(200).send('Progress updated successfully.');
-    } catch (error) {
-        console.error('Error updating progress:', error);
-        res.status(500).send('Error updating progress.');
-    }
-});
-
-
-// Endpoint to add a new activity
 router.post('/activities', async (req, res) => {
-    // Check if user is logged in
     if (!req.session.user) {
         return res.redirect('/login');
     }
 
-    // Extract data from the request body
     const { quantity, notes, progressMeasurement } = req.body;
-
-    // Retrieve userId, taskId, and taskTypeId from the session or task context
     const userId = req.session.user.id;
     const taskId = req.session.currentTask.id;
     const taskTypeId = req.session.currentTask.typeId;
 
     try {
-        // Insert new activity into the database
         await db.insertNewActivity(userId, taskId, taskTypeId, quantity, notes, progressMeasurement);
-        res.redirect('/tasks'); // Redirect to tasks page after adding activity
+        res.redirect('/tasks');
     } catch (err) {
         console.error('Error inserting new activity:', err.message);
         res.status(500).send("Internal Server Error");
     }
 });
 
-
-// Route to update task status
 router.put('/:taskId', async (req, res) => {
     if (!req.session.user) {
         return res.redirect('/login');
@@ -160,13 +156,13 @@ router.put('/:taskId', async (req, res) => {
 
     try {
         await db.updateTaskStatus(taskId, status);
-        res.sendStatus(200);
+        res.redirect('/tasks');
     } catch (err) {
         console.error('Error updating task status:', err.message);
         res.status(500).send("Internal Server Error");
     }
 });
-// Route to update a task's deadline
+
 router.post('/:taskID', async (req, res) => {
     const { newDeadline } = req.body;
     const { taskID } = req.params;
@@ -180,18 +176,16 @@ router.post('/:taskID', async (req, res) => {
     }
 });
 
-router.put('/milestone/:milestoneId', async (req, res) => {
-    const { newDeadline } = req.body;
-    const { milestoneId } = req.params;
-
+// New route to get progress measurements for a specific task type
+router.get('/progress-measurements/:taskTypeId', async (req, res) => {
+    const { taskTypeId } = req.params;
     try {
-        await db.updateMilestoneDeadline(milestoneId, newDeadline);
-        res.sendStatus(200);
+        const measurements = await db.getProgressMeasurementsByTaskType(taskTypeId);
+        res.status(200).json(measurements);
     } catch (err) {
-        console.error('Error updating milestone deadline:', err.message);
+        console.error('Error fetching task type progress measurements:', err.message);
         res.status(500).send("Internal Server Error");
     }
 });
-
 
 module.exports = router;

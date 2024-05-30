@@ -1,440 +1,655 @@
-/* Task Section Styles */ 
-
-/* Add New Task Section */ 
-
+/* Add New Task Section */
 .add-task-section {
-    background-color: #f8f9fa;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 30px;
-    max-height: calc(100vh - 150px);
-    overflow-y: auto;
+    background-color: #fff;
+    padding: 0; /* Ensure no padding at the top */
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    margin-bottom: 40px;
+    width: 50%;
+    max-height: 80vh; /* Increase Max height with scrolling */
+    overflow-y: auto; /* Enable vertical scrolling */
     transition: all 0.4s ease;
-    width: 50%; /* Make the form more compact */
-    margin: 0 auto; /* Center the form */
+    border: 2px solid #3498db;
 }
 
 .add-task-section .form-title {
+    position: sticky;
+    top: 0;
+    background-color: #fff; /* Same as section background */
+    z-index: 1;
+    padding: 15px 0;
     color: #2c3e50;
-    margin-bottom: 20px;
-    font-size: 24px; /* Reduce the font size */
+    font-size: 26px;
     font-weight: bold;
     text-transform: uppercase;
     text-align: center;
+    letter-spacing: 1.5px;
+    margin: 0; /* Ensure no margin at the top */
 }
 
 .add-task-section label {
     font-weight: bold;
     display: block;
     margin-bottom: 10px;
-    font-size: 16px; /* Reduce the font size */
+    font-size: 18px;
     color: #34495e;
 }
 
 .add-task-section input[type="text"],
+.add-task-section input[type="number"],
+.add-task-section input[type="date"],
 .add-task-section select,
 .add-task-section textarea {
-    width: calc(100% - 24px);
-    padding: 12px;
+    width: 100%;
+    padding: 15px;
     border: 1px solid #bdc3c7;
-    border-radius: 6px;
+    border-radius: 8px;
     box-sizing: border-box;
-    margin-bottom: 12px;
-    font-size: 16px; /* Reduce the font size */
+    margin-bottom: 20px;
+    font-size: 16px;
     transition: border 0.4s ease, box-shadow 0.4s ease;
+}
+
+.add-task-section input[type="text"]:focus,
+.add-task-section input[type="number"]:focus,
+.add-task-section input[type="date"]:focus,
+.add-task-section select:focus,
+.add-task-section textarea:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
 }
 
 .add-task-section button[type="submit"] {
     background-color: #3498db;
     color: #fff;
-    padding: 12px 24px;
+    padding: 15px;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
     width: 100%;
-    font-size: 16px; /* Reduce the font size */
-    margin-top: 12px;
+    font-size: 18px;
+    margin-top: 20px;
     transition: background-color 0.4s ease, transform 0.4s ease;
 }
 
-.add-task-section .input-group {
-    display: flex; /* Make the label and input field sit side by side */
-    justify-content: space-between; /* Add some space between the label and input field */
-    align-items: center; /* Align the label and input field vertically */
+.add-task-section button[type="submit"]:hover {
+    background-color: #2980b9;
+    transform: scale(1.02);
 }
 
-.add-task-section .input-group label {
-    width: 30%; /* Assign a width to the label */
+.milestone-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
 }
 
-.add-task-section .input-group input,
-.add-task-section .input-group select {
-    width: 65%; /* Assign a width to the input field and select dropdown */
+.milestone-container label {
+    width: 40%;
 }
 
-/* Existing Tasks Section */ 
-.tasks-section { 
-    background-color: #f9f9f9; 
-    padding: 20px; 
-    border: 2px solid #3498db; /* Add a border around the section */ 
-    border-radius: 8px; 
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
-    width: 100%; 
-    flex-grow: 1; 
-    height: calc(100% - 30px); 
-    overflow-y: auto; 
-    transition: all 0.3s ease; 
-    font-family: 'Arial', sans-serif; /* Change the font */ 
-} 
-
-.tasks-section:hover { 
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); 
-} 
-
- 
-
-.tasks-section h2 { 
-    color: #333; 
-    margin-bottom: 20px; 
-    text-transform: uppercase; 
-    text-align: center; 
-    font-size: 24px; 
-    font-weight: bold; 
-    letter-spacing: 1px; 
-} 
-
-.task-list { 
-    height: 350px; 
-    overflow-y: auto; 
-    display: flex; 
-    flex-direction: column; 
-    width: 100%; /* Make the task list go the width of the page */ 
-    box-sizing: border-box; /* Include padding and border in element's total width */
-} 
-
-.task-item { 
-    border: 1px solid #ccc; 
-    border-radius: 5px; 
-    padding: 5px; /* Reduce padding */
-    margin-bottom: 20px; /* Reduce space between items */
-    display: flex; 
-    flex-direction: column; 
-    justify-content: flex-start; 
-    align-items: flex-start; 
-    flex-wrap: nowrap; 
-    position: relative; 
-} 
-
-.task-info { 
-    flex-grow: 1; 
-    background-color: #f9f9f9; 
-    padding: 5px; /* Further reduce padding */
-    border-radius: 5px; 
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
-    transition: all 0.3s ease; 
-    border-left: 5px solid #3498db; /* Add a left border */ 
+.milestone-container input[type="text"],
+.milestone-container input[type="date"] {
+    width: 60%;
 }
-
-.task-info h3 { 
-    color: #3498db; 
-    font-size: 24px; 
-    text-transform: uppercase; 
-    margin-bottom: 10px; 
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Add a text shadow */ 
-} 
-
-
-.task-info p { 
-    color: #2c3e50; 
-    font-size: 16px; 
-    line-height: 1.6; 
-    border-bottom: 1px solid #bdc3c7; /* Add a bottom border */ 
-    padding-bottom: 5px; /* Add some padding to the bottom */ 
-    margin-bottom: 5px; /* Add some margin to the bottom */ 
-} 
-
- 
-
-.task-info .task-deadline { 
-
-    color: #e74c3c; 
-
-    font-weight: bold; 
-
-    font-size: 18px; /* Increase the font size */ 
-
-    text-decoration: underline; /* Underline the text */ 
-
-} 
-
- 
-
-.task-actions { 
-
-    display: flex; 
-
-    gap: 10px; 
-
-    margin-top: 10px; 
-
-    width: 100%; 
-
-    position: relative; /* Ensure relative positioning for absolute positioning of bubble boxes */ 
-
-} 
-
- 
-
- 
-
-.task-actions button { 
-
-    background-color: #3498db; 
-
-    color: #fff; 
-
-    padding: 10px 20px; 
-
-    border: none; 
-
-    border-radius: 6px; 
-
-    cursor: pointer; 
-
-    margin-left: 10px; 
-
-    transition: background-color 0.4s ease; 
-
-} 
-
- 
-
-.task-actions button:hover { 
-
-    background-color: #2980b9; 
-
-} 
-
- 
-
-.task-progress-section, .study-progress-section, .task-activities, .update-deadline-section { 
-
-    display: none; 
-
-    margin-top: 10px; 
-
-    width: 100%; 
-
-} 
-
- 
-
- 
-
-.task-progress-section h4, 
-
-.study-progress-section h4, 
-
-.task-activities h4, .update-deadline-section h4{ 
-
-    margin-bottom: 10px; 
-
-    font-size: 18px; 
-
-    font-weight: bold; 
-
-} 
-
- 
-
-.task-progress-section.active, 
-
-.study-progress-section.active, 
-
-.task-activities.active, .update-deadline-section.active { 
-
-    display: block; 
-
-} 
-
- 
-
-.bubble-box.active { 
-
-    display: block; 
-
-} 
-
- 
-
-.input-group { 
-
-    margin-bottom: 15px; 
-
-} 
-
- 
-
-.input-group label { 
-
-    font-weight: bold; 
-
-    display: block; 
-
-    margin-bottom: 5px; 
-
-    font-size: 16px; 
-
-    color: #34495e; 
-
-} 
-
- 
-
-.input-group input, 
-
-.input-group textarea, 
-
-.input-group select { 
-
-    width: 100%; 
-
-    padding: 10px; 
-
-    border: 1px solid #bdc3c7; 
-
-    border-radius: 6px; 
-
-    font-size: 16px; 
-
-    box-sizing: border-box; 
-
-    transition: border 0.4s ease, box-shadow 0.4s ease; 
-
-} 
-
- 
-
-.input-group input:focus, 
-
-.input-group textarea:focus, 
-
-.input-group select:focus { 
-
-    border-color: #3498db; 
-
-    box-shadow: 0 0 6px rgba(52, 152, 219, 0.7); 
-
-} 
-
- 
-
-.button-group { 
-
-    display: flex; 
-
-    justify-content: flex-end; 
-
-} 
-
- 
-
-.button-group button { 
-
-    background-color: #3498db; 
-
-    color: #fff; 
-
-    padding: 10px 20px; 
-
-    border: none; 
-
-    border-radius: 6px; 
-
-    cursor: pointer; 
-
-    transition: background-color 0.4s ease; 
-
-} 
-
- 
-
-.button-group button:hover { 
-
-    background-color: #2980b9; 
-
-} 
-
- 
-
- 
-
-.mark-as-done { 
-
-    background-color: #e74c3c; 
-
-    color: #fff; 
-
-    padding: 12px 24px; 
-
-    border: none; 
-
-    border-radius: 6px; 
-
-    cursor: pointer; 
-
-    width: 100%; 
-
-    font-size: 18px; 
-
-    margin-top: 20px; 
-
-    transition: background-color 0.4s ease, transform 0.4s ease; 
-
-} 
-
- 
-
-.mark-as-done:hover { 
-
-    background-color: #c0392b; 
-
-    transform: scale(1.05); 
-
-} 
-
- 
-
-#taskDependencies { 
-
-    height: 150px; /* Increase the height to show more options at once */ 
-
-    width: 100%; /* Use the full width of the parent element */ 
-
-} 
-
- 
-
-#taskDependencies option:checked { 
-
-    background-color: #3498db; /* Change the background color of selected options */ 
-
-    color: #fff; /* Change the text color of selected options */ 
-
-} 
 
 .add-milestone-btn {
-    background-color: #3498db; /* Primary color */
-    color: #fff; /* Text color */
-    border: none; /* Remove default border */
-    padding: 10px 20px; /* Padding around the text */
-    border-radius: 5px; /* Rounded corners */
-    font-size: 16px; /* Text size */
-    cursor: pointer; /* Change cursor to pointer when hovering over the button */
-    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.4s ease, transform 0.4s ease;
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
 }
 
 .add-milestone-btn:hover {
-    background-color: #2980b9; /* Darken the background color a bit when hovering */
+    background-color: #2980b9;
+    transform: scale(1.02);
+}
+
+.additional-milestone {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.additional-milestone .input-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.additional-milestone .input-group label {
+    width: 40%;
+}
+
+.additional-milestone .input-group input[type="text"],
+.additional-milestone .input-group input[type="date"] {
+    width: 60%;
+}
+
+/* Existing Tasks Section */
+.tasks-section {
+    background-color: #ffffff;
+    padding: 0; /* Ensure no padding at the top */
+    border: 2px solid #3498db;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    flex-grow: 1;
+    max-height: 80vh; /* Increase Max height with scrolling */
+    overflow-y: auto;
+    transition: all 0.3s ease;
+}
+
+.tasks-section:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.tasks-section h2 {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    z-index: 1;
+    padding: 15px 0;
+    color: #333;
+    margin: 0; /* Ensure no margin at the top */
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 26px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+}
+
+.task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.task-item {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #fafafa;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.task-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.task-info h3 {
+    color: #3498db;
+    font-size: 24px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.task-info p {
+    color: #2c3e50;
+    font-size: 16px;
+    line-height: 1.6;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.task-info p:not(:last-child) {
+    border-bottom: 1px solid #bdc3c7;
+}
+
+.task-info .task-deadline {
+    color: #e74c3c;
+    font-weight: bold;
+    font-size: 18px;
+    text-decoration: underline;
+}
+
+.task-info .hours-spent,
+.task-info .activity-quantity {
+    font-size: 18px;
+    font-weight: bold;
+    color: #27ae60;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.task-actions {
+    display: flex;
+    justify-content: space-between; /* Distribute buttons evenly */
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap; /* Allow wrapping if necessary */
+}
+
+.task-actions button {
+    flex: 1; /* Make buttons grow to fill available space */
+    background-color: #3498db;
+    color: #fff;
+    padding: 12px 15px; /* Adjust padding for a sleeker look */
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px; /* Reduce font size for better fit */
+    text-align: center;
+    transition: background-color 0.4s ease, transform 0.4s ease, box-shadow 0.3s ease;
+}
+
+.task-actions button:hover {
+    background-color: #2980b9;
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow on hover */
+}
+
+.task-actions button:active {
+    transform: scale(1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add shadow on active */
+}
+
+.task-progress-section,
+.study-progress-section,
+.task-activities,
+.update-deadline-section {
+    display: none;
+    margin-top: 20px;
+    width: 100%;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.task-progress-section h4,
+.study-progress-section h4,
+.task-activities h4,
+.update-deadline-section h4 {
+    margin-bottom: 15px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #2c3e50;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+}
+
+.task-progress-section.active,
+.study-progress-section.active,
+.task-activities.active,
+.update-deadline-section.active {
+    display: block;
+}
+
+.task-activities .activity {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.task-activities .activity:hover {
+    background-color: #f1f1f1;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.task-activities .activity p {
+    margin: 5px 0;
+    font-size: 16px;
+    color: #34495e;
+}
+
+.task-activities .activity p strong {
+    color: #3498db;
+    font-weight: bold;
+}
+
+/* Adjustments for Better Layout */
+.bubble-box {
+    background-color: #f7f7f7;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    transition: all 0.3s ease;
+}
+
+.bubble-box h4 {
+    margin-bottom: 20px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #2c3e50;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+}
+
+.bubble-box.active {
+    display: block;
+}
+
+/* Input Group Styling */
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 16px;
+    color: #34495e;
+    font-weight: bold;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #bdc3c7;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input-group input:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+}
+
+.input-group input,
+.input-group textarea,
+.input-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #bdc3c7;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input-group input:focus,
+.input-group textarea:focus,
+.input-group select:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+}
+
+.button-group {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.button-group button {
+    background-color: #3498db;
+    color: #fff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.4s ease, transform 0.4s ease;
+}
+
+.button-group button:hover {
+    background-color: #2980b9;
+    transform: scale(1.05);
+}
+
+.mark-as-done {
+    background-color: #e74c3c;
+    color: #fff;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 18px;
+    margin-top: 20px;
+    transition: background-color 0.4s ease, transform 0.4s ease;
+}
+
+.mark-as-done:hover {
+    background-color: #c0392b;
+    transform: scale(1.05);
+}
+
+/* Specific Button Styles */
+.update-progress-btn,
+.update-deadline-btn {
+    background-color: #27ae60;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.4s ease, transform 0.4s ease;
+}
+
+.update-progress-btn:hover,
+.update-deadline-btn:hover {
+    background-color: #1e8449;
+    transform: scale(1.05);
+}
+
+.update-progress-form button[type="submit"],
+.study-progress-form button[type="submit"],
+.update-deadline-form button[type="submit"] {
+    background-color: #3498db;
+    color: #fff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.4s ease, transform 0.4s ease;
+}
+
+.update-progress-form button[type="submit"]:hover,
+.study-progress-form button[type="submit"]:hover,
+.update-deadline-form button[type="submit"]:hover {
+    background-color: #2980b9;
+    transform: scale(1.05);
+}
+
+.delete-task-button {
+    background-color: #e74c3c;
+    color: #fff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.4s ease;
+}
+
+.delete-task-button:hover {
+    background-color: #c0392b;
+}
+
+.show-less,
+.show-more {
+    color: #3498db;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.show-less:hover,
+.show-more:hover {
+    text-decoration: underline;
+}
+
+#taskDependencies {
+    height: 150px;
+    width: 100%;
+}
+
+#taskDependencies option:checked {
+    background-color: #3498db;
+    color: #fff;
+}
+
+.add-milestone-btn {
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.add-milestone-btn:hover {
+    background-color: #2980b9;
+}
+
+/* Milestones Section */
+.milestones-section {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.milestones-section h4 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #2c3e50;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.milestone-list {
+    list-style: none;
+    padding: 0;
+}
+
+.milestone-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    margin-bottom: 10px;
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.milestone-item:hover {
+    background-color: #e9e9e9;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.milestone-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.milestone-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #3498db;
+    margin-bottom: 5px;
+}
+
+.milestone-deadline {
+    font-size: 16px;
+    color: #2c3e50;
+}
+
+.update-milestone-deadline-btn {
+    background-color: #3498db;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.4s ease, transform 0.4s ease, box-shadow 0.3s ease;
+}
+
+.update-milestone-deadline-btn:hover {
+    background-color: #2980b9;
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.update-milestone-deadline-section {
+    display: none;
+    margin-top: 10px;
+    padding: 15px;
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.update-milestone-deadline-section.active {
+    display: block;
+}
+
+.update-milestone-deadline-section h4 {
+    margin-bottom: 15px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.update-milestone-deadline-section .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.update-milestone-deadline-section .input-group label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #34495e;
+}
+
+.update-milestone-deadline-section .input-group input[type="date"] {
+    padding: 10px;
+    border: 1px solid #bdc3c7;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.update-milestone-deadline-section .input-group input[type="date"]:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 6px rgba(52, 152, 219, 0.3);
+}
+
+.update-milestone-deadline-section .update-milestone-deadline-submit-btn {
+    background-color: #27ae60;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.4s ease, transform 0.4s ease;
+}
+
+.update-milestone-deadline-section .update-milestone-deadline-submit-btn:hover {
+    background-color: #1e8449;
+    transform: scale(1.05);
 }
