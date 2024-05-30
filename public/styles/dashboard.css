@@ -10,12 +10,12 @@
 .tabs {
     display: flex;
     flex-direction: column;
-    justify-content: space-around; /* Distributes buttons evenly */
+    justify-content: flex-start; /* Align buttons to the top */
     align-items: flex-start;
     padding: 20px;
     background-color: #ffffff;
     border-right: 1px solid #ddd;
-    height: calc(100vh - 120px); /* Adjust height based on header and padding */
+    height: calc(100vh - 120px);
 }
 
 .tablinks {
@@ -23,10 +23,10 @@
     border: 1px solid #ddd;
     border-radius: 5px;
     cursor: pointer;
-    padding: 20px 30px; /* Increased padding */
-    margin-bottom: 20px; /* Increased gap */
+    padding: 10px 20px; /* Reduced padding */
+    margin-bottom: 10px; /* Reduced gap */
     text-align: left;
-    font-size: 18px; /* Increased font size */
+    font-size: 16px; /* Slightly reduced font size */
     color: #555;
     transition: background-color 0.3s, box-shadow 0.3s;
     width: 100%;
@@ -48,7 +48,7 @@
     padding: 20px;
     flex-grow: 1;
     overflow-y: auto;
-    height: calc(100vh - 120px); /* Adjust height based on header and padding */
+    height: calc(100vh - 120px);
 }
 
 .deadline-card {
@@ -119,7 +119,7 @@
 }
 
 .left-side {
-    flex: 1;
+    flex: 0.3; /* Reduced width */
     background-color: #f9f9f9;
     padding: 20px;
     border-right: 1px solid #ddd;
@@ -143,7 +143,7 @@
 .progress-bar {
     height: 20px;
     border-radius: 10px;
-    background-color: #ddd;
+    background-color:  #8BC34A;
     overflow: hidden;
     position: relative;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
@@ -156,9 +156,9 @@
     top: 0;
     left: 0;
     height: 100%;
+    /* Change the background gradient to green */
     background: linear-gradient(to right, #4CAF50, #8BC34A);
     transition: width 0.3s ease-in-out;
-    background: var(--progress-bar-color, linear-gradient(to right, #4CAF50, #8BC34A));
 }
 
 .progress-bar span {

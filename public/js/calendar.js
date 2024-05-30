@@ -1,9 +1,5 @@
 let currentMonth = new Date().getMonth();
 let currentYear = new Date().getFullYear();
-let cache = {
-    assessments: {},
-    tasks: {}
-};
 let currentUserId = 5; // Use correct user ID
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -38,44 +34,16 @@ async function showCalendar(month, year, userId) {
         }
         calendarBody.appendChild(row);
     }
+
     await fetchEventsAndTasks(userId, year, month);
     addEventListenersToEvents();
 }
 
 async function fetchEventsAndTasks(userId, year, month) {
-    const cacheKey = `${userId}-${year}-${month + 1}`;
-
-    // Ensure calendar is cleared before adding new events
     clearCalendarEvents();
 
-    if (!cache.assessments[cacheKey]) {
-        await fetchAssessments(userId, year, month);
-    } else {
-        console.log('Using cached assessments:', cache.assessments[cacheKey]);
-        cache.assessments[cacheKey].forEach(assessment => {
-            const dateParts = assessment.AssessmentDate.split('/');
-            const assessmentDate = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
-            if (assessmentDate.getFullYear() === year && assessmentDate.getMonth() === month) {
-                addAssessmentToCalendar(assessmentDate.getDate(), assessment);
-            }
-        });
-    }
-
-    if (!cache.tasks[cacheKey]) {
-        await fetchTasks(userId, year, month);
-    } else {
-        console.log('Using cached tasks:', cache.tasks[cacheKey]);
-        cache.tasks[cacheKey].forEach(task => {
-            const date = new Date(task.TaskDate);
-            if (date.getFullYear() === year && date.getMonth() === month) {
-                addTaskToCalendar(date.getDate(), task);
-            }
-        });
-    }
-}
-
-async function fetchData(userId, year, month) {
-    await Promise.all([fetchAssessments(userId, year, month), fetchTasks(userId, year, month)]);
+    await fetchAssessments(userId, year, month);
+    await fetchTasks(userId, year, month);
 }
 
 async function fetchAssessments(userId, year, month) {
@@ -85,9 +53,6 @@ async function fetchAssessments(userId, year, month) {
         const assessments = await response.json();
 
         console.log('Assessments fetched:', assessments);
-
-        const cacheKey = `${userId}-${year}-${month + 1}`;
-        cache.assessments[cacheKey] = assessments;
 
         assessments.forEach(assessment => {
             console.log('Processing assessment:', assessment);
@@ -111,14 +76,11 @@ async function fetchTasks(userId, year, month) {
 
         console.log('Tasks fetched:', tasks);
 
-        const cacheKey = `${userId}-${year}-${month + 1}`;
-        cache.tasks[cacheKey] = tasks;
-
         tasks.forEach(task => {
             console.log('Processing task:', task);
-            const date = new Date(task.TaskDate);
-            if (date.getFullYear() === year && date.getMonth() === month) {
-                addTaskToCalendar(date.getDate(), task);
+            const taskDate = new Date(task.TaskDate);
+            if (taskDate.getFullYear() === year && taskDate.getMonth() === month) {
+                addTaskToCalendar(taskDate.getDate(), task);
             }
         });
 
@@ -138,7 +100,7 @@ function addAssessmentToCalendar(day, assessment) {
     cells.forEach(cell => {
         const eventDiv = document.createElement('div');
         eventDiv.classList.add('event', 'assessment-event');  // Added class for assessments
-        eventDiv.textContent = assessment.AssessmentName;
+        eventDiv.textContent = `${assessment.ModuleID} - ${assessment.AssessmentName}`;
         eventDiv.setAttribute('data-module-name', assessment.ModuleName);
         eventDiv.setAttribute('data-assessment-name', assessment.AssessmentName);
         eventDiv.setAttribute('data-assessment-type', assessment.AssessmentType);
@@ -161,21 +123,21 @@ function addAssessmentToCalendar(day, assessment) {
 
 function addTaskToCalendar(day, task) {
     const cells = document.querySelectorAll(`td[data-date="${day}"][data-month="${currentMonth + 1}"][data-year="${currentYear}"]`);
-    console.log(`Adding task: ${task.AssessmentName} on day ${day}`, task);
+    console.log(`Adding task: ${task.TaskName} on day ${day}`, task);
     cells.forEach(cell => {
         const eventDiv = document.createElement('div');
         eventDiv.classList.add('event', 'task-event');  // Added class for tasks
-        eventDiv.textContent = task.AssessmentName;
+        eventDiv.textContent = `${task.ModuleID} - ${task.TaskName}`;
         eventDiv.setAttribute('data-module-name', task.ModuleName);
-        eventDiv.setAttribute('data-assessment-name', task.AssessmentName);
+        eventDiv.setAttribute('data-task-name', task.TaskName);
         eventDiv.setAttribute('data-type-name', task.TypeName);
         eventDiv.setAttribute('data-time-spent', task.TimeSpent);
         eventDiv.addEventListener('click', () => {
             openTaskModal(
                 task.ModuleName,
-                task.AssessmentName,
+                task.TaskName,
                 task.TypeName,
-                task.description || 'No additional details provided.',
+                task.Notes || 'No additional details provided.',
                 task.TaskDate,
                 task.TimeSpent
             );
@@ -213,18 +175,18 @@ function openAssessmentModal(moduleName, assessmentName, typeName, description, 
     modal.style.display = 'block'; // Show the modal
 }
 
-function openTaskModal(moduleName, assessmentName, typeName, description, date, timeSpent) {
-    console.log("Modal opening with data:", moduleName, assessmentName, typeName, description, date, timeSpent);
+function openTaskModal(moduleName, taskName, typeName, description, date, timeSpent) {
+    console.log("Modal opening with data:", moduleName, taskName, typeName, description, date, timeSpent);
     const modal = document.getElementById('modal');
     const detailsElement = document.getElementById('modal-details');
     const formattedDate = new Date(date).toLocaleDateString();
     detailsElement.innerHTML = `
-        <h2>${assessmentName}</h2>
+        <h2>${taskName}</h2>
         <p><strong>Module:</strong> ${moduleName}</p>
         <p><strong>Type:</strong> ${typeName}</p>
         <p><strong>Description:</strong> ${description}</p>
         <p><strong>Date:</strong> ${formattedDate}</p>
-        <p><strong>Time Spent:</strong> ${timeSpent} minutes</p>
+        <p><strong>Time Spent:</strong> ${timeSpent} hours</p>
     `;
     modal.style.display = 'block'; // Show the modal
 }

@@ -45,6 +45,7 @@ app.use('/logout', logoutRoute);
 
 
 app.get('/', (req, res) => {
+    res.redirect('/profile');
     if (req.session && req.session.user) {
         return res.redirect('/profile');
     }
@@ -113,16 +114,7 @@ app.get('/tasks', checkAuth, async (req, res) => {
     }
 });
 
-app.get('/task-type-progress-measurements/:taskTypeId', async (req, res) => {
-    const { taskTypeId } = req.params;
-    try {
-        const measurements = await db.getProgressMeasurementsByTaskType(taskTypeId);
-        res.status(200).json(measurements);
-    } catch (err) {
-        console.error('Error fetching task type progress measurements:', err.message);
-        res.status(500).send("Internal Server Error");
-    }
-});
+
 
 
 app.get('/getModuleAssessments/:moduleID', async (req, res) => {
@@ -141,6 +133,7 @@ app.get('/getModuleAssessments/:moduleID', async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });
+
 
 
 app.get('/api/user/:userId/tasks', async (req, res) => {
@@ -169,12 +162,24 @@ app.post('/progress', async (req, res) => {
 app.post('/activities', async (req, res) => {
     const { userId, taskId, taskTypeId, quantity, notes, progressMeasurement } = req.body;
     try {
-        const activity = await db.insertNewActivity(userId, taskId, taskTypeId, quantity, notes, progressMeasurement);
-        res.status(200).json(activity);
+        await db.insertNewActivity(userId, taskId, taskTypeId, quantity, notes, progressMeasurement);
+        res.status(200).json({ message: 'Activity added successfully' });
     } catch (err) {
         console.error('Error inserting new activity:', err.message);
         res.status(500).send("Internal Server Error");
     }
 });
+
+app.get('/api/user/:userId/gantt-data', async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const ganttData = await db.getUserGanttData(userId); 
+        res.json(ganttData);
+    } catch (err) {
+        console.error('Error fetching Gantt data:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 
 app.listen(PORT);

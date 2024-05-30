@@ -66,13 +66,24 @@ function comparePassword(password, hash) {
 function getUserAssessments(userId) {
     return new Promise((resolve, reject) => {
         const sql = `
-            SELECT 
-            UserAssessments.*, 
-            Assessments.AssessmentName, Assessments.ModuleID
-            FROM UserAssessments
-            JOIN Assessments ON UserAssessments.AssessmentID = Assessments.AssessmentID
-            WHERE UserAssessments.UserID = ?
-        `;
+        SELECT 
+            a.AssessmentID,
+            a.ModuleID,
+            a.AssessmentType,
+            a.AssessmentName,
+            a.AssessmentDescription,
+            a.AssessmentDate,
+            a.Weighting,
+            m.ModuleName
+        FROM 
+            Assessments a
+        JOIN 
+            Modules m ON a.ModuleID = m.ModuleID
+        JOIN 
+            UserModules um ON m.ModuleID = um.ModuleID
+        WHERE 
+            um.UserID = ?
+`;
         db.all(sql, [userId], (err, rows) => {
             if (err) {
                 reject(err);
@@ -211,7 +222,7 @@ function deleteModules(userID) {
     });
 }
 
-function getUserModules(userID,) {
+function getUserModules(userID) {
     return new Promise((resolve, reject) => {
         const query = `
             SELECT Modules.*
@@ -546,6 +557,51 @@ function getUserModuleAssessments(userID, moduleID) {
         });
     });
 }
+function getUserGanttData(userId) {
+    return new Promise((resolve, reject) => {
+        const sql = `
+        SELECT 
+            a.AssessmentID,
+            a.ModuleID,
+            a.AssessmentType,
+            a.AssessmentName,
+            a.AssessmentDescription,
+            a.AssessmentDate,
+            a.Weighting,
+            m.ModuleName,
+            t.TaskID,
+            t.TaskName,
+            t.TaskDate,
+            t.TimeSpent,
+            t.Status,
+            t.Quantity,
+            d.DependencyID
+        FROM 
+            Assessments a
+        JOIN 
+            Modules m ON a.ModuleID = m.ModuleID
+        JOIN 
+            UserModules um ON m.ModuleID = um.ModuleID
+        LEFT JOIN 
+            StudyTasks t ON a.AssessmentID = t.AssessmentID
+        LEFT JOIN 
+            Dependencies d ON t.TaskID = d.TaskID
+        WHERE 
+            um.UserID = ?
+        ORDER BY 
+            a.AssessmentDate, t.TaskDate;
+        `;
+        db.all(sql, [userId], (err, rows) => {
+            if (err) {
+                console.error('Error executing SQL:', err.message);
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+}
+
 
 
 
@@ -637,6 +693,7 @@ module.exports = {
     getDependencies,
     updateTaskDeadline,
     getUserModuleAssessments,
+    getUserGanttData,
     getUserActivitiesForTask,
     updateMilestoneDeadline,
     getTaskById
