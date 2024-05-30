@@ -3,109 +3,193 @@
 <head>
     <%- include('partials/global-head') %>
     <%- include('partials/main-page-head') %>
-  <title>Study Planner Gantt Chart</title>
-  <link rel="stylesheet" href="/styles/global.css"> Link to global stylesheet
-  <link rel="stylesheet" href="/styles/gantt.css"> Link to the new Gantt stylesheet
-  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-  <script type="text/javascript">
-    google.charts.load('current', {'packages':['gantt']});
-    google.charts.setOnLoadCallback(drawChart);
+    <title>Study Planner Gantt Chart</title>
+    <link rel="stylesheet" href="/styles/global.css">
+    <link rel="stylesheet" href="/styles/gantt.css">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {'packages':['gantt']});
+        google.charts.setOnLoadCallback(drawChart);
 
-    async function drawChart() {
-      const userId = 5; // Replace with dynamic user ID if needed
-      const data = await fetchGanttData(userId);
+        async function drawChart() {
+            try {
+                const userId = 5; // Replace with dynamic user ID if needed
+                const assessments = await fetchUserAssessments(userId);
+                const tasks = await fetchUserTasks(userId);
 
-      var dataTable = new google.visualization.DataTable();
-      dataTable.addColumn('string', 'Task ID');
-      dataTable.addColumn('string', 'Task Name');
-      dataTable.addColumn('string', 'Resource');
-      dataTable.addColumn('date', 'Start Date');
-      dataTable.addColumn('date', 'End Date');
-      dataTable.addColumn('number', 'Duration');
-      dataTable.addColumn('number', 'Percent Complete');
-      dataTable.addColumn('string', 'Dependencies');
+                console.log("Assessments Data:", JSON.stringify(assessments, null, 2));
+                console.log("Tasks Data:", JSON.stringify(tasks, null, 2));
 
-      data.forEach(task => {
-        dataTable.addRow([
-          task.id,
-          task.name,
-          task.resource,
-          new Date(task.startDate),
-          new Date(task.endDate),
-          null,
-          task.percentComplete,
-          task.dependencies
-        ]);
-      });
+                var dataTable = new google.visualization.DataTable();
+                dataTable.addColumn('string', 'Task ID');
+                dataTable.addColumn('string', 'Task Name');
+                dataTable.addColumn('string', 'Resource');
+                dataTable.addColumn('date', 'Start Date');
+                dataTable.addColumn('date', 'End Date');
+                dataTable.addColumn('number', 'Duration');
+                dataTable.addColumn('number', 'Percent Complete');
+                dataTable.addColumn('string', 'Dependencies');
 
-      var options = {
-        height: 400,
-        backgroundColor: { fill: 'white' },
-        gantt: {
-          trackHeight: 30,
-          barHeight: 20,
-          barCornerRadius: 5,
-          arrow: {
-            angle: 45,
-            width: 2,
-            color: '#757575',
-            radius: 15,
-            length: 8,
-            spaceAfter: 4
-          },
-          labelStyle: {
-            fontName: 'Roboto-Medium',
-            fontSize: 14,
-            color: '#333'
-          },
-          criticalPathEnabled: true,
-          criticalPathStyle: {
-            stroke: '#e64a19',
-            strokeWidth: 2
-          },
-          innerGridTrack: { fill: '#f3f4f6' },
-          innerGridDarkTrack: { fill: '#e8eaf6' },
-          innerGridHorizLine: {
-            stroke: '#dcdcdc',
-            strokeWidth: 1
-          },
-          percentEnabled: true,
-          percentStyle: { fill: '#4caf50' },
-          shadowEnabled: true,
-          shadowColor: '#757575',
-          shadowOffset: 2,
-          sortTasks: true
+                const assessmentMap = new Map();
+
+                assessments.forEach(assessment => {
+                    const endDate = parseDate(assessment.AssessmentDate); // Actual end date from the query result
+                    const startDate = getSemesterStartDate(endDate);
+
+                    if (!endDate || isNaN(endDate.getTime())) {
+                        console.error('Invalid date for assessment:', assessment);
+                        return;
+                    }
+
+                    console.log(`Adding Assessment: ${assessment.ModuleID} ${assessment.AssessmentName}, Start Date: ${startDate}, End Date: ${endDate}`);
+
+                    const assessmentId = `assessment-${assessment.AssessmentID}`;
+                    assessmentMap.set(assessment.AssessmentID, { id: assessmentId, endDate: endDate });
+
+                    dataTable.addRow([
+                        assessmentId,
+                        `${assessment.ModuleID} ${assessment.AssessmentName}`,
+                        assessment.ModuleName,
+                        startDate,
+                        endDate,
+                        null,
+                        null, // Set percent complete to null for assessments
+                        null
+                    ]);
+                });
+
+                tasks.forEach(task => {
+                    const endDate = parseDate(task.TaskDate);
+                    let startDate = new Date(endDate);
+                    startDate.setDate(startDate.getDate() - 7); // Set start date to 7 days before the end date
+
+                    const assessment = assessmentMap.get(task.AssessmentID);
+                    const dependencies = assessment ? assessment.id : null;
+
+                    if (!endDate || isNaN(endDate.getTime())) {
+                        console.error('Invalid date for task:', task);
+                        return;
+                    }
+
+                    console.log(`Adding Task: ${task.TaskName}, Start Date: ${startDate}, End Date: ${endDate}, Dependencies: ${dependencies}`);
+
+                    dataTable.addRow([
+                        `task-${task.TaskID}`,
+                        `${task.TaskName} ${task.ModuleID}`,
+                        task.ModuleName,
+                        startDate,
+                        endDate,
+                        null,
+                        0, // Placeholder for percent complete for tasks
+                        dependencies
+                    ]);
+                });
+
+                var options = {
+                    height: dataTable.getNumberOfRows() * 40,
+                    backgroundColor: { fill: 'white' },
+                    gantt: {
+                        trackHeight: 30,
+                        barHeight: 20,
+                        barCornerRadius: 5,
+                        arrow: {
+                            angle: 45,
+                            width: 2,
+                            color: '#757575',
+                            radius: 15,
+                            length: 8,
+                            spaceAfter: 4
+                        },
+                        labelStyle: {
+                            fontName: 'Roboto-Medium',
+                            fontSize: 14,
+                            color: '#333'
+                        },
+                        criticalPathEnabled: true,
+                        criticalPathStyle: {
+                            stroke: '#e64a19',
+                            strokeWidth: 2
+                        },
+                        innerGridTrack: { fill: '#f3f4f6' },
+                        innerGridDarkTrack: { fill: '#e8eaf6' },
+                        innerGridHorizLine: {
+                            stroke: '#dcdcdc',
+                            strokeWidth: 1
+                        },
+                        percentEnabled: true,
+                        percentStyle: { fill: '#4caf50' },
+                        shadowEnabled: true,
+                        shadowColor: '#757575',
+                        shadowOffset: 2,
+                        sortTasks: true
+                    }
+                };
+
+                var chart = new google.visualization.Gantt(document.getElementById('chart_div'));
+                chart.draw(dataTable, options);
+            } catch (error) {
+                console.error("Error drawing chart:", error);
+                const errorBox = document.getElementById('error-box');
+                errorBox.textContent = `Error: ${error.message}`;
+                errorBox.classList.remove('hidden');
+            }
         }
-      };
 
-      var chart = new google.visualization.Gantt(document.getElementById('chart_div'));
+        function parseDate(dateString) {
+            if (!dateString) return null;
 
-      chart.draw(dataTable, options);
-    }
+            if (dateString.includes('-')) {
+                const date = new Date(dateString);
+                return isNaN(date.getTime()) ? null : date;
+            } else if (dateString.includes('/')) {
+                const [day, month, year] = dateString.split('/').map(Number);
+                const date = new Date(year, month - 1, day);
+                return isNaN(date.getTime()) ? null : date;
+            } else {
+                return null;
+            }
+        }
 
-    async function fetchGanttData(userId) {
-      // Mock data, replace with actual fetch call
-      return [
-        { id: 'task1', name: 'Review Lecture Notes', resource: 'Module 1', startDate: '2024-05-01', endDate: '2024-05-03', percentComplete: 100, dependencies: null },
-        { id: 'task2', name: 'Complete Assignment 1', resource: 'Module 1', startDate: '2024-05-04', endDate: '2024-05-10', percentComplete: 75, dependencies: 'task1' },
-        { id: 'task3', name: 'Prepare for Quiz', resource: 'Module 2', startDate: '2024-05-05', endDate: '2024-05-07', percentComplete: 50, dependencies: null },
-        { id: 'task4', name: 'Write Lab Report', resource: 'Module 2', startDate: '2024-05-08', endDate: '2024-05-12', percentComplete: 25, dependencies: 'task3' },
-        { id: 'task5', name: 'Read Chapter 3', resource: 'Module 3', startDate: '2024-05-01', endDate: '2024-05-05', percentComplete: 60, dependencies: null },
-        { id: 'task6', name: 'Solve Problem Set', resource: 'Module 3', startDate: '2024-05-06', endDate: '2024-05-10', percentComplete: 20, dependencies: 'task5' }
-      ];
-    }
-  </script>
+        function getSemesterStartDate(date) {
+            if (!date || isNaN(date.getTime())) return null;
+
+            const month = date.getMonth();
+
+            if (month >= 8 && month <= 11) {
+                return new Date(date.getFullYear(), 8, 1); // September 1st of the same year
+            } else if (month >= 0 && month <= 4) {
+                return new Date(date.getFullYear(), 0, 1); // January 1st of the same year
+            } else {
+                return new Date(date.getFullYear(), 4, 1); // May 1st of the same year
+            }
+        }
+
+        async function fetchUserAssessments(userId) {
+            const response = await fetch(`/api/user/${userId}/assessments`);
+            const assessments = await response.json();
+            return assessments;
+        }
+
+        async function fetchUserTasks(userId) {
+            const response = await fetch(`/api/user/${userId}/tasks`);
+            const tasks = await response.json();
+            return tasks;
+        }
+    </script>
 </head>
 <body>
-  <div class="wrapper">
-    <%- include('partials/nav-bar') %>
-    <div class="container">
-      <div class="content">
-        <div id="chart_div"></div>
-      </div>
+    <div class="wrapper">
+        <%- include('partials/nav-bar') %>
+        <div class="container">
+            <div class="content">
+                <div class="scrollable-container">
+                    <div id="chart_div"></div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-  <%- include('partials/error-box') %>
-  <script src="/js/gantt.js"></script>
+    <div id="error-box" class="hidden"></div>
+    <%- include('partials/error-box') %>
+    <script src="/js/gantt.js"></script>
 </body>
 </html>

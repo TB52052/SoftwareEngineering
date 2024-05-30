@@ -111,15 +111,16 @@ app.get('/tasks', checkAuth, async (req, res) => {
 
 
 
-app.get('/getModuleAssessments/:moduleID', async (req, res) => {
+app.get('/api/user/:userId/assessments', async (req, res) => {
     try {
-        const moduleID = req.params.moduleID;
-        const assessments = await getUserModuleAssessments(moduleID);
+        const userId = req.params.userId;
+        const assessments = await db.getUserAssessments(userId);
         res.json(assessments);
     } catch (err) {
         res.status(500).send(err.message);
     }
 });
+
 
 
 app.get('/api/user/:userId/tasks', async (req, res) => {
@@ -153,5 +154,17 @@ app.post('/activities', async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });
+
+app.get('/api/user/:userId/gantt-data', async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const ganttData = await db.getUserGanttData(userId); 
+        res.json(ganttData);
+    } catch (err) {
+        console.error('Error fetching Gantt data:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 
 app.listen(PORT);

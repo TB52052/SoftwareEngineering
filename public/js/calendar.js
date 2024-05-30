@@ -6,6 +6,7 @@ let cache = {
 };
 let currentUserId = 5; // Use correct user ID
 
+
 document.addEventListener("DOMContentLoaded", function() {
     console.log('User ID:', currentUserId);
     showCalendar(currentMonth, currentYear, currentUserId);
@@ -103,6 +104,7 @@ async function fetchAssessments(userId, year, month) {
     }
 }
 
+
 async function fetchTasks(userId, year, month) {
     const baseUrl = `/api/user/${userId}/tasks`;
     try {
@@ -116,9 +118,10 @@ async function fetchTasks(userId, year, month) {
 
         tasks.forEach(task => {
             console.log('Processing task:', task);
-            const date = new Date(task.TaskDate);
-            if (date.getFullYear() === year && date.getMonth() === month) {
-                addTaskToCalendar(date.getDate(), task);
+            const dateParts = task.TaskDate.split('/');
+            const taskDate = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
+            if (taskDate.getFullYear() === year && taskDate.getMonth() === month) {
+                addTaskToCalendar(taskDate.getDate(), task);
             }
         });
 
@@ -126,6 +129,8 @@ async function fetchTasks(userId, year, month) {
         console.error('Error fetching tasks:', err);
     }
 }
+
+
 
 function clearCalendarEvents() {
     const events = document.querySelectorAll('.event');
@@ -138,7 +143,7 @@ function addAssessmentToCalendar(day, assessment) {
     cells.forEach(cell => {
         const eventDiv = document.createElement('div');
         eventDiv.classList.add('event', 'assessment-event');  // Added class for assessments
-        eventDiv.textContent = assessment.AssessmentName;
+        eventDiv.textContent = `${assessment.ModuleID} - ${assessment.AssessmentName}`;
         eventDiv.setAttribute('data-module-name', assessment.ModuleName);
         eventDiv.setAttribute('data-assessment-name', assessment.AssessmentName);
         eventDiv.setAttribute('data-assessment-type', assessment.AssessmentType);
@@ -158,24 +163,23 @@ function addAssessmentToCalendar(day, assessment) {
         cell.appendChild(eventDiv);
     });
 }
-
 function addTaskToCalendar(day, task) {
     const cells = document.querySelectorAll(`td[data-date="${day}"][data-month="${currentMonth + 1}"][data-year="${currentYear}"]`);
-    console.log(`Adding task: ${task.AssessmentName} on day ${day}`, task);
+    console.log(`Adding task: ${task.TaskName} on day ${day}`, task);
     cells.forEach(cell => {
         const eventDiv = document.createElement('div');
         eventDiv.classList.add('event', 'task-event');  // Added class for tasks
-        eventDiv.textContent = task.AssessmentName;
+        eventDiv.textContent = `${task.ModuleID} - ${task.TaskName}`;
         eventDiv.setAttribute('data-module-name', task.ModuleName);
-        eventDiv.setAttribute('data-assessment-name', task.AssessmentName);
+        eventDiv.setAttribute('data-task-name', task.TaskName);
         eventDiv.setAttribute('data-type-name', task.TypeName);
         eventDiv.setAttribute('data-time-spent', task.TimeSpent);
         eventDiv.addEventListener('click', () => {
             openTaskModal(
                 task.ModuleName,
-                task.AssessmentName,
+                task.TaskName,
                 task.TypeName,
-                task.description || 'No additional details provided.',
+                task.Notes || 'No additional details provided.',
                 task.TaskDate,
                 task.TimeSpent
             );
@@ -183,6 +187,8 @@ function addTaskToCalendar(day, task) {
         cell.appendChild(eventDiv);
     });
 }
+
+
 
 function moveDate(dir) {
     currentMonth += dir;
@@ -224,7 +230,7 @@ function openTaskModal(moduleName, assessmentName, typeName, description, date, 
         <p><strong>Type:</strong> ${typeName}</p>
         <p><strong>Description:</strong> ${description}</p>
         <p><strong>Date:</strong> ${formattedDate}</p>
-        <p><strong>Time Spent:</strong> ${timeSpent} minutes</p>
+        <p><strong>Time Spent:</strong> ${timeSpent} hours</p>
     `;
     modal.style.display = 'block'; // Show the modal
 }
