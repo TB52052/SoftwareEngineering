@@ -29,7 +29,7 @@
                         <div class="input-group">
                             <label for="assessment">Assessment:</label>
                             <select id="assessment" name="assessmentID" required>
-                                <!-- Options will be dynamically populated based on selected module -->
+                      
                             </select>
                         </div>
                         <div class="input-group">
@@ -92,7 +92,7 @@
                                     <p data-label="Status"><%= task.Status %></p>
                                     <p class="hours-spent" data-label="Hours Spent"><span><%= task.HoursSpent %> hrs</span></p>
                                     <p class="activity-quantity" data-label="Activity Quantity"><span><%= task.AmountDone %> <%= task.ProgressMeasurement %></span></p>
-                                    <!-- Placeholder for new progress entries -->
+                               
                                     <% if (task.newProgressEntries) { %>
                                         <% task.newProgressEntries.forEach(entry => { %>
                                             <p><%= entry.amountDone %> <%= entry.progressMeasurement %></p>
@@ -307,6 +307,35 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
 
+        document.querySelectorAll('.update-progress-btn').forEach(button => {
+    button.addEventListener('click', async function() {
+        const taskItem = this.closest('.task-item');
+        const taskProgressSection = taskItem.querySelector('.task-progress-section');
+        toggleBubbleBoxes(taskItem, taskProgressSection);
+
+        const taskTypeId = taskItem.dataset.taskTypeId;
+        const progressMeasurementDropdown = taskProgressSection.querySelector('#progressMeasurement');
+        
+        try {
+            const response = await fetch(`/tasks/progress-measurements/${taskTypeId}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const progressMeasurements = await response.json();
+            progressMeasurementDropdown.innerHTML = '';
+            progressMeasurements.forEach(measurement => {
+                const option = document.createElement('option');
+                option.value = measurement;
+                option.textContent = measurement;
+                progressMeasurementDropdown.appendChild(option);
+            });
+        } catch (error) {
+            console.error('Error fetching progress measurements:', error);
+        }
+    });
+});
+
+
         const updateDeadlineForm = taskItem.querySelector('.update-deadline-form');
         updateDeadlineForm.addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -333,6 +362,42 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    
+    function addMilestoneBox() {
+        const milestoneSection = document.querySelector('.add-task-section');
+        const milestoneBoxes = milestoneSection.querySelectorAll('.milestone-input-box');
+        const milestoneBox = document.createElement('div');
+        milestoneBox.classList.add('input-group', 'milestone-input-box');
+        milestoneBox.innerHTML = `
+            <label for="milestoneName">Milestone Name:</label>
+            <input type="text" name="milestoneName[]" required>
+            <label for="milestoneDeadline">Milestone Deadline:</label>
+            <input type="date" name="milestoneDeadline[]" required>
+        `;
+
+        const addMilestoneBtnParent = document.querySelector('.add-milestone-btn').parentNode;
+        addMilestoneBtnParent.insertBefore(milestoneBox, document.querySelector('.add-milestone-btn'));
+
+        milestoneBoxes.forEach((box, index) => {
+            box.querySelector('label').textContent = `Milestone ${index + 1} Name:`;
+        });
+    }
+
+    document.querySelector('.add-milestone-btn').addEventListener('click', addMilestoneBox);
+
+    function displayNewActivity(activity) {
+        const activitiesSection = document.querySelector('.task-activities');
+        const activityDiv = document.createElement('div');
+        activityDiv.className = 'activity';
+        activityDiv.innerHTML = `
+            <p><strong>Quantity:</strong> ${activity.quantity}</p>
+            <p><strong>Notes:</strong> ${activity.notes}</p>
+            <p><strong>Progress Measurement:</strong> ${activity.progressMeasurement}</p>
+        `;
+        activitiesSection.appendChild(activityDiv);
+        window.location.reload();
+    }
 
     document.querySelectorAll('.update-progress-form').forEach(form => {
         form.addEventListener('submit', async function(event) {
@@ -466,6 +531,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
 
     </script>
 </body>

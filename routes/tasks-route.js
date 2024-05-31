@@ -160,7 +160,7 @@ router.post('/activities', async (req, res) => {
 
     try {
         await db.insertNewActivity(userId, taskId, taskTypeId, quantity, notes, progressMeasurement);
-        updateTaskDetails(taskId); // Update task details after adding the activity
+        updateTaskDetails(taskId); 
         res.redirect('/tasks');
     } catch (err) {
         console.error('Error inserting new activity:', err.message);
@@ -198,7 +198,6 @@ router.post('/:taskID', async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });
-
 router.get('/progress-measurements/:taskTypeId', async (req, res) => {
     const { taskTypeId } = req.params;
     try {

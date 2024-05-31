@@ -49,7 +49,7 @@
 
 
 .scrollable-container {
-    overflow-y: scroll;
+    overflow-x: scroll;
     height: 500px; 
     width: 100%;
   }

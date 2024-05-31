@@ -1,6 +1,6 @@
 let currentMonth = new Date().getMonth();
 let currentYear = new Date().getFullYear();
-let currentUserId = 5; // Use correct user ID
+const userId = req.session.user.id;
 
 document.addEventListener("DOMContentLoaded", function() {
     console.log('User ID:', currentUserId);
@@ -13,7 +13,7 @@ async function showCalendar(month, year, userId) {
     const calendarBody = document.getElementById("calendar-body");
     const monthAndYear = document.getElementById("monthAndYear");
 
-    calendarBody.innerHTML = "";  // Clear previous calendar entries
+    calendarBody.innerHTML = "";  // Clear previous calendar 
     monthAndYear.textContent = `${new Date(year, month).toLocaleString('default', { month: 'long' })} ${year}`;
 
     let date = 1;
@@ -26,7 +26,7 @@ async function showCalendar(month, year, userId) {
             } else {
                 cell.textContent = date;
                 cell.setAttribute("data-date", date);
-                cell.setAttribute("data-month", month + 1);  // Adjust for zero-index month.
+                cell.setAttribute("data-month", month + 1);  
                 cell.setAttribute("data-year", year);
                 date++;
             }
@@ -126,7 +126,7 @@ function addTaskToCalendar(day, task) {
     console.log(`Adding task: ${task.TaskName} on day ${day}`, task);
     cells.forEach(cell => {
         const eventDiv = document.createElement('div');
-        eventDiv.classList.add('event', 'task-event');  // Added class for tasks
+        eventDiv.classList.add('event', 'task-event');  
         eventDiv.textContent = `${task.ModuleID} - ${task.TaskName}`;
         eventDiv.setAttribute('data-module-name', task.ModuleName);
         eventDiv.setAttribute('data-task-name', task.TaskName);
@@ -155,7 +155,7 @@ function moveDate(dir) {
         currentMonth = 0;
         currentYear += 1;
     }
-    showCalendar(currentMonth, currentYear, currentUserId); // Use currentUserId
+    showCalendar(currentMonth, currentYear, currentUserId);
 }
 
 function openAssessmentModal(moduleName, assessmentName, typeName, description, date, weighting) {
@@ -197,7 +197,7 @@ function closeModal() {
     modal.style.display = 'none'; // Hide the modal
 }
 
-// Attaching the closeModal function to the close button
+
 document.querySelector('.close').addEventListener('click', closeModal);
 
 function addEventListenersToEvents() {
@@ -211,7 +211,7 @@ function addEventListenersToEvents() {
     });
 }
 
-// CSS for red vertical bar for assessments
+
 const style = document.createElement('style');
 style.innerHTML = `
     .assessment-event {

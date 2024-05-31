@@ -10,7 +10,7 @@ async function fetchGanttData(userId) {
         const taskDependencies = {};
 
         data.forEach(item => {
-            // Adding assessments as main tasks
+            
             if (!ganttData.find(task => task.id === `assessment-${item.AssessmentID}`)) {
                 ganttData.push({
                     id: `assessment-${item.AssessmentID}`,
@@ -18,24 +18,24 @@ async function fetchGanttData(userId) {
                     resource: item.ModuleID,
                     startDate: new Date(item.AssessmentDate),
                     endDate: new Date(item.AssessmentDate),
-                    percentComplete: 0, // Adjust this value as needed
+                    percentComplete: 0, 
                     dependencies: null
                 });
             }
 
-            // Adding study tasks as dependent tasks
+          
             if (item.TaskID) {
                 ganttData.push({
                     id: `task-${item.TaskID}`,
                     name: item.TaskName,
                     resource: item.ModuleID,
                     startDate: new Date(item.TaskDate),
-                    endDate: new Date(item.TaskDate), // Adjust as needed
-                    percentComplete: (item.Status === 'completed') ? 100 : 0, // Adjust this value as needed
+                    endDate: new Date(item.TaskDate), 
+                    percentComplete: (item.Status === 'completed') ? 100 : 0, 
                     dependencies: `assessment-${item.AssessmentID}`
                 });
 
-                // Collect task dependencies
+               
                 if (item.DependencyID) {
                     if (!taskDependencies[item.TaskID]) {
                         taskDependencies[item.TaskID] = [];
@@ -45,7 +45,7 @@ async function fetchGanttData(userId) {
             }
         });
 
-        // Add task dependencies to the ganttData
+
         ganttData.forEach(task => {
             if (task.id.startsWith('task-')) {
                 const taskId = parseInt(task.id.split('-')[1], 10);

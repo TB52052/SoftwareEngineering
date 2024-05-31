@@ -48,7 +48,7 @@
                                         <% }); %>
                                         <div class="progress-bar-container">
                                             <h3>Progress</h3>
-                                            <!-- Add a data-status attribute to the progress bar -->
+                                           
                                             <div class="progress-bar" data-status="<%= assessment.status %>" style="width: <%= assessment.progress %>%;" title="You have completed <%= assessment.completedTasks %> out of <%= assessment.totalTasks %> tasks.">
                                                 <span><%= assessment.progress %>%</span>
                                             </div>
@@ -73,7 +73,7 @@
                                         <% }); %>
                                         <div class="progress-bar-container">
                                             <h3>Progress</h3>
-                                            <!-- Add a data-status attribute to the progress bar -->
+                                       
                                             <div class="progress-bar" data-status="<%= assessment.status %>" style="width: <%= assessment.progress %>%;" title="You have completed <%= assessment.completedTasks %> out of <%= assessment.totalTasks %> tasks.">
                                                 <span><%= assessment.progress %>%</span>
                                             </div>
@@ -98,7 +98,7 @@
                                         <% }); %>
                                         <div class="progress-bar-container">
                                             <h3>Progress</h3>
-                                            <!-- Add a data-status attribute to the progress bar -->
+                                          
                                             <div class="progress-bar" data-status="<%= assessment.status %>" style="width: <%= assessment.progress %>%;" title="You have completed <%= assessment.completedTasks %> out of <%= assessment.totalTasks %> tasks.">
                                                 <span><%= assessment.progress %>%</span>
                                             </div>
@@ -122,7 +122,7 @@
                                     <% }); %>
                                     <div class="progress-bar-container">
                                         <h3>Progress</h3>
-                                        <!-- Add a data-status attribute to the progress bar -->
+                                     
                                         <div class="progress-bar" data-status="<%= assessment.status %>" style="width: <%= assessment.progress %>%;" title="You have completed <%= assessment.completedTasks %> out of <%= assessment.totalTasks %> tasks.">
                                             <span><%= assessment.progress %>%</span>
                                         </div>
@@ -157,17 +157,16 @@
             evt.currentTarget.className += " active";
         }
 
-        // Automatically open the first tab by default
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelector('.tablinks').click();
         });
 
-        // Add an event listener to the progress bar
+   
 document.querySelectorAll('.progress-bar').forEach(function(bar) {
     bar.addEventListener('click', function() {
         window.location.href = '/tasks?assessment=' + this.dataset.assessment;
     });
-     // Add an event listener to the module filter dropdown
+
      document.getElementById('moduleFilter').addEventListener('change', function() {
         const selectedModule = this.value;
         window.location.href = `/dashboard?module=${selectedModule}`;

@@ -386,6 +386,7 @@ function getProgressMeasurementsByTaskType(taskTypeId) {
         });
     });
 }
+
 function updateTaskProgress(taskId, hoursSpent, amountDone) {
     return new Promise((resolve, reject) => {
         const query = `
@@ -405,10 +406,6 @@ function updateTaskProgress(taskId, hoursSpent, amountDone) {
 }
 
 
-
-
-// Function to insert a new milestone into the Milestones table 
-
 function insertNewMilestone(taskId, milestoneNames, milestoneDeadlines) { 
     return new Promise((resolve, reject) => { 
         if (!Array.isArray(milestoneNames) || !Array.isArray(milestoneDeadlines)) { 
@@ -420,7 +417,6 @@ function insertNewMilestone(taskId, milestoneNames, milestoneDeadlines) {
             VALUES (?, ?, ?) 
         `;
 
-        // Use Promise.all to wait for all milestones to be inserted 
         Promise.all(milestoneNames.map((name, index) => { 
             return new Promise((resolve, reject) => { 
                 db.run(query, [taskId, name, milestoneDeadlines[index]], (err) => { 
@@ -444,7 +440,7 @@ function insertNewMilestone(taskId, milestoneNames, milestoneDeadlines) {
     }); 
 } 
 
-// Function to retrieve milestones for a given task from the database 
+
 function getMilestonesForTask(taskID) { 
     return new Promise((resolve, reject) => { 
         const query = ` 
@@ -456,7 +452,7 @@ function getMilestonesForTask(taskID) {
                 console.error('Error retrieving milestones:', err); 
                 reject(err); 
             } else { 
-                resolve(rows); // Return the milestones for the task 
+                resolve(rows); 
             } 
         }); 
     }); 
@@ -474,7 +470,7 @@ function updateMilestoneDeadline(milestoneId, newDeadline) {
                 console.error('Error updating milestone deadline:', err);
                 reject(err);
             } else {
-                console.log(`Milestone ${milestoneId} deadline updated to ${newDeadline}`); // Add this line for debugging
+                console.log(`Milestone ${milestoneId} deadline updated to ${newDeadline}`); 
                 resolve();
             }
         });
@@ -483,7 +479,7 @@ function updateMilestoneDeadline(milestoneId, newDeadline) {
 
 
 
-// Function to insert a new dependency into the Dependencies table 
+
 
 function insertNewDependency(taskID, dependencyID) { 
     return new Promise((resolve, reject) => { 
@@ -496,7 +492,7 @@ function insertNewDependency(taskID, dependencyID) {
                 console.error('Error inserting new dependency:', err); 
                 reject(err); 
             } else { 
-                resolve(this.lastID); // Return the ID of the newly inserted dependency 
+                resolve(this.lastID); 
             } 
         }); 
     }); 
@@ -504,7 +500,7 @@ function insertNewDependency(taskID, dependencyID) {
 
  
 
-// Function to get dependencies of a task from the Dependencies table 
+
 function getDependencies(taskID) { 
     return new Promise((resolve, reject) => { 
         const query = ` 
@@ -515,13 +511,13 @@ function getDependencies(taskID) {
                 console.error('Error getting dependencies:', err); 
                 reject(err); 
             } else { 
-                resolve(rows); // Return the rows of dependencies 
+                resolve(rows);  
             } 
         }); 
     }); 
 } 
 
-// Function to update a task's deadline 
+
 function updateTaskDeadline(taskID, newDeadline) { 
     return new Promise((resolve, reject) => { 
         const query = ` 
@@ -534,7 +530,7 @@ function updateTaskDeadline(taskID, newDeadline) {
                 console.error('Error updating task deadline:', err); 
                 reject(err); 
             } else { 
-                resolve(this.changes); // Return the number of rows changed 
+                resolve(this.changes); 
             } 
         }); 
     }); 
@@ -605,7 +601,7 @@ function getUserGanttData(userId) {
 
 
 
-// Function to retrieve activities for a given task from the database 
+
 function getUserActivitiesForTask(taskID) { 
     return new Promise((resolve, reject) => { 
         const query = ` 
@@ -617,7 +613,7 @@ function getUserActivitiesForTask(taskID) {
                 console.error('Error retrieving activities:', err); 
                 reject(err); 
             } else { 
-                resolve(rows); // Return the activities for the task 
+                resolve(rows);  
             } 
         }); 
     }); 

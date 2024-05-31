@@ -37,7 +37,7 @@ router.get('/', async (req, res) => {
                         }
                         assessment.tasks = rows;
         
-                        // Calculate progress
+                    
                         const totalTasks = assessment.tasks.length;
                         const completedTasks = assessment.tasks.filter(task => task.Status === 'done').length;
                         assessment.progress = (completedTasks / totalTasks) * 100; // This will be a number between 0 and 100

@@ -66,7 +66,6 @@ app.get('/clear-session-message', (req, res) => {
 });
 
 
-// Endpoint to fetch tasks along with their types
 app.get('/api/tasks', (req, res) => {
     db.all(`
         SELECT StudyTasks.*, TaskTypes.TypeName, Modules.ModuleName 
@@ -82,7 +81,7 @@ app.get('/api/tasks', (req, res) => {
         });
 });
 
-// Endpoint to fetch modules for select options
+
 app.get('/api/modules', (req, res) => {
     db.all("SELECT * FROM Modules", (err, modules) => {
         if (err) {
@@ -93,7 +92,7 @@ app.get('/api/modules', (req, res) => {
     });
 });
 
-// Endpoint to fetch task types for select options
+
 app.get('/api/tasktypes', (req, res) => {
     db.all("SELECT * FROM TaskTypes", (err, types) => {
         if (err) {
@@ -114,9 +113,6 @@ app.get('/tasks', checkAuth, async (req, res) => {
     }
 });
 
-
-
-
 app.get('/getModuleAssessments/:moduleID', async (req, res) => {
     if (!req.session.user) {
         return res.redirect('/login');
@@ -131,6 +127,18 @@ app.get('/getModuleAssessments/:moduleID', async (req, res) => {
     } catch (err) {
         console.error('Error fetching module assessments:', err.message);
         res.status(500).send("Internal Server Error");
+    }
+});
+
+
+
+app.get('/api/user/:userId/assessments', async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const assessments = await db.getUserAssessments(userId);
+        res.json(assessments);
+    } catch (err) {
+        res.status(500).send(err.message);
     }
 });
 
@@ -158,7 +166,6 @@ app.post('/progress', async (req, res) => {
     }
 });
 
-
 app.post('/activities', async (req, res) => {
     const { userId, taskId, taskTypeId, quantity, notes, progressMeasurement } = req.body;
     try {
@@ -178,6 +185,16 @@ app.get('/api/user/:userId/gantt-data', async (req, res) => {
     } catch (err) {
         console.error('Error fetching Gantt data:', err);
         res.status(500).json({ error: err.message });
+    }
+});
+
+app.get('/api/tasks/:taskId/activities', async (req, res) => {
+    try {
+        const taskId = req.params.taskId;
+        const activities = await db.getUserActivitiesForTask(taskId);
+        res.json(activities);
+    } catch (err) {
+        res.status(500).send(err.message);
     }
 });
 
